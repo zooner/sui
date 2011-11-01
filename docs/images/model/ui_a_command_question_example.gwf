@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<GWF version="1.6">
+    <staticSector>
+        <node type="node/const/group" idtf="ui_command_question" shapeColor="0" id="157125680" parent="0" left="0" top="0" right="135" bottom="23" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="322" y="115" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/general_node" idtf="ui_acmd_search_identifiers" shapeColor="0" id="156947952" parent="0" left="0" top="0" right="163" bottom="23" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="253" y="161" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/group" idtf="ui_atom_command" shapeColor="0" id="154002656" parent="0" left="0" top="0" right="117" bottom="23" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="253" y="69" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="157073768" parent="0" id_b="157125680" id_e="156947952" b_x="322" b_y="115" e_x="253" e_y="161" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="156500600" parent="0" id_b="154002656" id_e="156947952" b_x="253" b_y="69" e_x="253" e_y="161" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </arc>
+    </staticSector>
+</GWF>

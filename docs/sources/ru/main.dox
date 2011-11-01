@@ -1,0 +1,9 @@
+/*! \mainpage Основные разделы документации
+ * \section intro_section Введение 
+ *
+ * \section main_chapters_section Основные разделы
+ * \li \link help_page Справка по документации \endlink
+ * \li \link ui_model_main_page Семантическая модель пользовательских интерфейсов \endlink
+ * \li \link sui_main_page Компоненты ядра пользовательского интерфейса \endlink
+ */
+

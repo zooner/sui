@@ -1,0 +1,18 @@
+/*! \page help_page Справка по документации
+
+\section about_short_names Сокращения
+\li <b>ПИ</b> - пользовательский интерфейс
+
+\section about_legend Легенда
+<table class="doc">
+<tr>
+	<th>Графический примитив</th>
+	<th>Описание</th>
+</tr>
+
+<tr>
+	<td> \image html icons/info.gif</td>
+	<td> Обозначение важной информации, на которую стоит обратить внимание </td>
+</tr>
+</table>
+ */

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<GWF version="1.6">
+    <staticSector>
+        <contour type="" idtf="&lt;output_set&gt;" shapeColor="0" id="150643960" parent="0" left="0" top="0" right="83" bottom="23" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10">
+            <points>
+                <point x="465" y="45"/>
+                <point x="435" y="120"/>
+                <point x="570" y="225"/>
+                <point x="630" y="120"/>
+                <point x="615" y="60"/>
+            </points>
+        </contour>
+        <node type="node/const/relation" idtf="nrel_sem_eq*" shapeColor="193" id="150713776" parent="0" left="0" top="0" right="86" bottom="23" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="375" y="195" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/asymmetry" idtf="" shapeColor="0" id="150655680" parent="0" x="300" y="135" haveBus="false">
+            <content type="0" mime_type="" file_name=""/>
+        </node>
+        <node type="node/const/general_node" idtf="" shapeColor="0" id="147687008" parent="0" x="150" y="135" haveBus="false">
+            <content type="1" mime_type="content/term" file_name=""><![CDATA[content data]]></content>
+        </node>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="150761200" parent="0" id_b="150713776" id_e="150880536" b_x="375" b_y="195" e_x="0" e_y="0" dotBBalance="0" dotEBalance="0.446762">
+            <points/>
+        </arc>
+        <arc type="arc/const/pos" idtf="" shapeColor="0" id="150889792" parent="0" id_b="150655680" id_e="147687008" b_x="300" b_y="135" e_x="150" e_y="135" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </arc>
+        <pair type="pair/const/orient" idtf="" shapeColor="0" id="150880536" parent="0" id_b="150655680" id_e="150643960" b_x="300" b_y="135" e_x="538.5" e_y="132.5" dotBBalance="0" dotEBalance="0">
+            <points/>
+        </pair>
+    </staticSector>
+</GWF>

@@ -65,7 +65,7 @@ suiRoot::suiRoot(QMainWindow *mainWindow, QObject *parent) :
 #endif    
     // load sc plugins
     mPluginManager->loadPluginsFromDir(pluginsDir.absoluteFilePath("sc"), false);
-    scMemory()->initialize("../repo/bin");
+    scMemory()->initialize("./kb");
 
     // create knowledge base control class
     mKnowBase = new suiKnowBase(this);

@@ -95,14 +95,15 @@ public:
 
     /*! Calculate connection point coordinates for connected sc.g-pair.
       * @param dotPosition Dot position value.
-      * @param point Coordinates of second point (fisrt point - is a connection point)
+      * @param point World coordinates of second point (fisrt point - is a connection point)
       * for line segment that connected to sc.g-object.
+      * @param
       */
     virtual QPointF calculateDotCoordinates(qreal dotPosition, const QPointF &point) const = 0;
 
     /*! Claculate dot position by coordinates. That function make backward calculation
       * from ScgObject::calculateDotCoordinates.
-      * @param point Point coordinates
+      * @param point World coordinates of point
       * @return Return dot position value for thi object
       */
     virtual qreal calculateDotPosition(const QPointF &point) const = 0;

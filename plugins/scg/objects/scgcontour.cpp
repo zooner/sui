@@ -41,32 +41,25 @@ QPointF SCgContour::calculateDotCoordinates(qreal dotPosition, const QPointF &po
 
     if (dotPosition != 0)
     {
-        qint32 seg_num = (qint32)dotPosition;
+        quint32 seg_num = (quint32)dotPosition;
         qreal seg_pos = dotPosition - (qreal)seg_num;
-
-        QPointF p2, p1;
+        quint32 sz = mPoints.size();
         QPointF wpos = worldPosition();
-        if (seg_num >= mPoints.size() - 1)
-        {
-            seg_num = (qint32)mPoints.size() - 2;
-            p2 = mPoints.at(seg_num + 1) + wpos;
-            p1 = mPoints.at(seg_num) + wpos;
-        }else
-        {
-            p2 = mPoints.front() + wpos;
-            p1 = mPoints.back() + wpos;
-        }
 
-        QPointF dir = p2 - p1;
+        seg_num = qMin(sz - 1, seg_num);
 
-        res = p1 + dir * seg_pos;
+        QPointF p2 = mPoints.at((seg_num + 1) % sz);
+        QPointF p1 = mPoints.at((seg_num) % sz);
+        QPointF dir(p2 - p1);
+
+        res = p1 + dir * seg_pos + wpos;
     }
     else
     {
         //! TODO: old style calculation
     }
 
-    return res - worldPosition();
+    return res;
 }
 
 qreal SCgContour::calculateDotPosition(const QPointF &point) const
@@ -75,13 +68,13 @@ qreal SCgContour::calculateDotPosition(const QPointF &point) const
     // and calculates relative dot position on it
     qreal minDist = -1.f;
     qreal result = 0.f;
-    qint32 sz = mPoints.size();
     QPointF wpos = worldPosition();
+    quint32 sz = mPoints.size();
 
-    for (int i = 0; i < mPoints.size(); i++)
+    for (int i = 0; i < sz; i++)
     {
-        QPointF p1 = mPoints.at((i + sz - 1) % sz) + wpos;
-        QPointF p2 = mPoints.at((i + sz) % sz) + wpos;
+        QPointF p1 = mPoints.at(i) + wpos;
+        QPointF p2 = mPoints.at((i + 1) % sz) + wpos;
 
         QVector2D v(p2 - p1);
         QVector2D vp(point - p1);
@@ -100,10 +93,13 @@ qreal SCgContour::calculateDotPosition(const QPointF &point) const
         qreal d = QVector2D(point - p).lengthSquared();
 
         // compare with minimum distance
-        if (minDist < 0.f || (minDist > d && d < 15.f))
+        if (d < 15.f)
         {
-            minDist = d;
-            result = i + dotPos - 1;
+            if (minDist < 0.f || minDist > d)
+            {
+                minDist = d;
+                result = i + dotPos;
+            }
         }
     }
 

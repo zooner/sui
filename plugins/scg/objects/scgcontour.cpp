@@ -39,12 +39,12 @@ QPointF SCgContour::calculateDotCoordinates(qreal dotPosition, const QPointF &po
 {
     QPointF res;
 
+    QPointF wpos = worldPosition();
     if (dotPosition != 0)
     {
         quint32 seg_num = (quint32)dotPosition;
         qreal seg_pos = dotPosition - (qreal)seg_num;
         quint32 sz = mPoints.size();
-        QPointF wpos = worldPosition();
 
         seg_num = qMin(sz - 1, seg_num);
 
@@ -52,14 +52,41 @@ QPointF SCgContour::calculateDotCoordinates(qreal dotPosition, const QPointF &po
         QPointF p1 = mPoints.at((seg_num) % sz);
         QPointF dir(p2 - p1);
 
-        res = p1 + dir * seg_pos + wpos;
+        res = p1 + dir * seg_pos;
     }
     else
     {
-        //! TODO: old style calculation
+        QRectF bound = QPolygonF(mPoints).boundingRect();
+        QPointF p(bound.center());
+
+        QPointF p1 = mPoints.last();
+        QPointF p2, intersectPoint, result;
+        QLineF line, pair(point - wpos, p);
+        // Ensure, that pair definitely have intersections with contour.
+        pair.setLength(pair.length() + bound.width() + bound.height());
+        qreal minLength = -1;
+
+        //Find intersection point with minimal distance from @p from to contour
+        for (int i = 0; i < mPoints.size(); i++)
+        {
+            p2 = mPoints[i];
+            line.setPoints(p1,p2);
+            QLineF::IntersectType intersectType = line.intersect(pair, &intersectPoint);
+            if (intersectType == QLineF::BoundedIntersection)
+            {
+                pair.setP2(intersectPoint);
+                if(minLength == -1 || pair.length() < minLength)
+                {
+                    minLength = pair.length();
+                    res = intersectPoint;
+                }
+            }
+
+            p1 = p2;
+        }
     }
 
-    return res;
+    return res + wpos;
 }
 
 qreal SCgContour::calculateDotPosition(const QPointF &point) const
@@ -71,7 +98,7 @@ qreal SCgContour::calculateDotPosition(const QPointF &point) const
     QPointF wpos = worldPosition();
     quint32 sz = mPoints.size();
 
-    for (int i = 0; i < sz; i++)
+    for (quint32 i = 0; i < sz; i++)
     {
         QPointF p1 = mPoints.at(i) + wpos;
         QPointF p2 = mPoints.at((i + 1) % sz) + wpos;

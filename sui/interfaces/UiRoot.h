@@ -89,7 +89,7 @@ public:
       * \image html current_language_templ.png
       * @return Return ScUri of sc-element that designate current language.
       */
-    virtual const ScUri& currentLanguage() const = 0;
+    virtual ScUri currentLanguage() const = 0;
 
     /*! Translate data from sc-link into sc-code. Translated construction included into
       * specified set \p <output_set> see image.

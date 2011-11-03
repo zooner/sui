@@ -185,7 +185,22 @@ void SCgVisualObject::_needSync()
 void SCgVisualObject::_update(UpdateEventType eventType, SCgObject *object)
 {
     if (eventType == PositionChanged)
-         setPos(object->position());
+        setPos(object->position());
+
+    if (eventType == IdentifierChanged)
+    {
+        if (mTextItem == 0)
+        {
+            QFont font("Times New Roman [Arial]", 10, 10, false);
+            font.setBold(true);
+            font.setItalic(true);
+
+            mTextItem = new QGraphicsTextItem(this);
+            mTextItem->setFont(font);
+        }
+
+        mTextItem->setPlainText(object->identifier());
+    }
 
     update();
 }

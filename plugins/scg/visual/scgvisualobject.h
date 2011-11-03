@@ -31,9 +31,6 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "scgprerequest.h"
 
 
-//! List of scg-object pointers
-typedef QList<SCgVisualObject*> SCgObjectList;
-
 class SCgVisualObject : public QObject, public QGraphicsItem,
                         public SCgObjectObserver
 {

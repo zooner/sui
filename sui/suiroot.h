@@ -63,7 +63,7 @@ public:
     UiMainWindowInterface* mainScWindow();
 
     //! @copydoc UiRootInterface::currentLanguage
-    const ScUri& currentLanguage() const;
+    ScUri currentLanguage() const;
 
     //! @copydoc UiRootInterface::mainWindowSize
     QSize mainWindowSize() const;

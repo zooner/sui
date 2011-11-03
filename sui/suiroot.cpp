@@ -88,30 +88,30 @@ suiRoot::suiRoot(QMainWindow *mainWindow, QObject *parent) :
     mKpm->initialize();
 
 
-//    // show main menu on main window
-//    ScUri main_menu = scHelper()->keynode("/ui/main_menu");
-//    ScUri decomp = scHelper()->keynode("/etc/decomposition*");
+    // show main menu on main window
+    ScUri main_menu = scHelper()->keynode("/ui/main_menu");
+    ScUri decomp = scHelper()->keynode("/etc/decomposition*");
 
-//    // get set of child items for main menu
-//    ScUriVector v;
-//    if (scHelper()->searchOneShot(ScTemplate() << ScElementType(ScNode | ScConst)
-//                              << ScElementType(ScArcCommon | ScConst)
-//                              << main_menu
-//                              << ScElementType(ScArcMain)
-//                              << decomp, v))
-//    {
-//        ScUriList objects;
-//        ScTemplate templ;
-//        templ << v[0] << ScElementType(ScArcMain) << ScElementType(ScNode | ScConst);
-//        ScSafeIterator it(scMemory(), templ);
-//        while (!it.is_over())
-//        {
-//            objects << it.value(2);
-//            it.next();
-//        }
+    // get set of child items for main menu
+    ScUriVector v;
+    if (scHelper()->searchOneShot(ScTemplate() << ScElementType(ScNode | ScConst)
+                              << ScElementType(ScArcCommon | ScConst)
+                              << main_menu
+                              << ScElementType(ScArcMain)
+                              << decomp, v))
+    {
+        ScUriList objects;
+        ScTemplate templ;
+        templ << v[0] << ScElementType(ScArcMain) << ScElementType(ScNode | ScConst);
+        ScSafeIterator it(scMemory(), templ);
+        while (!it.is_over())
+        {
+            objects << it.value(2);
+            it.next();
+        }
 
-//        mMainScWindow->showObjects(objects);
-//    }
+        mMainScWindow->showObjects(objects);
+    }
 }
 
 suiRoot::~suiRoot()
@@ -176,7 +176,7 @@ UiMainWindowInterface* suiRoot::mainScWindow()
     return mMainScWindow;
 }
 
-const ScUri& suiRoot::currentLanguage() const
+ScUri suiRoot::currentLanguage() const
 {
     //! FIXME: get current language from memory
     return mScHelper->keynode("/language/english");

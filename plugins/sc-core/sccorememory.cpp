@@ -870,7 +870,10 @@ void ScCoreMemory::_listenSegment(sc_segment *seg)
             ScUri uri = sc_addr2ScUri(addr);
             ScUri2ScAddrMap::iterator it_uri = mScUri2ScAddr.find(uri);
             if (it_uri == mScUri2ScAddr.end())
+            {
                 mScUri2ScAddr[uri] = addr;
+                qDebug() << uri.value() << " --- " << mSession->get_idtf(addr).c_str() << "\n";
+            }
         }
     }
 

@@ -58,15 +58,9 @@ private:
       * At first it try to find SCg-object that already exist. If object
       * that designate specified \p uri doesn't exists, then it will be created
       * @param uri ScUri of visualized sc-element
-      * @return Return pointer to scg-object, that designate sc-element with specified \p uri
+      * @return Return pointer to sc.g-object, that designate sc-element with specified \p uri
       */
-    SCgVisualObject *resolveUri(const ScUri &uri);
-
-    /*! Resolve sc-element type alias. This function convert ScElementType to string type alias.
-      * @param uri ScUri of sc-element to resolve type
-      * @return Return string type alias.
-      */
-    QString resolveTypeAlias(const ScUri &uri);
+    SCgObject *resolveUri(const ScUri &uri);
 
     /*! Check if sc-element with specified \p uri is a command node
       * @param uri ScUri of sc-element for check
@@ -75,8 +69,6 @@ private:
       */
     bool isCommand(const ScUri &uri) const;
 
-    //! Initialize type convertation maps
-    void initTypeConvert();
 
 private:
 
@@ -91,15 +83,8 @@ private:
     /*! Map to get scg-elements by their uri's
       * That map used when we link any scg-pair object to begin and end
       */
-    typedef QMap<ScUri, SCgVisualObject*> ScUriToSCgObjectMap;
+    typedef QMap<ScUri, SCgObject*> ScUriToSCgObjectMap;
     ScUriToSCgObjectMap mUriToObject;
-
-    //! Map to convert sc-element type into scg-type string alias
-    typedef QMap<ScElementType, QString> ScElementTypeToAliasMap;
-    ScElementTypeToAliasMap mScElementTypeToAliasMap;
-    //! Map to convert scg-type string alias into sc-element type
-    typedef QMap<QString, ScElementType> AliasToScElementTypeMap;
-    AliasToScElementTypeMap mAliasToScElementTypeMap;
 
 signals:
 

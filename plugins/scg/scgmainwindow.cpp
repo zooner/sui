@@ -91,40 +91,6 @@ void SCgMainWindow::initializeActions()
     mView->addAction(actionUndo);
 }
 
-void SCgMainWindow::initTypeConvert()
-{
-    mAliasToScElementTypeMap["pair/const/pos/-/orient"] = ScElementType(ScArcMain | ScConst | ScPos);
-    mAliasToScElementTypeMap["pair/const/neg/-/orient"] = ScElementType(ScArcMain | ScConst | ScNeg);
-    mAliasToScElementTypeMap["pair/const/fuz/-/orient"] = ScElementType(ScArcMain | ScConst);
-    mAliasToScElementTypeMap["pair/const/pos/temp/orient"] = ScElementType(ScArcMain | ScConst | ScPos);
-    mAliasToScElementTypeMap["pair/const/neg/temp/orient"] = ScElementType(ScArcMain | ScConst | ScNeg | ScTemp);
-    mAliasToScElementTypeMap["pair/const/fuz/temp/orient"] = ScElementType(ScArcMain | ScConst | ScTemp);
-    mAliasToScElementTypeMap["pair/const/-/-/-"] = ScElementType(ScEdgeCommon | ScConst);
-    mAliasToScElementTypeMap["pair/const/-/-/orient"] = ScElementType(ScArcCommon | ScConst);
-
-    mAliasToScElementTypeMap["pair/var/pos/-/orient"] = ScElementType(ScArcMain | ScVar | ScPos);
-    mAliasToScElementTypeMap["pair/var/neg/-/orient"] = ScElementType(ScArcMain | ScVar | ScNeg);
-    mAliasToScElementTypeMap["pair/var/fuz/-/orient"] = ScElementType(ScArcMain | ScVar);
-    mAliasToScElementTypeMap["pair/var/pos/temp/orient"] = ScElementType(ScArcMain | ScVar | ScPos | ScTemp);
-    mAliasToScElementTypeMap["pair/var/neg/temp/orient"] = ScElementType(ScArcMain | ScVar | ScNeg | ScTemp);
-    mAliasToScElementTypeMap["pair/var/fuz/temp/orient"] = ScElementType(ScArcMain | ScVar | ScTemp);
-    mAliasToScElementTypeMap["pair/var/-/-/-"] = ScElementType(ScEdgeCommon | ScVar);
-    mAliasToScElementTypeMap["pair/var/-/-/orient"] = ScElementType(ScArcCommon | ScVar);
-
-    mAliasToScElementTypeMap["pair/meta/pos/-/orient"] = ScElementType(ScArcMain | ScMeta | ScPos);
-    mAliasToScElementTypeMap["pair/meta/neg/-/orient"] = ScElementType(ScArcMain | ScMeta | ScNeg);
-    mAliasToScElementTypeMap["pair/meta/fuz/-/orient"] = ScElementType(ScArcMain | ScMeta);
-    mAliasToScElementTypeMap["pair/meta/pos/temp/orient"] = ScElementType(ScArcMain | ScMeta | ScPos | ScTemp);
-    mAliasToScElementTypeMap["pair/meta/neg/temp/orient"] = ScElementType(ScArcMain | ScMeta | ScNeg | ScTemp);
-    mAliasToScElementTypeMap["pair/meta/fuz/temp/orient"] = ScElementType(ScArcMain | ScMeta | ScTemp);
-    mAliasToScElementTypeMap["pair/meta/-/-/-"] = ScElementType(ScEdgeCommon | ScMeta);
-    mAliasToScElementTypeMap["pair/meta/-/-/orient"] = ScElementType(ScArcCommon | ScMeta);
-
-    // revert map
-    AliasToScElementTypeMap::iterator it;
-    for (it = mAliasToScElementTypeMap.begin(); it != mAliasToScElementTypeMap.end(); ++it)
-        mScElementTypeToAliasMap[it.value()] = it.key();
-}
 
 SCgMainWindow::~SCgMainWindow()
 {
@@ -145,7 +111,7 @@ QWidget* SCgMainWindow::widget() const
 
 void SCgMainWindow::showObjects(const ScUriList &objects)
 {
-    QMap<ScUri, SCgVisualObject*> uri2obj;
+    QMap<ScUri, SCgObject*> uri2obj;
     ScUri uri;
     foreach(uri, objects)
         uri2obj[uri] = resolveUri(uri);
@@ -161,90 +127,54 @@ bool SCgMainWindow::isObjectVisible(const ScUri &uri) const
     return false;
 }
 
-SCgVisualObject* SCgMainWindow::resolveUri(const ScUri &uri)
+SCgObject* SCgMainWindow::resolveUri(const ScUri &uri)
 {
     // trying to find scg-object with uri
-    SCgObjectList list;
-//    if (SCgVisualObject::objectsByUri(uri, list))
-//        return list.first();    //! FIXME: need to resolve situation, when we have more than one scg-object in list
+    const SCgObject::SCgObjectList& list = SCgObject::objectsByScUri(uri);
 
-//    UiRootInterface *root = SCgPlugin::rootInterface();
+    //! TODO: resolve situation with multiply
+    if (list.size() > 0) return list.front();
 
-//    ScMemoryInterface *memory = root->scMemory();
-//    SCgVisualObject *res = 0;
+    UiRootInterface *root = SCgPlugin::rootInterface();
 
-//    // get element type and create scg-object
-//    ScElementType type = memory->get_el_type(uri);
+    ScMemoryInterface *memory = root->scMemory();
+    SCgObject *res = 0;
 
-//    // create new scg-object
-//    if (type.check(ScNode))
-//    {
+    // get element type and create scg-object
+    ScElementType type = memory->get_el_type(uri);
+
+    // create new scg-object
+    if (type.check(ScNode))
+    {
 //        // check if it a command
 //        if (isCommand(uri))
 //        {
-//            SCgVisualControl *control = new SCgVisualControl();
-//            mScene->addItem(control);
+////            SCgVisualControl *control = new SCgVisualControl();
+////            mScene->addItem(control);
 
-//            res = control;
+////            res = control;
 //        }else
-//        {
-//            SCgVisualNode *node = new SCgVisualNode();
-//            node->setTypeAlias(resolveTypeAlias(uri));
-//            mScene->addItem(node);
-
-//            res = node;
-//        }
-//    }else
-//        if (type.check(ScArcMask))
-//        {
-
-//        }else
-//            if (type.check(ScLink))
-//            {
-
-//            }
-
-//    // setup identifier
-//    QString idtf_value = root->scHelper()->stringIdtf(uri, root->currentLanguage());
-//    if (!idtf_value.isEmpty())
-//        res->setIdtfValue(idtf_value);
-
-    return 0;
-}
-
-QString SCgMainWindow::resolveTypeAlias(const ScUri &uri)
-{
-    ScElementType type = SCgPlugin::rootInterface()->scMemory()->get_el_type(uri);
-    QString res;
-
-    Q_ASSERT(type.isValid());
-
-    if (type.check(ScNode))
-    {
-        res = "node/";
-
-        if (type.check(ScConst))
-            res += "const/";
-        else if (type.check(ScVar))
-            res += "var/";
-        else if (type.check(ScMeta))
-            res += "meta/";
-
-        //! TODO: struct types
-        res += "general_node"; /// temporary
-    }else if (type.check(ScLink))
-    {
-
+        {
+            SCgNode *node = mScene->construction()->createNode();
+            res = node;
+        }
     }else
-    {
-        ScElementTypeToAliasMap::iterator it = mScElementTypeToAliasMap.find(type);
-        if (it != mScElementTypeToAliasMap.end())
-            return it.value();
-        else
-            SuiExcept(SuiExceptionItemNotFound,
-                      QString("Can't find alias for type: %1").arg(type.toString()),
-                      "QString SCgMainWindow::resolveTypeAlias(const ScUri &uri)");
-    }
+        if (type.check(ScArcMask))
+        {
+
+        }else
+            if (type.check(ScLink))
+            {
+
+            }
+
+    // setup identifier
+    QString idtf_value = root->scHelper()->stringIdtf(uri, root->currentLanguage());
+    if (!idtf_value.isEmpty())
+        res->setIdentifier(idtf_value);
+
+    if (res != 0)
+        res->setObjectType(type);
 
     return res;
 }

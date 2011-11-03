@@ -70,6 +70,37 @@ protected:
     //! Reset all update flags to null
     void _resetUpdateFalgs();
 
+    // -------------- Work with ScUri's -----------------------------
+public:
+    typedef QList<SCgObject*> SCgObjectList;
+
+    /*! Get sc.g-objects by ScUri
+      * @param uri ScUri of sc-element.
+      * @return Return list of sc.g-objects, that assigned to specified \p uri.
+      *         If there are no sc.g-objects assigned to specified \p uri, then
+      *         return empty list.
+      */
+    static const SCgObjectList& objectsByScUri(const ScUri &uri);
+
+    //! @copydoc ScObjectInterface::setUri
+    void setUri(const ScUri &uri);
+
+private:
+
+    /*! Append this sc.g-object into ScUri mapping list
+      * @param uri ScUri of sc.g-object
+      */
+    void _appendScgObjectIntoUriMap(const ScUri &uri);
+
+    /*! Remove this sc.g-object from ScUri mapping list
+      * @param uri ScUri of sc.g-object
+      */
+    void _removeSCgObjectFromUriMap(const ScUri &uri);
+
+    typedef QMap<ScUri, SCgObjectList> ScUriToSCgObjectListMap;
+    //! Map of ScUri's to sc.g-object assigments
+    static ScUriToSCgObjectListMap mScUriToSCgObjects;
+
 public:
     // -------------- Work with observers ---------------------------
     /*! Attach new observer to sc.g-object

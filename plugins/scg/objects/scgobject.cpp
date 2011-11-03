@@ -23,6 +23,17 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "scgprecompiled.h"
 #include "scgobject.h"
 
+SCgObject::ScUriToSCgObjectListMap SCgObject::mScUriToSCgObjects = SCgObject::ScUriToSCgObjectListMap();
+
+const SCgObject::SCgObjectList& SCgObject::objectsByScUri(const ScUri &uri)
+{
+    ScUriToSCgObjectListMap::iterator it = mScUriToSCgObjects.find(uri);
+    if (it != mScUriToSCgObjects.end())
+        return it.value();
+
+    return SCgObjectList();
+}
+
 SCgObject::SCgObject(QObject *parent) :
     QObject(parent),
     mConstruction(0),
@@ -35,6 +46,57 @@ SCgObject::~SCgObject()
 {
     while (!mObservers.empty())
         detachObserver(mObservers.front());
+
+    if (!uri().isEmpty()) _removeSCgObjectFromUriMap(uri());
+}
+
+void SCgObject::setUri(const ScUri &_uri)
+{
+    if (!uri().isEmpty())
+        _removeSCgObjectFromUriMap(uri());
+
+    ScObjectInterface::setUri(_uri);
+
+    if (!_uri.isEmpty())
+        _appendScgObjectIntoUriMap(_uri);
+}
+
+void SCgObject::_appendScgObjectIntoUriMap(const ScUri &uri)
+{
+    ScUriToSCgObjectListMap::iterator it = mScUriToSCgObjects.find(uri);
+
+    if (it == mScUriToSCgObjects.end())
+    {
+        SCgObjectList list;
+        list.push_back(this);
+        mScUriToSCgObjects[uri] = list;
+    }else
+    {
+        SCgObjectList &list = it.value();
+        if (list.contains(this))    SuiExcept(SuiExceptionDuplicateItem,
+                                              "sc.g-object already exist in that list",
+                                              "void SCgObject::_appendScgObjectIntoUriMap(const ScUri &uri)");
+        list.push_back(this);
+    }
+}
+
+void SCgObject::_removeSCgObjectFromUriMap(const ScUri &uri)
+{
+    ScUriToSCgObjectListMap::iterator it = mScUriToSCgObjects.find(uri);
+
+    if (it != mScUriToSCgObjects.end())
+    {
+        SCgObjectList &list = it.value();
+        if (!list.removeOne(this))
+            SuiExcept(SuiExceptionItemNotFound,
+                      QString("There are not sc.g-object in list for uri: %1").arg(uri.value()),
+                      "void SCgObject::_removeSCgObjectFromUriMap(const ScUri &uri)")
+    }else
+    {
+        SuiExcept(SuiExceptionItemNotFound,
+                  QString("There are no any sc.g-object assigned to uri: %1").arg(uri.value()),
+                  "void SCgObject::_removeSCgObjectFromUriMap(const ScUri &uri)")
+    }
 }
 
 void SCgObject::_notifyUpdate(SCgObjectObserver::UpdateEventType eventType)

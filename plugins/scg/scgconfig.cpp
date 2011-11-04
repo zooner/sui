@@ -79,11 +79,15 @@ void SCgConfig::initializeDefault()
     scg_cfg_set_default_value_color(scg_key_element_font_color_highlight, QColor(128, 64, 0));
 
     // --- controls ---
-    scg_cfg_set_default_value_color(scg_key_control_backcolor_normal, QColor(224, 224, 224));
-    scg_cfg_set_default_value_color(scg_key_control_backcolor_selected, QColor(164, 196, 164));
-    scg_cfg_set_default_value_color(scg_key_control_backcolor_highlight, QColor(255, 194, 100));
-    scg_cfg_set_default_value(scg_key_control_font_name, QString("Arial [Times New Roman]"));
-    scg_cfg_set_default_value(scg_key_control_font_size, 10);
+    scg_cfg_set_default_value_color(scg_key_control_backcolor_normal, QColor(99, 186, 35));
+    scg_cfg_set_default_value_color(scg_key_control_backcolor_selected, QColor(99, 215, 35));
+    scg_cfg_set_default_value_color(scg_key_control_backcolor_highlight, QColor(99, 215, 35));
+    scg_cfg_set_default_value_color(scg_key_control_color_normal, QColor(255, 255, 255));
+    scg_cfg_set_default_value_color(scg_key_control_color_selected, QColor(99, 215, 35));
+    scg_cfg_set_default_value_color(scg_key_control_color_highlight, QColor(99, 186, 35));
+    scg_cfg_set_default_value(scg_key_control_font_name, QString("Times New Roman [Arial]"));
+    scg_cfg_set_default_value(scg_key_control_font_size, 12);
+    scg_cfg_set_default_value_color(scg_key_control_font_color, QColor(255, 255, 255));
 
 #if ENABLE_VISUAL_EFFECTS_SUPPORT
     // --- effects ---

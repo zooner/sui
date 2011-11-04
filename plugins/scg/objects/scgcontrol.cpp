@@ -66,7 +66,7 @@ QPointF SCgControl::calculateDotCoordinates(qreal dotPosition, const QPointF &po
         p1 = p2;
     }
 
-    return res + wpos;
+    return res;
 }
 
 qreal SCgControl::calculateDotPosition(const QPointF &point) const

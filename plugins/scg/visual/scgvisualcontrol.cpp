@@ -32,6 +32,7 @@ SCgVisualControl::SCgVisualControl(QGraphicsItem *parent, QGraphicsScene *scene)
     SCgVisualObject(parent, scene)
 {
     mBackColor = scg_cfg_get_value_color(scg_key_control_backcolor_normal);
+    mColor = scg_cfg_get_value_color(scg_key_control_color_normal);
 
     setFlag(QGraphicsItem::ItemIsMovable, true);
 
@@ -71,33 +72,45 @@ void SCgVisualControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
     // draw shape
     QPen pen = QPen(QBrush(mColor, Qt::SolidPattern), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin);
-    QBrush brush = QBrush(QColor(255, 255, 255, 224), Qt::SolidPattern);
+    QBrush brush = QBrush(mBackColor, Qt::SolidPattern);
 
     painter->setPen(pen);
     painter->setBrush(brush);
 
-    painter->drawRoundRect(bound, 35, 35);
+    painter->drawRect(bound);
 }
 
 void SCgVisualControl::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
     if (!isSelected())
+    {
         mBackColor = scg_cfg_get_value_color(scg_key_control_backcolor_highlight);
+        mColor = scg_cfg_get_value_color(scg_key_control_color_highlight);
+        mTextItem->setDefaultTextColor(scg_cfg_get_value_color(scg_key_control_font_color));
+    }
 
-    SCgVisualObject::hoverEnterEvent(event);
+    QGraphicsItem::hoverEnterEvent(event);
 }
 
 void SCgVisualControl::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
     mBackColor = scg_cfg_get_value_color(isSelected() ? scg_key_control_backcolor_selected : scg_key_control_backcolor_normal);
+    mColor = scg_cfg_get_value_color(isSelected() ? scg_key_control_color_selected : scg_key_control_color_normal);
+    mTextItem->setDefaultTextColor(scg_cfg_get_value_color(scg_key_control_font_color));
 
-    SCgVisualObject::hoverLeaveEvent(event);
+    QGraphicsItem::hoverLeaveEvent(event);
 }
 
 QVariant SCgVisualControl::itemChange(GraphicsItemChange change, const QVariant &value)
 {
     if (change == QGraphicsItem::ItemSelectedHasChanged)
+    {
         mBackColor = scg_cfg_get_value_color(isSelected() ? scg_key_control_backcolor_selected : scg_key_control_backcolor_normal);
+        mColor = scg_cfg_get_value_color(isSelected() ? scg_key_control_color_selected : scg_key_control_color_normal);
+        mTextItem->setDefaultTextColor(scg_cfg_get_value_color(scg_key_control_font_color));
+
+        return QVariant();
+    }
 
     return SCgVisualObject::itemChange(change, value);
 }
@@ -115,13 +128,24 @@ void SCgVisualControl::_update(SCgObjectObserver::UpdateEventType eventType, SCg
 {
     if (eventType == SCgObjectObserver::IdentifierChanged)
     {
-        SCgVisualObject::_update(eventType, object);
-        if (mTextItem != 0)
+        if (mTextItem == 0)
         {
-            QRectF textBound = mTextItem->boundingRect();
-            observedObject(0)->setSize(QPointF(textBound.width() + 10, textBound.height() + 10));
-            mTextItem->setPos(-textBound.width() / 2.f, -textBound.height() / 2.f);
+            QFont font(scg_cfg_get_value_string(scg_key_control_font_name),
+                       scg_cfg_get_value_uint(scg_key_control_font_size),
+                       10, false);
+            //font.setBold(true);
+            //font.setItalic(true);
+
+            mTextItem = new QGraphicsTextItem(this);
+            mTextItem->setFont(font);
+            mTextItem->setDefaultTextColor(scg_cfg_get_value_color(scg_key_control_font_color));
         }
+
+        mTextItem->setPlainText(object->identifier());
+        QRectF textBound = mTextItem->boundingRect();
+        observedObject(0)->setSize(QPointF(textBound.width() + 10, textBound.height() + 10));
+        mTextItem->setPos(-textBound.width() / 2.f, -textBound.height() / 2.f);
+
         return;
     }
 

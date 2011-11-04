@@ -68,8 +68,12 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #define scg_key_control_backcolor_normal QString("control/backcolor/normal")
 #define scg_key_control_backcolor_selected QString("control/backcolor/selected")
 #define scg_key_control_backcolor_highlight QString("control/backcolor/highlight")
+#define scg_key_control_color_normal QString("control/color/normal")
+#define scg_key_control_color_selected QString("control/color/selected")
+#define scg_key_control_color_highlight QString("control/color/highlight")
 #define scg_key_control_font_name QString("control/font/name")
 #define scg_key_control_font_size QString("control/font/size")
+#define scg_key_control_font_color QString("control/font/color")
 
 #if ENABLE_VISUAL_EFFECTS_SUPPORT
 #define scg_key_effects_enabled QString("effects/enabled")

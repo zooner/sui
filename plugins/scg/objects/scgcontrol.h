@@ -20,45 +20,33 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 */
 
+#ifndef SCGCONTROL_H
+#define SCGCONTROL_H
 
-#ifndef SCGPRECOMPILED_H
-#define SCGPRECOMPILED_H
+#include "scgobject.h"
 
-#include "scgbuildconfig.h"
+/*! Class define any sc.g-control, that can be used in sc.g-window.
+  * It allow to work with control types. Also it store whole information
+  * that need to define control.
+  */
+class SCgControl : public SCgObject
+{
+    friend class SCgConstruction;
+    Q_OBJECT
 
-#include "scgscenebase.h"
-#include "scgconfig.h"
+public:
+    explicit SCgControl(QObject *parent = 0);
+    virtual ~SCgControl();
 
-#include "visual/scgvisualobject.h"
-#include "visual/scgvisualbus.h"
-#include "visual/scgvisualcontour.h"
-#include "visual/scgvisualnode.h"
-#include "visual/scgvisualpair.h"
-#include "visual/scgvisualcontrol.h"
-#include "visual/scgcontent.h"
+    //! @copydoc SCgObject::calculateDotCoordinates
+    QPointF calculateDotCoordinates(qreal dotPosition, const QPointF &point) const;
+    //! @copydoc SCgObject::calculateDotPosition
+    qreal calculateDotPosition(const QPointF &point) const;
 
-#include "commands/scgbasecommand.h"
+signals:
 
-#include "layout/scglayoutalgorithm.h"
+public slots:
 
-#include "objects/scgobject.h"
-#include "objects/scgnode.h"
-#include "objects/scgbus.h"
-#include "objects/scgpair.h"
-#include "objects/scgcontour.h"
-#include "objects/scgcontrol.h"
-#include "objects/scgconstruction.h"
+};
 
-/// sui
-#include "interfaces/_utils.h"
-
-/// qt
-#include <QMap>
-#include <QPair>
-#include <QPointF>
-#include <QColor>
-#include <QVector>
-#include <QVariant>
-#include <QGraphicsItem>
-
-#endif // SCGPRECOMPILED_H
+#endif // SCGCONTROL_H

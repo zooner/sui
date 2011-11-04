@@ -32,6 +32,7 @@ class SCgNode;
 class SCgPair;
 class SCgContour;
 class SCgBus;
+class SCgControl;
 
 /*! Class realize sc.g-construction logic. All algorithms operate with
   * sc.g-constructions. You can append or remove sc.g-object from construction.
@@ -95,6 +96,11 @@ public:
       * @return Return pointer to created sc.g-bus
       */
     SCgBus* createBus();
+
+    /*! Create new sc.g-control object
+      * @return Return pointer to created sc.g-control
+      */
+    SCgControl* createControl();
 
     /*! Destroy specified sc.g-object. It free allocated memory, so
       * all pointer to sc.g-object will be invalid.

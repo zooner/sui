@@ -74,6 +74,7 @@ void SCgMainWindowScene::_processEventObjectCreated(QObject *object)
 
     // create visual object
     SCgVisualObject *vobject = 0;
+    //! TODO: add typee function to sc.g-objects and replace qobject_cast with it
     if (qobject_cast<SCgNode*>(object) != 0)
         vobject = new SCgVisualNode(0, this);
     if (qobject_cast<SCgPair*>(object) != 0)
@@ -82,6 +83,8 @@ void SCgMainWindowScene::_processEventObjectCreated(QObject *object)
         vobject = new SCgVisualContour(0, this);
     if (qobject_cast<SCgBus*>(object) != 0)
         vobject = new SCgVisualBus(0, this);
+    if (qobject_cast<SCgControl*>(object))
+        vobject = new SCgVisualControl(0, this);
 
     if (vobject == 0) SuiExcept(SuiExceptionInternalError,
                                 "Unsupported sc.g-object type",

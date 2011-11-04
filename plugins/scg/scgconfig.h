@@ -23,6 +23,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SCGCONFIG_H
 #define SCGCONFIG_H
 
+#include "scgbuildconfig.h"
+
 #include <QObject>
 #include <QMap>
 #include <QVariant>
@@ -68,6 +70,10 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #define scg_key_control_backcolor_highlight QString("control/backcolor/highlight")
 #define scg_key_control_font_name QString("control/font/name")
 #define scg_key_control_font_size QString("control/font/size")
+
+#if ENABLE_VISUAL_EFFECTS_SUPPORT
+#define scg_key_effects_enabled QString("effects/enabled")
+#endif
 
 class SCgConfig : public QObject
 {

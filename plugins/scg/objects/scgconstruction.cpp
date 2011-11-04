@@ -120,6 +120,17 @@ SCgBus* SCgConstruction::createBus()
     return bus;
 }
 
+SCgControl* SCgConstruction::createControl()
+{
+    SCgControl *control = new SCgControl(this);
+    mObjects.push_back(control);
+    control->mConstruction = this;
+
+    _notifyUpdate(SCgConstructionObserver::ObjectCreated, control);
+
+    return control;
+}
+
 void SCgConstruction::destroyObject(SCgObject *object)
 {
     if (!mObjects.removeOne(object)) SuiExcept(SuiExceptionItemNotFound,

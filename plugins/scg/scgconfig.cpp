@@ -85,6 +85,11 @@ void SCgConfig::initializeDefault()
     scg_cfg_set_default_value(scg_key_control_font_name, QString("Arial [Times New Roman]"));
     scg_cfg_set_default_value(scg_key_control_font_size, 10);
 
+#if ENABLE_VISUAL_EFFECTS_SUPPORT
+    // --- effects ---
+    scg_cfg_set_default_value(scg_key_effects_enabled, 1);
+#endif
+
 
     // copy default values to current
     mValues = mDefaultValues;

@@ -146,14 +146,12 @@ SCgObject* SCgMainWindow::resolveUri(const ScUri &uri)
     // create new scg-object
     if (type.check(ScNode))
     {
-//        // check if it a command
-//        if (isCommand(uri))
-//        {
-////            SCgVisualControl *control = new SCgVisualControl();
-////            mScene->addItem(control);
-
-////            res = control;
-//        }else
+        // check if it a command
+        if (isCommand(uri))
+        {
+            SCgControl *control = mScene->construction()->createControl();
+            res = control;
+        }else
         {
             SCgNode *node = mScene->construction()->createNode();
             res = node;

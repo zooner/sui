@@ -53,6 +53,12 @@ protected:
     //! @copydoc SCgObject::itemChange
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
+    //! Return object shape
+    QPainterPath shape() const;
+
+    //! @copydoc SCgVisualObject::_update
+    void _update(UpdateEventType eventType, SCgObject *object);
+
 protected:
     //! Backgound color
     QColor mBackColor;

@@ -63,7 +63,9 @@ HEADERS += scgprecompiled.h \
     objects/scgconstruction.h \
     objects/scgpointcontainer.h \
     objects/scgcontour.h \
-    objects/scgbus.h
+    objects/scgbus.h \
+    objects/scgcontrol.h \
+    scgbuildconfig.h
 
 SOURCES += scgprecompiled.cpp \
     scgscenebase.cpp \
@@ -105,4 +107,5 @@ SOURCES += scgprecompiled.cpp \
     objects/scgconstruction.cpp \
     objects/scgpointcontainer.cpp \
     objects/scgcontour.cpp \
-    objects/scgbus.cpp
+    objects/scgbus.cpp \
+    objects/scgcontrol.cpp

@@ -20,45 +20,11 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 */
 
+#ifndef SCGBUILDCONFIG_H
+#define SCGBUILDCONFIG_H
 
-#ifndef SCGPRECOMPILED_H
-#define SCGPRECOMPILED_H
 
-#include "scgbuildconfig.h"
+//! Flag to enable visual effects support
+#define ENABLE_VISUAL_EFFECTS_SUPPORT 0
 
-#include "scgscenebase.h"
-#include "scgconfig.h"
-
-#include "visual/scgvisualobject.h"
-#include "visual/scgvisualbus.h"
-#include "visual/scgvisualcontour.h"
-#include "visual/scgvisualnode.h"
-#include "visual/scgvisualpair.h"
-#include "visual/scgvisualcontrol.h"
-#include "visual/scgcontent.h"
-
-#include "commands/scgbasecommand.h"
-
-#include "layout/scglayoutalgorithm.h"
-
-#include "objects/scgobject.h"
-#include "objects/scgnode.h"
-#include "objects/scgbus.h"
-#include "objects/scgpair.h"
-#include "objects/scgcontour.h"
-#include "objects/scgcontrol.h"
-#include "objects/scgconstruction.h"
-
-/// sui
-#include "interfaces/_utils.h"
-
-/// qt
-#include <QMap>
-#include <QPair>
-#include <QPointF>
-#include <QColor>
-#include <QVector>
-#include <QVariant>
-#include <QGraphicsItem>
-
-#endif // SCGPRECOMPILED_H
+#endif // SCGBUILDCONFIG_H

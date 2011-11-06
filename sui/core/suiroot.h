@@ -23,6 +23,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SUIROOT_H
 #define SUIROOT_H
 
+#include "suiCore_global.h"
 #include <QObject>
 #include "interfaces/UiRoot.h"
 
@@ -32,8 +33,8 @@ class suiScHelper;
 class suiKpm;
 class suiKnowBase;
 
-class suiRoot : public QObject,
-                public UiRootInterface
+class SUICORESHARED_EXPORT suiRoot : public QObject,
+                                    public UiRootInterface
 {
     Q_OBJECT
     Q_INTERFACES(UiRootInterface)

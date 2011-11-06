@@ -23,11 +23,12 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SUICOMPONENTSMANAGER_H
 #define SUICOMPONENTSMANAGER_H
 
+#include "suiCore_global.h"
 #include <QObject>
 #include "interfaces/UiCompManager.h"
 
-class suiComponentsManager : public QObject,
-                             public UiComponentManagerInterface
+class SUICORESHARED_EXPORT suiComponentsManager : public QObject,
+                                                    public UiComponentManagerInterface
 {
     Q_OBJECT
     Q_INTERFACES(UiComponentManagerInterface)

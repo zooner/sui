@@ -23,6 +23,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SUIKNOWBASE_H
 #define SUIKNOWBASE_H
 
+#include "suiCore_global.h"
 #include <QObject>
 #include <QMap>
 #include <QtCore>
@@ -37,7 +38,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 /*! Class that control knowledge base stuff, like keynodes and garbage clean
   */
-class suiKnowBase : public QObject
+class SUICORESHARED_EXPORT suiKnowBase : public QObject
 {
     Q_OBJECT
 public:

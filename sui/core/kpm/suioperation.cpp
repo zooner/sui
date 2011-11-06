@@ -20,10 +20,10 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 */
 
-#include "suiprecompiled.h"
+#include "../suiprecompiled.h"
 #include "suioperation.h"
-#include "suikpm.h"
-#include "suiroot.h"
+#include "../suikpm.h"
+#include "../suiroot.h"
 
 suiOperation::suiOperation(const QString &_name, QObject *parent) :
     QObject(parent),

@@ -20,7 +20,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 */
 
-#include "suiprecompiled.h"
+#include "precompiled.h"
 #include <QtGui/QApplication>
 #include "mainwindow.h"
 

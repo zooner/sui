@@ -23,6 +23,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SUIKPM_H
 #define SUIKPM_H
 
+#include "suiCore_global.h"
 #include <QObject>
 
 class suiOperation;
@@ -32,7 +33,7 @@ class suiOperation;
   * When you create new operation it automaticaly register in suiKpm. It will be destroyed automaticaly,
   * when knowledge process machine will be shutted down.
   */
-class suiKpm : public QObject
+class SUICORESHARED_EXPORT suiKpm : public QObject
 {
     friend class suiOperation;
 

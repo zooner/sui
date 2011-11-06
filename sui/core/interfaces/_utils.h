@@ -136,6 +136,15 @@ public:
     Exception *clone() const { return new SuiExceptionInternalError(*this); }
 };
 
+class SuiInvalidKnowledgeBase : public BaseException
+{
+public:
+    SuiInvalidKnowledgeBase(const QString& inDescription, const QString& inSource, const char* inFile, long inLine) :
+        BaseException("SuiInvalidKnowledgeBase", inDescription, inSource, inFile, inLine) {}
+
+    Exception *clone() const { return new SuiInvalidKnowledgeBase(*this); }
+};
+
 #define SuiExcept(_class, desc, src) _class(desc, src, __FILE__, __LINE__).raise();
 
 #define def_exception(ex_name) class ex_name : public BaseException \

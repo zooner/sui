@@ -24,6 +24,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #define SUIPRECOMPILED_H
 
 #include "suiconfig.h"
+#include "suiCore_global.h"
 
 // interfaces
 #include "interfaces/ScHelper.h"

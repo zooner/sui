@@ -23,11 +23,12 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SUISCHELPER_H
 #define SUISCHELPER_H
 
+#include "suiCore_global.h"
 #include <QObject>
 #include "interfaces/ScHelper.h"
 
-class suiScHelper : public QObject,
-                    public ScHelperInterface
+class SUICORESHARED_EXPORT suiScHelper : public QObject,
+                                            public ScHelperInterface
 
 {
     Q_OBJECT

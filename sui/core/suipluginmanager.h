@@ -23,6 +23,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SUIPLUGINMANAGER_H
 #define SUIPLUGINMANAGER_H
 
+#include "suiCore_global.h"
 #include <QObject>
 #include <QMap>
 
@@ -31,8 +32,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 class QPluginLoader;
 
-class suiPluginManager : public QObject,
-                         public UiPluginManagerInterface
+class SUICORESHARED_EXPORT suiPluginManager : public QObject,
+                                                public UiPluginManagerInterface
 {
     Q_OBJECT
     Q_INTERFACES(UiPluginManagerInterface)

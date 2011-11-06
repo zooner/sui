@@ -24,7 +24,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #define MAINWINDOW_H
 
 #include <QtGui/QMainWindow>
-#include "suiroot.h"
+#include "core/suiroot.h"
 
 
 class MainWindow : public QMainWindow

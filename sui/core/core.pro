@@ -4,43 +4,46 @@
 #
 #-------------------------------------------------
 
-QT       -= gui
+QT       += gui
 
 TARGET = suiCore
 TEMPLATE = lib
-
-TARGETDEPS += suiCore
+VERSION = 0.1.0
 
 DEFINES += SUICORE_LIBRARY
 
+OBJECTS_DIR = obj
+MOC_DIR = moc
+
 CONFIG (debug, debug|release) {
-        OBJECTS_DIR = ../sui/build/debug
+        DESTDIR = ../../bin/debug
 } else {
-        OBJECTS_DIR = ../sui/build/release
+        DESTDIR = ../../bin/release
 }
 
-MOC_DIR = build/moc
-
-SOURCES += suicore.cpp
+SOURCES += suicore.cpp \
+    suischelper.cpp \
+    suiroot.cpp \
+    suiprecompiled.cpp \
+    suipluginmanager.cpp \
+    suikpm.cpp \
+    suiknowbase.cpp \
+    suicomponentsmanager.cpp \
+    kpm/suioperation.cpp \
+    kpm/suimainwindowremoveoperation.cpp \
+    kpm/suimainwindowaddoperation.cpp
 
 HEADERS += suicore.h\
-        suiCore_global.h
+        suiCore_global.h \
+    suischelper.h \
+    suiroot.h \
+    suiprecompiled.h \
+    suipluginmanager.h \
+    suikpm.h \
+    suiknowbase.h \
+    suiconfig.h \
+    suicomponentsmanager.h \
+    kpm/suioperation.h \
+    kpm/suimainwindowremoveoperation.h \
+    kpm/suimainwindowaddoperation.h
 
-symbian {
-    MMP_RULES += EXPORTUNFROZEN
-    TARGET.UID3 = 0xE26CEA28
-    TARGET.CAPABILITY = 
-    TARGET.EPOCALLOWDLLDATA = 1
-    addFiles.sources = suiCore.dll
-    addFiles.path = !:/sys/bin
-    DEPLOYMENT += addFiles
-}
-
-unix:!symbian {
-    maemo5 {
-        target.path = /opt/usr/lib
-    } else {
-        target.path = /usr/lib
-    }
-    INSTALLS += target
-}

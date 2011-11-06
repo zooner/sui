@@ -23,7 +23,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SUIOPERATION_H
 #define SUIOPERATION_H
 
-#include "interfaces/ScMemory.h"
+#include "../suiCore_global.h"
+#include "../interfaces/ScMemory.h"
 #include <QObject>
 
 /*! Base class for user interface operation.
@@ -31,8 +32,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
   * @note You need to call suiOperation::init function to initialize operation and
   * suiOperation::shutdown to shut it down.
   */
-class suiOperation : public QObject,
-                     public ScEventCallbackInterface
+class SUICORESHARED_EXPORT suiOperation : public QObject,
+                                            public ScEventCallbackInterface
 {
     Q_OBJECT
     Q_INTERFACES(ScEventCallbackInterface)

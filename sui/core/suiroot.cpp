@@ -88,6 +88,7 @@ suiRoot::suiRoot(QMainWindow *mainWindow, QObject *parent) :
     mKpm->initialize();
 
 
+    // >>>>> test
     // show main menu on main window
     ScUri main_menu = scHelper()->keynode("/ui/main_menu");
     ScUri decomp = scHelper()->keynode("/etc/decomposition*");
@@ -112,6 +113,8 @@ suiRoot::suiRoot(QMainWindow *mainWindow, QObject *parent) :
 
         mMainScWindow->showObjects(objects);
     }
+
+    // <<<<<<< test
 }
 
 suiRoot::~suiRoot()

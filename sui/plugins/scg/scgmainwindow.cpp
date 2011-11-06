@@ -133,7 +133,7 @@ SCgObject* SCgMainWindow::resolveUri(const ScUri &uri)
     const SCgObject::SCgObjectList& list = SCgObject::objectsByScUri(uri);
 
     //! TODO: resolve situation with multiply
-    if (list.size() > 0) return list.front();
+    if (!list.empty()) return list.front();
 
     UiRootInterface *root = SCgPlugin::rootInterface();
 

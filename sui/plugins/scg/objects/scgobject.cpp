@@ -31,7 +31,9 @@ const SCgObject::SCgObjectList& SCgObject::objectsByScUri(const ScUri &uri)
     if (it != mScUriToSCgObjects.end())
         return it.value();
 
-    return SCgObjectList();
+    static SCgObjectList empty_list;
+
+    return empty_list;
 }
 
 SCgObject::SCgObject(QObject *parent) :

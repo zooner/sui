@@ -23,6 +23,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "scgprecompiled.h"
 #include "scgcontrol.h"
 
+#include "scgplugin.h"
+
 SCgControl::SCgControl(QObject *parent) :
     SCgObject(parent)
 {
@@ -44,7 +46,6 @@ QPointF SCgControl::calculateDotCoordinates(qreal dotPosition, const QPointF &po
     QPointF p1 = polygon.last();
     QPointF p2, intersectPoint, result;
     QLineF line, pair(point, p);
-    bool haveIntersect = false;
     qreal minLength = -1;
 
     //Find intersection point with minimal distance from @p from to contour
@@ -73,3 +74,55 @@ qreal SCgControl::calculateDotPosition(const QPointF &point) const
 {
     return 0.f;
 }
+
+SCgControl::ControlType SCgControl::controlType() const
+{
+    // get all interfaces we need to work
+    UiRootInterface *root = SCgPlugin::rootInterface();
+    ScHelperInterface *helper = root->scHelper();
+
+    if (helper->checkInclusion(uri(), helper->keynode("/ui/command/noatom")))
+        return NoAtomType;
+
+    if (helper->checkInclusion(uri(), helper->keynode("/ui/command/atom")))
+        return ClassType;
+}
+
+bool SCgControl::childCommands(ScUriVector &childs)
+{
+    childs.clear();
+
+    // get all interfaces we need to work
+    UiRootInterface *root = SCgPlugin::rootInterface();
+    ScMemoryInterface *memory = root->scMemory();
+    ScHelperInterface *helper = root->scHelper();
+
+    ScUri _uri = uri();
+    if (_uri.isEmpty()) SuiExcept(SuiExceptionInternalError,
+                                   "ScUri of sc.g-control element is empty",
+                                   "bool SCgControl::childCommands(ScUriVector &childs)");
+
+    // get decomposition keynode
+    ScUri decompUri = helper->keynode("/etc/decomposition*");
+    if  (decompUri.isEmpty()) SuiExcept(SuiExceptionInternalError,
+                                        "Can't find decomposition* keynode",
+                                        "bool SCgControl::childCommands(ScUriVector &childs)");
+
+    // trying to find child elements
+    ScUriVector res;
+    if (helper->searchOneShot(ScTemplate() << ScElementType(ScNode | ScConst)
+                              << ScElementType(ScArcCommon | ScConst)
+                              << _uri, res))
+    {
+        // get all child commands
+        ScSafeIterator it(memory, ScTemplate() << res[2] << ScElementType(ScArcMain) << ScElementType(ScNode));
+        while (!it.is_over())
+        {
+            childs.append(it.value(2));
+            it.next();
+        }
+    }
+
+    return !childs.empty();
+}
+

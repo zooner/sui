@@ -133,7 +133,7 @@ void SCgVisualControl::_update(SCgObjectObserver::UpdateEventType eventType, SCg
             QFont font(scg_cfg_get_value_string(scg_key_control_font_name),
                        scg_cfg_get_value_uint(scg_key_control_font_size),
                        10, false);
-            //font.setBold(true);
+            font.setBold(true);
             //font.setItalic(true);
 
             mTextItem = new QGraphicsTextItem(this);

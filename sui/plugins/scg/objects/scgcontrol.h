@@ -28,6 +28,14 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 /*! Class define any sc.g-control, that can be used in sc.g-window.
   * It allow to work with control types. Also it store whole information
   * that need to define control.
+  * Control can be one of types:
+  * \li noatom user commands. They can be opened by mouse click. After opening
+  * child commands (relation decomposition*) will showed
+  * \li class of user commands. They can be initiated by mouse click. Depending on command
+  * type they start edit or view command, or initiade question.
+  * \li controls that already associated with object, that they affect.
+  * \li objects, that doesn't initiate anything, but can be used as arguments
+  * to any command
   */
 class SCgControl : public SCgObject
 {
@@ -38,14 +46,35 @@ public:
     explicit SCgControl(QObject *parent = 0);
     virtual ~SCgControl();
 
+    //! Contol type
+    typedef enum
+    {
+        Unlnown = 0,
+        NoAtomType,
+        ClassType,
+        InstanceType,
+        ObjectType
+    } ControlType;
+
     //! @copydoc SCgObject::calculateDotCoordinates
     QPointF calculateDotCoordinates(qreal dotPosition, const QPointF &point) const;
     //! @copydoc SCgObject::calculateDotPosition
     qreal calculateDotPosition(const QPointF &point) const;
 
+private:
+    //! Return control type
+    ControlType controlType() const;
+
+    /*! Get all child commands for noatom command
+      * @param childs Result vector, where child commands ScUri's will be placed
+      * @return Return true, if command have any childs; otherwise return false
+      */
+    bool childCommands(ScUriVector &childs);
+
 signals:
 
 public slots:
+
 
 };
 

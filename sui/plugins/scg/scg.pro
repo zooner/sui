@@ -4,19 +4,19 @@ QT += xml \
 
 TARGET        = $$qtLibraryTarget(scg)
 TEMPLATE      = lib
-INCLUDEPATH  += ./
-INCLUDEPATH  += ../../sui
-DESTDIR       = ../../sui/plugins/ui
+INCLUDEPATH  += ../../core
+
+CONFIG (debug, debug|release) {
+        DESTDIR = ../../../bin/debug/plugins/ui
+} else {
+        DESTDIR = ../../../bin/release/plugins/ui
+}
+
 CONFIG       += plugin
 PRECOMPILED_HEADER = scgprecompiled.h
 
-CONFIG (debug, debug|release) {
-        OBJECTS_DIR = build/debug
-} else {
-        OBJECTS_DIR = build/release
-}
-
-MOC_DIR = build/moc
+OBJECTS_DIR = obj
+MOC_DIR = moc
 
 HEADERS += scgprecompiled.h \
     scgprerequest.h \

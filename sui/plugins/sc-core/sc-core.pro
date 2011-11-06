@@ -10,8 +10,10 @@ TARGET = $$qtLibraryTarget(sc-core)
 TEMPLATE = lib
 
 INCLUDEPATH  += ../../sui
-DESTDIR       = ../../sui/plugins/sc
+DESTDIR       = ../../sui/app/plugins/sc
 CONFIG       += plugin
+
+INCLUDEPATH += ../../core
 
 win32 {
 }
@@ -27,12 +29,13 @@ unix {
 }
 
 CONFIG (debug, debug|release) {
-        OBJECTS_DIR = build/debug
+        DESTDIR = ../../../bin/debug/plugins/sc
 } else {
-        OBJECTS_DIR = build/release
+        DESTDIR = ../../../bin/release/plugins/sc
 }
 
-MOC_DIR = build/moc
+OBJECTS_DIR = obj
+MOC_DIR = moc
 
 #DEFINES += SC_MODEL_OLD
 

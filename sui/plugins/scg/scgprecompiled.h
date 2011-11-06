@@ -51,6 +51,9 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 /// sui
 #include "interfaces/_utils.h"
+#include "interfaces/ScHelper.h"
+#include "interfaces/ScMemory.h"
+#include "interfaces/UiRoot.h"
 
 /// qt
 #include <QMap>

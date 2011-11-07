@@ -842,8 +842,12 @@ void ScCoreMemory::_notifyEraseElement(ScCoreSink *sink, const QString &idtf)
 
     // check if element exist in map
     ScUri2ScAddrMap::iterator it = mScUri2ScAddr.find(uri);
-    if (it == mScUri2ScAddr.end())
+    if (it != mScUri2ScAddr.end())
         mScUri2ScAddr.erase(it);
+    else
+        SuiExcept(SuiExceptionInternalError,
+                  "Notify to delete unknownd sc-element",
+                  "void ScCoreMemory::_notifyEraseElement(ScCoreSink *sink, const QString &idtf)");
 }
 
 void ScCoreMemory::_listenSegment(sc_segment *seg)

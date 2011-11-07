@@ -23,6 +23,14 @@ dt {
 	font-weight: bold;
 }
 
+div.image {
+	margin: 0 auto;
+	text-align: center;
+	font-weight: bold;
+	margin-bottom: 15px;
+	margin-top: 15px;
+}
+
 div.multicol {
 	-moz-column-gap: 1em;
 	-webkit-column-gap: 1em;
@@ -591,7 +599,9 @@ address {
 
 table.doc{
 	border: 3px solid #000;
-	margin: 0;
+	margin: 0 auto;
+	margin-top: 15px;
+	margin-bottom: 15px;
 	border-collapse: collapse;
 }
 

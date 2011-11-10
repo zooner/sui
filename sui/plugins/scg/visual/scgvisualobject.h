@@ -34,10 +34,10 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 class SCgVisualObject : public QObject, public QGraphicsItem,
                         public SCgObjectObserver
 {
-Q_OBJECT
-Q_INTERFACES(QGraphicsItem)
+    Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
 
-friend class SCgPlugin;
+    friend class SCgPlugin;
 
 public:
     // scg object types

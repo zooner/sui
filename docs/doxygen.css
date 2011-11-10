@@ -56,8 +56,9 @@ p.endtd {
 
 /* @end */
 
-caption {
+.caption {
 	font-weight: bold;
+	font-size: 8px;
 }
 
 span.legend {

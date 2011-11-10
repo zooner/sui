@@ -26,7 +26,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include <QVector2D>
 
 SCgContour::SCgContour(QObject *parent) :
-    SCgPointContainer(parent)
+    SCgPointContainer(parent),
+    mBorderAccuracy(15.f)
 {
 }
 
@@ -120,7 +121,7 @@ qreal SCgContour::calculateDotPosition(const QPointF &point) const
         qreal d = QVector2D(point - p).lengthSquared();
 
         // compare with minimum distance
-        if (d < 15.f)
+        if (d < mBorderAccuracy)
         {
             if (minDist < 0.f || minDist > d)
             {
@@ -131,4 +132,14 @@ qreal SCgContour::calculateDotPosition(const QPointF &point) const
     }
 
     return result;
+}
+
+void SCgContour::setBorderAccuracy(qreal value)
+{
+    mBorderAccuracy = value;
+}
+
+qreal SCgContour::borderAccuracy() const
+{
+    return mBorderAccuracy;
 }

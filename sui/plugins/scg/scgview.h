@@ -3,7 +3,7 @@
 This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
 For the latest info, see http://www.ostis.net
 
-Copyright (c) 2010 OSTIS
+Copyright (c) 2011 OSTIS
 
 OSTIS is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,39 +20,21 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 */
 
-#ifndef SCGCONTOUR_H
-#define SCGCONTOUR_H
+#ifndef SCGVIEW_H
+#define SCGVIEW_H
 
-#include "scgpointcontainer.h"
+#include <QGraphicsView>
 
-/*! Class represents sc.g-contour object.
-  * \chapter Coordinate system.
-  * All coordinate sof contour points must to bee relative to it position.
-  */
-class SCgContour : public SCgPointContainer
+class SCgView : public QGraphicsView
 {
     Q_OBJECT
 public:
-    explicit SCgContour(QObject *parent = 0);
-    virtual ~SCgContour();
+    explicit SCgView(QWidget *parent = 0);
+    virtual ~SCgView();
 
-    //! @see SCgObject::calculateDotCoordinates
-    QPointF calculateDotCoordinates(qreal dotPosition, const QPointF &point) const;
-
-    //! @see SCgObject::calculateDotPosition
-    qreal calculateDotPosition(const QPointF &point) const;
-
-    /*! Set new border accuracy
-      * @param value New border accuracy
-      */
-    void setBorderAccuracy(qreal value);
-
-    //! Return border accuracy
-    qreal borderAccuracy() const;
-
-private:
-    //! Bodred accuracy value
-    qreal mBorderAccuracy;
+protected:
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
 
 signals:
 
@@ -60,4 +42,4 @@ public slots:
 
 };
 
-#endif // SCGCONTOUR_H
+#endif // SCGVIEW_H

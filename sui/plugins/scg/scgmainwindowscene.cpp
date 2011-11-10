@@ -26,12 +26,10 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 SCgMainWindowScene::SCgMainWindowScene(SCgInputHandlerInterface *inputHandler, QObject *parent) :
     SCgSceneBase(inputHandler, parent)
 {
-
 }
 
 SCgMainWindowScene::~SCgMainWindowScene()
 {
-
 }
 
 void SCgMainWindowScene::_update(SCgConstructionObserver::UpdateEventType eventType, QObject *object)

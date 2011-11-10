@@ -30,6 +30,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 class QGraphicsView;
 class SCgSceneBase;
 class SCgMainWindowInputHandler;
+class SCgView;
 
 class SCgMainWindow : public QObject,
                         public UiMainWindowInterface
@@ -75,7 +76,7 @@ private:
     void initializeActions();
 
     //! Pointer to widget, that realize whole logic of window
-    QGraphicsView *mView;
+    SCgView *mView;
     //! Pointer to used graphics scene
     SCgSceneBase *mScene;
     //! Pointer to input handler

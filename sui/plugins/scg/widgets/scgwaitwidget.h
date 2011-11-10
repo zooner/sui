@@ -3,7 +3,7 @@
 This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
 For the latest info, see http://www.ostis.net
 
-Copyright (c) 2010 OSTIS
+Copyright (c) 2011 OSTIS
 
 OSTIS is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -20,44 +20,33 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 */
 
-#ifndef SCGCONTOUR_H
-#define SCGCONTOUR_H
+#ifndef SCGWAITWIDGET_H
+#define SCGWAITWIDGET_H
 
-#include "scgpointcontainer.h"
+#include <QGraphicsWidget>
 
-/*! Class represents sc.g-contour object.
-  * \chapter Coordinate system.
-  * All coordinate sof contour points must to bee relative to it position.
-  */
-class SCgContour : public SCgPointContainer
+class SCgWaitWidget : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    explicit SCgContour(QObject *parent = 0);
-    virtual ~SCgContour();
+    explicit SCgWaitWidget(QGraphicsItem *parent = 0);
+    virtual ~SCgWaitWidget();
 
-    //! @see SCgObject::calculateDotCoordinates
-    QPointF calculateDotCoordinates(qreal dotPosition, const QPointF &point) const;
-
-    //! @see SCgObject::calculateDotPosition
-    qreal calculateDotPosition(const QPointF &point) const;
-
-    /*! Set new border accuracy
-      * @param value New border accuracy
-      */
-    void setBorderAccuracy(qreal value);
-
-    //! Return border accuracy
-    qreal borderAccuracy() const;
+protected:
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 private:
-    //! Bodred accuracy value
-    qreal mBorderAccuracy;
+    //! Animation progress
+    qreal mProgress;
 
 signals:
 
 public slots:
 
+protected slots:
+    //! Update animation progress
+    void updateAnimationProgress();
+
 };
 
-#endif // SCGCONTOUR_H
+#endif // SCGWAITWIDGET_H

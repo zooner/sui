@@ -25,12 +25,14 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "scgmainwindowscene.h"
 #include "scgmainwindowinputhandler.h"
 #include "scgplugin.h"
+#include "scgview.h"
 #include "interfaces/UiRoot.h"
 
 #include <QUndoStack>
 #include <QAction>
 #include <QApplication>
 #include <QGraphicsView>
+#include <QScrollBar>
 //#include <QGLWidget>
 
 SCgMainWindow::SCgMainWindow(QObject *parent) :
@@ -39,7 +41,7 @@ SCgMainWindow::SCgMainWindow(QObject *parent) :
     mScene(0),
     mInputHandler(0)
 {
-    mView = new QGraphicsView();
+    mView = new SCgView();
     mInputHandler = new SCgMainWindowInputHandler(mView);
     mScene = new SCgMainWindowScene(mInputHandler, mView);
 
@@ -52,6 +54,9 @@ SCgMainWindow::SCgMainWindow(QObject *parent) :
     mView->setDragMode(QGraphicsView::RubberBandDrag);
     mView->setAcceptDrops(true);
     mView->setSceneRect(-1024, -1024, 2048, 2048);
+
+    mView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    mView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
 //    mView->setViewport(new QGLWidget());
 //    mView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);

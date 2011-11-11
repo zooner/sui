@@ -23,9 +23,14 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "scgprecompiled.h"
 #include "scgmainwindowscene.h"
 
+#include "widgets/scgtextedit.h"
+
 SCgMainWindowScene::SCgMainWindowScene(SCgInputHandlerInterface *inputHandler, QObject *parent) :
     SCgSceneBase(inputHandler, parent)
 {
+    SCgTextEdit *textEdit = new SCgTextEdit();
+    textEdit->setGeometry(QRectF(0, 0, 150, 50));
+    addItem(textEdit);
 }
 
 SCgMainWindowScene::~SCgMainWindowScene()

@@ -67,7 +67,8 @@ HEADERS += scgprecompiled.h \
     objects/scgcontrol.h \
     scgbuildconfig.h \
     scgview.h \
-    widgets/scgwaitwidget.h
+    widgets/scgwaitwidget.h \
+    widgets/scgtextedit.h
 
 SOURCES += scgprecompiled.cpp \
     scgscenebase.cpp \
@@ -112,4 +113,5 @@ SOURCES += scgprecompiled.cpp \
     objects/scgbus.cpp \
     objects/scgcontrol.cpp \
     scgview.cpp \
-    widgets/scgwaitwidget.cpp
+    widgets/scgwaitwidget.cpp \
+    widgets/scgtextedit.cpp

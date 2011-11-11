@@ -45,5 +45,12 @@ HEADERS += suicore.h\
     suicomponentsmanager.h \
     kpm/suioperation.h \
     kpm/suimainwindowremoveoperation.h \
-    kpm/suimainwindowaddoperation.h
-
+    kpm/suimainwindowaddoperation.h \
+    interfaces/_utils.h \
+    interfaces/UiRoot.h \
+    interfaces/UiPlugins.h \
+    interfaces/UiObjects.h \
+    interfaces/UiComponents.h \
+    interfaces/UiCompManager.h \
+    interfaces/ScMemory.h \
+    interfaces/ScHelper.h

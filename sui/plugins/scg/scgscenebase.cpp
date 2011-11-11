@@ -66,6 +66,7 @@ void SCgSceneBase::appendUndoCommand(QUndoCommand *command)
 void SCgSceneBase::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->contextMenuEvent(event);
 
     if (!event->isAccepted())
@@ -75,6 +76,7 @@ void SCgSceneBase::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 void SCgSceneBase::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->dragEnterEvent(event);
 
     if (!event->isAccepted())
@@ -84,6 +86,7 @@ void SCgSceneBase::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 void SCgSceneBase::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->dragLeaveEvent(event);
 
     if (!event->isAccepted())
@@ -93,6 +96,7 @@ void SCgSceneBase::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 void SCgSceneBase::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->dragMoveEvent(event);
 
     if (!event->isAccepted())
@@ -118,6 +122,7 @@ void SCgSceneBase::drawForeground(QPainter *painter, const QRectF &rect)
 void SCgSceneBase::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->dropEvent(event);
 
     if (!event->isAccepted())
@@ -127,6 +132,7 @@ void SCgSceneBase::dropEvent(QGraphicsSceneDragDropEvent *event)
 void SCgSceneBase::focusInEvent(QFocusEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->focusInEvent(event);
 
     if (!event->isAccepted())
@@ -136,6 +142,7 @@ void SCgSceneBase::focusInEvent(QFocusEvent *event)
 void SCgSceneBase::focusOutEvent(QFocusEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->focusOutEvent(event);
 
     if (!event->isAccepted())
@@ -145,6 +152,7 @@ void SCgSceneBase::focusOutEvent(QFocusEvent *event)
 void SCgSceneBase::helpEvent(QGraphicsSceneHelpEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->helpEvent(event);
 
     if (!event->isAccepted())
@@ -154,6 +162,7 @@ void SCgSceneBase::helpEvent(QGraphicsSceneHelpEvent *event)
 void SCgSceneBase::inputMethodEvent(QInputMethodEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->inputMethodEvent(event);
 
     if (!event->isAccepted())
@@ -163,6 +172,7 @@ void SCgSceneBase::inputMethodEvent(QInputMethodEvent *event)
 void SCgSceneBase::keyPressEvent(QKeyEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->keyPressEvent(event);
 
     if (!event->isAccepted())
@@ -172,6 +182,7 @@ void SCgSceneBase::keyPressEvent(QKeyEvent *event)
 void SCgSceneBase::keyReleaseEvent(QKeyEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->keyReleaseEvent(event);
 
     if (!event->isAccepted())
@@ -181,6 +192,7 @@ void SCgSceneBase::keyReleaseEvent(QKeyEvent *event)
 void SCgSceneBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->mouseDoubleClickEvent(event);
 
     if (!event->isAccepted())
@@ -190,6 +202,7 @@ void SCgSceneBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 void SCgSceneBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->mouseMoveEvent(event);
 
     if (!event->isAccepted())
@@ -199,6 +212,7 @@ void SCgSceneBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 void SCgSceneBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->mousePressEvent(event);
 
     if (!event->isAccepted())
@@ -208,6 +222,7 @@ void SCgSceneBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void SCgSceneBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->mouseReleaseEvent(event);
 
     if (!event->isAccepted())
@@ -217,6 +232,7 @@ void SCgSceneBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 void SCgSceneBase::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
+    event->ignore();
     mInputHandler->wheelEvent(event);
 
     if (!event->isAccepted())

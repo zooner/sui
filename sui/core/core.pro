@@ -31,7 +31,10 @@ SOURCES += suicore.cpp \
     suicomponentsmanager.cpp \
     kpm/suioperation.cpp \
     kpm/suimainwindowremoveoperation.cpp \
-    kpm/suimainwindowaddoperation.cpp
+    kpm/suimainwindowaddoperation.cpp \
+    suitaskmanager.cpp \
+    suitask.cpp \
+    suitaskparams.cpp
 
 HEADERS += suicore.h\
         suiCore_global.h \
@@ -53,4 +56,7 @@ HEADERS += suicore.h\
     interfaces/UiComponents.h \
     interfaces/UiCompManager.h \
     interfaces/ScMemory.h \
-    interfaces/ScHelper.h
+    interfaces/ScHelper.h \
+    suitaskmanager.h \
+    suitask.h \
+    suitaskparams.h

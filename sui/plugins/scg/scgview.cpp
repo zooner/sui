@@ -50,3 +50,4 @@ void SCgView::keyReleaseEvent(QKeyEvent *event)
 
     QGraphicsView::keyReleaseEvent(event);
 }
+

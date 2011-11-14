@@ -61,6 +61,8 @@ void SCgModeContour::mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * mouseEve
 
 void SCgModeContour::mouseMoveEvent ( QGraphicsSceneMouseEvent * mouseEvent )
 {
+    mouseEvent->accept();
+
     if(mPathItem)
     {
         QVector2D vec(mouseEvent->scenePos() - mPathItem->points().first());

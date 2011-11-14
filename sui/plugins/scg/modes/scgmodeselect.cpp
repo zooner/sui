@@ -36,6 +36,8 @@ void SCgModeSelect::keyReleaseEvent ( QKeyEvent * keyEvent )
 
 void SCgModeSelect::mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * mouseEvent )
 {
+    mouseEvent->accept();
+
     QPointF mousePos = mouseEvent->scenePos();
 
     // left button

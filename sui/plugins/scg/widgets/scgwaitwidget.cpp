@@ -25,6 +25,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QTimer>
 #include <QPainter>
+#include <QFontMetrics>
 
 SCgWaitWidget::SCgWaitWidget(QGraphicsItem *parent) :
     QGraphicsWidget(parent),
@@ -66,11 +67,37 @@ void SCgWaitWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
                                      gr * sin(i * M_PI * 2 / (qreal)num + da) + offset.y()),
                              radius, radius);
     }
+
+    if (!mTextValue.isEmpty())
+    {
+        QFont font("Arial", 8, 8);
+        painter->setPen(QPen(QColor(255, 255, 255, 196)));
+        painter->setFont(font);
+        QRectF font_bounds = QFontMetrics(font).boundingRect(mTextValue);
+        font_bounds.moveCenter(boundRect.center());
+        painter->drawText(font_bounds, mTextValue);
+    }
 }
 
 void SCgWaitWidget::updateAnimationProgress()
 {
     mProgress += 0.06;
     if (mProgress > 1.f) mProgress -= 1.f;
+
     update();
+}
+
+void SCgWaitWidget::setText(const QString &text)
+{
+    mTextValue = text;
+}
+
+void SCgWaitWidget::setPercentText(qreal percent)
+{
+    mTextValue = QString("%1\%").arg((quint32)(percent * 100));
+}
+
+const QString& SCgWaitWidget::text() const
+{
+    return mTextValue;
 }

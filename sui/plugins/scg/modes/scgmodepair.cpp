@@ -43,6 +43,8 @@ void SCgModePair::mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * mouseEvent 
 
 void SCgModePair::mouseMoveEvent ( QGraphicsSceneMouseEvent * mouseEvent )
 {
+    mouseEvent->accept();
+
     if(mPathItem)
     {
         mPathItem->update(mouseEvent->scenePos());
@@ -70,6 +72,7 @@ void SCgModePair::mouseMoveEvent ( QGraphicsSceneMouseEvent * mouseEvent )
 void SCgModePair::mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent )
 {
     mouseEvent->accept();
+
     if (mPathItem)
     {
         QPointF mousePos = mouseEvent->scenePos();

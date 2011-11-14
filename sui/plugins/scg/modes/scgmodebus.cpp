@@ -48,6 +48,8 @@ void SCgModeBus::mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * mouseEvent )
 
 void SCgModeBus::mouseMoveEvent ( QGraphicsSceneMouseEvent * mouseEvent )
 {
+    mouseEvent->accept();
+
     if(mPathItem)
     {
         QVector2D vec(mouseEvent->scenePos() - mPathItem->points().last());

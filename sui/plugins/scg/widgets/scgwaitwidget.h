@@ -32,16 +32,31 @@ public:
     explicit SCgWaitWidget(QGraphicsItem *parent = 0);
     virtual ~SCgWaitWidget();
 
+    //! Return wait text value
+    const QString& text() const;
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
 
 private:
     //! Animation progress
     qreal mProgress;
+    //! Wait action text
+    QString mTextValue;
 
 signals:
 
 public slots:
+    /*! Set new text value into wait text
+      * @param text New wait text value
+      */
+    void setText(const QString &text);
+
+    /*! Set wait text value to percentage
+      * @param percent Percent value in range [0..1]
+      */
+    void setPercentText(qreal percent);
 
 protected slots:
     //! Update animation progress

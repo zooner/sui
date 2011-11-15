@@ -23,8 +23,11 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SUITASK_H
 #define SUITASK_H
 
+#include "suiCore_global.h"
 #include <QObject>
 #include <QRunnable>
+
+#include "suitaskparams.h"
 
 class QMutex;
 
@@ -36,7 +39,7 @@ class QMutex;
   * Like in QRunnable class you can use autoDelete flag, but in that case it
   * has a false value by default.
   */
-class SuiTask : public QObject, public QRunnable
+class SUICORESHARED_EXPORT SuiTask : public QObject, public QRunnable
 {
     Q_OBJECT
 
@@ -51,6 +54,9 @@ public:
         Error,          // task finished with some errors
         Restart         // task need to be restarted
     } Result;
+
+    //! Type for a list of tasks
+    typedef QList<SuiTask*> SuiTaskList;
 
 public:
     /*! Constructor
@@ -78,6 +84,31 @@ public:
     //! Check if task is finished
     bool isFinished() const;
 
+    /*! Operator that return reference to specified param value
+      * @param key Parameter name
+      * @return Return parameter value
+      */
+    QVariant operator [] (const QString &key);
+
+    /*! Return list of "child" tasks.
+      * @param subChilds Flag to include in result list all sub-childs. If that
+      * flag is true, then childs for child tasks will be appended recursively.
+      * By default it has false value.
+      * @note This function returns a copy of child list, so itsn't fast
+      */
+    SuiTaskList childTasks(bool subChilds = false);
+
+    /*! Set new priority for the task.
+      * @note It doesn't affect to task, if it already running.
+      */
+    void setPriority(int priority);
+
+    //! Return task priority
+    int priority() const;
+
+    //! Check if task is running
+    bool isRunning() const;
+
 protected:
     /*! Task impelementation
       * @return Return result code
@@ -96,19 +127,35 @@ protected:
     void _removeChildTask(SuiTask *task);
 
 protected:
-    //! Type for a list of tasks
-    typedef QList<SuiTask*> SuiTaskList;
     //! List of "child" tasks
     SuiTaskList mChildTasks;
-
+    //! Task running flag
+    bool mIsRunning;
     //! Pointer to a parent task
     SuiTask *mParentTask;
     //! Task execution finish flag
     bool mIsFinished;
     //! Pointer to mutex, tath used to make this class thread-safe
-    QMutex *mMutex;
+    mutable QMutex *mMutex;
+    //! Task parameters
+    SuiTaskParams mParams;
+    //! Task priority
+    int mPriority;
 
 signals:
+    /*! Signal that emits when task run complete.
+      * @param sender Pointer to task, that emit signal
+      * @param result Result code
+      *
+      * @note Depending on result code task,  can be finihsed or no
+      */
+    void complete(SuiTask *sender, Result result);
+
+    /*! Signal that emits when task run started
+      * @param sender Pointer to task, that emit signal
+      */
+    void started(SuiTask *sender);
+
 
 public slots:
 

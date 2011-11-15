@@ -23,10 +23,11 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef SUITASKPARAMS_H
 #define SUITASKPARAMS_H
 
+#include "suiCore_global.h"
 #include <QObject>
 #include <QMap>
 
-class SuiTaskParams
+class SUICORESHARED_EXPORT SuiTaskParams
 {
 public:
     explicit SuiTaskParams();
@@ -34,6 +35,7 @@ public:
 
     /*! Operator, that return reference to specified parameter value
       * @param key Parameter name
+      * @return Return reference to parameter value
       */
     QVariant& operator [] (const QString &key);
 

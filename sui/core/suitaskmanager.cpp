@@ -23,11 +23,41 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "suiprecompiled.h"
 #include "suitaskmanager.h"
 
+#include <QThreadPool>
+
 SuiTaskManager::SuiTaskManager(QObject *parent) :
     QObject(parent)
 {
+    mThreadPool = new QThreadPool(this);
 }
 
 SuiTaskManager::~SuiTaskManager()
 {
+    //delete mThreadPool;
+}
+
+void SuiTaskManager::runTask(SuiTask *task)
+{
+
+}
+
+void SuiTaskManager::taskStarted(SuiTask *task)
+{
+    Q_ASSERT(task != 0);
+
+    if (mRunningTasks.contains(task))
+        SuiExcept(SuiExceptionDuplicateItem,
+                  QString("Task '%1' already running").arg(task->objectName()),
+                  "void SuiTaskManager::taskStarted(SuiTask *task)");
+
+    mRunningTasks.append(task);
+}
+
+void SuiTaskManager::taskCompleted(SuiTask *task, SuiTask::Result result)
+{
+    Q_ASSERT(task != 0);
+
+    if (result == SuiTask::Restart)
+        runTask(task);
+
 }

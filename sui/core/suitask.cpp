@@ -27,7 +27,10 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 SuiTask::SuiTask(const QString &name, QObject *parent) :
     QObject(parent),
-    mIsFinished(false)
+    mIsRunning(false),
+    mParentTask(0),
+    mIsFinished(false),
+    mMutex(0)
 {
     setAutoDelete(false);
     setObjectName(name);
@@ -43,11 +46,22 @@ SuiTask::~SuiTask()
 
 void SuiTask::run()
 {
-    QMutexLocker locker(mMutex);
+    Q_ASSERT(mIsRunning == false);
+
+    mMutex->lock();
+    mIsRunning = true;
+    mMutex->unlock();
+
+    started(this);
 
     Result result = runImpl();
+
+    mMutex->lock();
     if (result != Restart)
         mIsFinished = true;
+    mMutex->unlock();
+
+    complete(this, result);
 }
 
 void SuiTask::setParentTask(SuiTask *parentTask)
@@ -73,6 +87,37 @@ bool SuiTask::isFinished() const
 {
     QMutexLocker locker(mMutex);
     return mIsFinished;
+}
+
+SuiTask::SuiTaskList SuiTask::childTasks(bool subChilds)
+{
+    QMutexLocker locker(mMutex);
+
+    if (!subChilds) return mChildTasks;
+
+    SuiTaskList list;
+    SuiTask *task;
+    foreach(task, mChildTasks)
+        list.append(task->childTasks(true));
+    return list;
+}
+
+QVariant SuiTask::operator [](const QString &key)
+{
+    QMutexLocker locker(mMutex);
+    return mParams[key];
+}
+
+void SuiTask::setPriority(int priority)
+{
+    QMutexLocker locker(mMutex);
+    mPriority = priority;
+}
+
+int SuiTask::priority() const
+{
+    QMutexLocker locker(mMutex);
+    return mPriority;
 }
 
 void SuiTask::_appendChildTask(SuiTask *task)

@@ -44,6 +44,13 @@ public:
     explicit SuiTaskManager(QObject *parent = 0);
     virtual ~SuiTaskManager();
 
+    //! Return pointer to instance
+    static SuiTaskManager* getInstance();
+private:
+    //! Pointer to task manager instance
+    static SuiTaskManager *mInstance;
+
+public:
     /*! Append task in to run queue.
       * @param task Pointer to task that need to be queued
       */
@@ -54,7 +61,8 @@ protected:
     QList<SuiTask*> mRunningTasks;
     //! Pointer to thread pool, that run tasks
     QThreadPool *mThreadPool;
-
+    //! Pointer to synchronization mutex
+    QMutex *mMutex;
 
 signals:
 

@@ -128,7 +128,16 @@ protected:
     QList<SCgConstructionObserver*> mObservers;
     //! List of all objects that contained in construction
     QList<SCgObject*> mObjects;
-
+    //! List of nodes
+    QList<SCgNode*> mNodeObjects;
+    //! List of pairs
+    QList<SCgPair*> mPairObjects;
+    //! List of contours
+    QList<SCgContour*> mContourObjects;
+    //! List of bus objects
+    QList<SCgBus*> mBusObjects;
+    //! List of controls
+    QList<SCgControl*> mControlObjects;
 };
 
 #endif // SCGCONSTRUCTION_H

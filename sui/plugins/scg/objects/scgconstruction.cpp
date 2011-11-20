@@ -77,6 +77,7 @@ SCgNode* SCgConstruction::createNode()
 {
     SCgNode *node = new SCgNode(this);
     mObjects.push_back(node);
+    mNodeObjects.push_back(node);
     node->mConstruction = this;
 
     _notifyUpdate(SCgConstructionObserver::ObjectCreated, node);
@@ -88,6 +89,7 @@ SCgPair* SCgConstruction::createPair(SCgObject *beginObject, SCgObject *endObjec
 {
     SCgPair *pair = new SCgPair(this);
     mObjects.push_back(pair);
+    mPairObjects.push_back(pair);
     pair->mConstruction = this;
 
     if (beginObject != 0) pair->setBeginObject(beginObject);
@@ -102,6 +104,7 @@ SCgContour* SCgConstruction::createContour()
 {
     SCgContour *contour = new SCgContour(this);
     mObjects.push_back(contour);
+    mContourObjects.push_back(contour);
     contour->mConstruction = this;
 
     _notifyUpdate(SCgConstructionObserver::ObjectCreated, contour);
@@ -113,6 +116,7 @@ SCgBus* SCgConstruction::createBus()
 {
     SCgBus *bus = new SCgBus(this);
     mObjects.push_back(bus);
+    mBusObjects.push_back(bus);
     bus->mConstruction = this;
 
     _notifyUpdate(SCgConstructionObserver::ObjectCreated, bus);
@@ -124,6 +128,7 @@ SCgControl* SCgConstruction::createControl()
 {
     SCgControl *control = new SCgControl(this);
     mObjects.push_back(control);
+    mControlObjects.push_back(control);
     control->mConstruction = this;
 
     _notifyUpdate(SCgConstructionObserver::ObjectCreated, control);
@@ -160,6 +165,35 @@ void SCgConstruction::removeObject(SCgObject *object)
     if (!mObjects.removeOne(object)) SuiExcept(SuiExceptionItemNotFound,
                                                "sc.g-object doesn't exist",
                                                "void SCgConstruction::removeObject(SCgObject *object)");
+
+    switch(object->type())
+    {
+    case SCgObject::Node:
+        mNodeObjects.removeOne(qobject_cast<SCgNode*>(object));
+        break;
+
+    case SCgObject::Pair:
+        mPairObjects.removeOne(qobject_cast<SCgPair*>(object));
+        break;
+
+    case SCgObject::Bus:
+        mBusObjects.removeOne(static_cast<SCgBus*>(object));
+        break;
+
+    case SCgObject::Contour:
+        mContourObjects.removeOne(static_cast<SCgContour*>(object));
+        break;
+
+    case SCgObject::Control:
+        mControlObjects.removeOne(static_cast<SCgControl*>(object));
+        break;
+
+    default:
+        SuiExcept(SuiExceptionInternalError,
+                  "Unknown object type",
+                  "void SCgConstruction::removeObject(SCgObject *object)");
+    }
+
     object->mConstruction = 0;
 
     _notifyUpdate(SCgConstructionObserver::ObjectRemoved, object);

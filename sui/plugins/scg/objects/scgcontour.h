@@ -50,6 +50,9 @@ public:
     //! Return border accuracy
     qreal borderAccuracy() const;
 
+    //! @copydoc SCgObject::type
+    int type() const { return Contour; }
+
 private:
     //! Bodred accuracy value
     qreal mBorderAccuracy;

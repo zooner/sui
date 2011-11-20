@@ -78,6 +78,9 @@ protected:
 
 public:
 
+    //! @copydoc SCgObject::type
+    int type() const { return Pair; }
+
     /*! Set begin sc.g-object for sc.g-pair
       * @param object Pointer to begin sc.g-object
       */

@@ -56,10 +56,23 @@ protected:
 public:
     virtual ~SCgObject();
 
+    typedef enum
+    {
+        Unknown = 0,
+        Node,
+        Pair,
+        Contour,
+        Bus,
+        Control
+    } ObjectType;
+
 public:
     /*! Notify all observers for updates.
       */
     void _sync();
+
+    //! Return object type. All types enumerated in SCgObject::ObjectType enum
+    virtual int type() const = 0;
 
 protected:
     /*! Function, that collect all needed updates

@@ -56,6 +56,9 @@ public:
     //! Recalculate bus points
     void updatePoints();
 
+    //! @copydoc SCgObject::type
+    int type() const { return Bus; }
+
 protected:
 
     //! @copydoc SCgObject::calculateDotCoordinates

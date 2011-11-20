@@ -41,6 +41,9 @@ protected:
     //! @see SCgObject::calculateDotPosition
     qreal calculateDotPosition(const QPointF &point) const;
 
+    //! @copydoc SCgObject::type
+    int type() const { return Node; }
+
 public:
 
 private:

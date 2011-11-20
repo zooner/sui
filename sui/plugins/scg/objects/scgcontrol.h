@@ -61,6 +61,9 @@ public:
     //! @copydoc SCgObject::calculateDotPosition
     qreal calculateDotPosition(const QPointF &point) const;
 
+    //! @copydoc SCgObject::type
+    int type() const { return Control; }
+
 private:
     //! Return control type
     ControlType controlType() const;

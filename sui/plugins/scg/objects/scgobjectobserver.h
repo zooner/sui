@@ -79,6 +79,7 @@ protected:
       * when it change any state. So it point to observer, that it need to
       * be synchronized with sc.g-object.
       * To synchronize use SCgObject::_sync function
+      * @attention This function must be a thread-safe
       */
     virtual void _needSync() { mNeedSync = true; }
 

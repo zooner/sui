@@ -7,10 +7,58 @@ SCg-код (Semantic Computer graphic Сode) – это один из возмо
 \li каждая информационная конструкция, принадлежащая SCg-ядру, изоморфна той sc-конструкции, которую она графически изображает. В этом смысле средства SCg-ядра максимально близки SC-коду.
 \li в конструкциях, принадлежащих SCg-ядру, как и в sc-конструкциях, запрещена синонимия элементов этих конструкций.
 Конструкции SCg-ядра удобны для иллюстрации синтаксических и семантических свойств SC-кода, но не удобны для широкого практического использования в качестве языка визуализации sc-конструкций, т.к. не являются наглядными. Разработка SCg-кода как раз и направлена на разрешение этого противоречия (см. \link ui_model_scg_code SCg-код \endlink). 
-\image html model/scg-core.png "Соответствие алфавита SC-кода и алфавита графических примитивов SCg-ядра"
-\image latex model/scg-core.png "Соответствие алфавита SC-кода и алфавита графических примитивов SCg-ядра"
+<center>
+<table width="90%" bgcolor="#FFF" class="doc">
+	<tr>
+		<th>Алфавит SC-кода</th>
+		<th>Алфавит SCg-ядра</th>
+		<th>Пояснения алфавита SCg-ядра</th>
+	</tr>
 
-<i>Более подробно можно посмотреть по ссылке:</i> <a href="http://www.ostis.net/wiki/Подпроект_101">http://www.ostis.net/wiki/Подпроект_101</a>
+	<tr>
+		<td width="200px"><b><i>sc-узел</i></b></td>
+		<td>
+			\image html model/scg/node_not_define.png
+		</td>
+		<td><b><i>sc.g-узел общего вида</i></b></td>
+	</tr>
+	<tr>
+		<td width="200px"><b><i>sc-ссылка</i></b></td>
+		<td>
+			\image html model/scg/content.png
+		</td>
+		<td><b><i>sc.g-рамка</i></b></td>
+	</tr>
+	<tr>
+		<td width="200px"><b><i>sc-ребро</i></b></td>
+		<td>
+			\image html model/scg/edge.png
+		</td>
+		<td><b><i>sc.g-ребро общего вида</i></b></td>
+	</tr>
+	<tr>
+		<td width="200px"><b><i>sc-дуга общего вида</i></b></td>
+		<td>
+			\image html model/scg/arc_common.png
+		</td>
+		<td><b><i>sc.g-дуга общего вида</i></b></td>
+	</tr>
+	<tr>
+		<td width="200px"><b><i>sc-дуга принадлежности</i></b></td>
+		<td>
+			\image html model/scg/arc_accessory.png
+		</td>
+		<td><b><i>sc.g-дуга принадлежности</i></b></td>
+	</tr>
+	<tr>
+		<td width="200px"><b><i>константная позитивная стационарная sc-дуга принадлежности</i></b></td>
+		<td>
+			\image html model/scg/pair_const_perm_pos.png
+		</td>
+		<td><b><i>константная позитивная стационарная sc.g-дуга принадлежности</i></b></td>
+	</tr>
+</table>
+</center>
 
  * \section ui_model_scg_code SCg-код
 
@@ -26,350 +74,215 @@ SCg-код (Semantic Computer graphic Сode) – это один из возмо
 </tr>
 
 <tr>
-	<td>sc.g-узел общего вида</td>
-	<td>	\image html model/scg/node_not_define.png </td>
-	<td> 	\image html model/scg/node_not_define.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константного sc-элемента</td>
+	<td>константный sc.g-узел</td>
 	<td>	\image html model/scg/node_general_const.png </td>
 	<td>	\image html model/scg/eq_node_general_const.png	</td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременного sc-элемента</td>
+	<td>переменный sc.g-узел</td>
 	<td>	\image html model/scg/node_general_var.png </td>
 	<td>	\image html model/scg/eq_node_general_var.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременного sc-элемента</td>
-	<td>	\image html model/scg/node_general_meta.png </td>
-	<td>	\image html model/scg/eq_node_general_meta.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константной связки</td>
+	<td>sc.g-узел обозначающий константную, n-арную связку</td>
 	<td>	\image html model/scg/node_tuple_const.png </td>
 	<td>	\image html model/scg/eq_node_tuple_const.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременной связки</td>
+	<td>sc.g-узел обозначающий переменную, n-арную связку</td>
 	<td>	\image html model/scg/node_tuple_var.png </td>
 	<td>	\image html model/scg/eq_node_tuple_var.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременной связки</td>
-	<td>	\image html model/scg/node_tuple_meta.png </td>
-	<td>	\image html model/scg/eq_node_tuple_meta.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константной структуры</td>
+	<td>sc.g-узел обозначающий константную структуру</td>
 	<td>	\image html model/scg/node_struct_const.png </td>
 	<td>	\image html model/scg/eq_node_struct_const.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременной структуры</td>
+	<td>sc.g-узел обозначающий переменную структуру</td>
 	<td>	\image html model/scg/node_struct_var.png </td>
 	<td>	\image html model/scg/eq_node_struct_var.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременной структуры</td>
-	<td>	\image html model/scg/node_struct_meta.png </td>
-	<td>	\image html model/scg/eq_node_struct_meta.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константного ролевого отношения</td>
+	<td>sc.g-узел обозначающий константное, ролевое отношение</td>
 	<td>	\image html model/scg/node_role_const.png </td>
 	<td>	\image html model/scg/eq_node_role_const.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременного ролевого отношения</td>
+	<td>sc.g-узел обозначающий переменное, ролевое отношение</td>
 	<td>	\image html model/scg/node_role_var.png </td>
 	<td>	\image html model/scg/eq_node_role_var.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременного ролевого отношения</td>
-	<td>	\image html model/scg/node_role_meta.png </td>
-	<td>	\image html model/scg/eq_node_role_meta.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константного бинарного ориентированного неролевого отношения</td>
+	<td>sc.g-узел обозначающий константное бинарное, неролевое отношение</td>
 	<td>	\image html model/scg/node_binary_const.png </td>
 	<td>	\image html model/scg/eq_node_binary_const.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременного бинарного ориентированного неролевого отношения</td>
+	<td>sc.g-узел обозначающий переменное бинарное, неролевое отношение</td>
 	<td>	\image html model/scg/node_binary_var.png </td>
 	<td>	\image html model/scg/eq_node_binary_var.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременного бинарного ориентированного неролевого отношения</td>
-	<td>	\image html model/scg/node_binary_meta.png </td>
-	<td>	\image html model/scg/eq_node_binary_meta.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константного понятия, не являющегося отношением</td>
+	<td>sc.g-узел обозначающий константное понятие, не являющееся отношением</td>
 	<td>	\image html model/scg/node_concept_const.png </td>
 	<td>	\image html model/scg/eq_node_concept_const.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременного понятия, не являющегося отношением</td>
+	<td>sc.g-узел обозначающий переменное понятие, не являющееся отношением</td>
 	<td>	\image html model/scg/node_concept_var.png </td>
 	<td>	\image html model/scg/eq_node_concept_var.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременного понятия, не являющегося отношением</td>
-	<td>	\image html model/scg/node_concept_meta.png </td>
-	<td>	\image html model/scg/eq_node_concept_meta.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константного абстрактного внешнего объекта</td>
+	<td>sc.g-узел обозначающий константный, абстрактный, внешний объект</td>
 	<td>	\image html model/scg/node_abstract_const.png </td>
 	<td>	\image html model/scg/eq_node_abstract_const.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременного абстрактного внешнего объекта</td>
+	<td>sc.g-узел обозначающий переменный, абстрактный, внешний объект</td>
 	<td>	\image html model/scg/node_abstract_var.png </td>
 	<td>	\image html model/scg/eq_node_abstract_var.png </td>
 	<td></td>
 </tr>
 
-<tr>
-	<td>sc.g-примитив метапеременного абстрактного внешнего объекта</td>
-	<td>	\image html model/scg/node_abstract_meta.png </td>
-	<td>	\image html model/scg/eq_node_abstract_meta.png </td>
-	<td></td>
-</tr>
+
 
 <tr>
-	<td>sc.g-рамка</td>
-	<td>	\image html model/scg/content.png </td>
-	<td> 	\image html model/scg/node_not_define.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-ребро общего вида</td>
-	<td>	\image html model/scg/edge.png
-		\image latex model/scg/edge.png		</td>
-	<td>	\image html model/scg/edge.png
-		\image latex model/scg/edge.png		</td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константной пары</td>
+	<td>константное sc.g-ребро</td>
 	<td>	\image html model/scg/pair_const.png </td>
 	<td>	\image html model/scg/eq_pair_const.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременной пары</td>
+	<td>переменное sc.g-ребро</td>
 	<td>	\image html model/scg/pair_var.png </td>
 	<td>	\image html model/scg/eq_pair_var.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременной пары</td>
-	<td>	\image html model/scg/pair_meta.png </td>
-	<td>	\image html model/scg/eq_pair_meta.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-дуга общего вида</td>
-	<td>	\image html model/scg/arc_common.png </td>
-	<td>	\image html model/scg/arc_common.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константной ориентированной пары</td>
+	<td>константная sc.g-дуга</td>
 	<td>	\image html model/scg/pair_const_orient.png </td>
 	<td>	\image html model/scg/eq_pair_const_orient.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременной ориентированной пары</td>
+	<td>переменная sc.g-дуга</td>
 	<td>	\image html model/scg/pair_var_orient.png </td>
 	<td>	\image html model/scg/eq_pair_var_orient.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременной ориентированной пары</td>
-	<td>	\image html model/scg/pair_meta_orient.png </td>
-	<td>	\image html model/scg/eq_pair_meta_orient.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-дуга основного вида (sc.g-примитив константной, постоянной, позитивной пары принадлежности)</td>
-	<td>	\image html model/scg/arc_main.png </td>
-	<td>	\image html model/scg/arc_main.png или
-		\image html model/scg/eq_pair_const_perm_pos.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив первопеременной, постоянной, позитивной пары принадлежности</td>
+	<td>переменная позитивная стационарная sc.g-дуга принадлежности</td>
 	<td>	\image html model/scg/pair_var_perm_pos.png </td>
 	<td>	\image html model/scg/eq_pair_var_perm_pos.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременной, постоянной, позитивной пары принадлежности</td>
-	<td>	\image html model/scg/pair_meta_perm_pos.png </td>
-	<td>	\image html model/scg/eq_pair_meta_perm_pos.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константной, постоянной пары принадлежности</td>
-	<td>	\image html model/scg/pair_const_perm_fuz.png </td>
-	<td>	\image html model/scg/eq_pair_const_perm_fuz.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив первопеременной, постоянной пары принадлежности</td>
-	<td>	\image html model/scg/pair_var_perm_fuz.png </td>
-	<td>	\image html model/scg/eq_pair_var_perm_fuz.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив метапеременной, постоянной пары принадлежности</td>
-	<td>	\image html model/scg/pair_meta_perm_fuz.png </td>
-	<td>	\image html model/scg/eq_pair_meta_perm_fuz.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константной, постоянной, негативной пары принадлежности</td>
+	<td>константная негативная стационарная sc.g-дуга принадлежности</td>
 	<td>	\image html model/scg/pair_const_perm_neg.png </td>
 	<td>	\image html model/scg/eq_pair_const_perm_neg.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременной, постоянной, негативной пары принадлежности</td>
+	<td>переменная негативная стационарная sc.g-дуга принадлежности</td>
 	<td>	\image html model/scg/pair_var_perm_neg.png </td>
 	<td>	\image html model/scg/eq_pair_var_perm_neg.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременной, постоянной, негативной пары принадлежности</td>
-	<td>	\image html model/scg/pair_meta_perm_neg.png </td>
-	<td>	\image html model/scg/eq_pair_meta_perm_neg.png </td>
+	<td>константная нечеткая стационарная sc.g-дуга принадлежности</td>
+	<td>	\image html model/scg/pair_const_perm_fuz.png </td>
+	<td>	\image html model/scg/eq_pair_const_perm_fuz.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив константной, временной, позитивной пары принадлежности</td>
+	<td>переменная нечеткая стационарная sc.g-дуга принадлежности</td>
+	<td>	\image html model/scg/pair_var_perm_fuz.png </td>
+	<td>	\image html model/scg/eq_pair_var_perm_fuz.png </td>
+	<td></td>
+</tr>
+
+
+
+
+<tr>
+	<td>константная позитивная нестационарная sc.g-дуга принадлежности</td>
 	<td>	\image html model/scg/pair_const_temp_pos.png </td>
 	<td>	\image html model/scg/eq_pair_const_temp_pos.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременной, временной, позитивной пары принадлежности</td>
+	<td>переменная позитивная нестационарная sc.g-дуга принадлежности</td>
 	<td>	\image html model/scg/pair_var_temp_pos.png </td>
 	<td>	\image html model/scg/eq_pair_var_temp_pos.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременной, временной, позитивной пары принадлежности</td>
-	<td>	\image html model/scg/pair_meta_temp_pos.png </td>
-	<td>	\image html model/scg/eq_pair_meta_temp_pos.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константной, временной пары принадлежности</td>
-	<td>	\image html model/scg/pair_const_temp_fuz.png </td>
-	<td>	\image html model/scg/eq_pair_const_temp_fuz.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив первопеременной, временной пары принадлежности</td>
-	<td>	\image html model/scg/pair_var_temp_fuz.png </td>
-	<td>	\image html model/scg/eq_pair_var_temp_fuz.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив метапеременной, временной пары принадлежности</td>
-	<td>	\image html model/scg/pair_meta_temp_fuz.png </td>
-	<td>	\image html model/scg/eq_pair_meta_temp_fuz.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>sc.g-примитив константной, временной, негативной пары принадлежности</td>
+	<td>константная негативная нестационарная sc.g-дуга принадлежности</td>
 	<td>	\image html model/scg/pair_const_temp_neg.png </td>
 	<td>	\image html model/scg/eq_pair_const_temp_neg.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив первопеременной, временной, негативной пары принадлежности</td>
+	<td>переменная негативная нестационарная sc.g-дуга принадлежности</td>
 	<td>	\image html model/scg/pair_var_temp_neg.png </td>
 	<td>	\image html model/scg/eq_pair_var_temp_neg.png </td>
 	<td></td>
 </tr>
 
 <tr>
-	<td>sc.g-примитив метапеременной, временной, негативной пары принадлежности</td>
-	<td>	\image html model/scg/pair_meta_temp_neg.png </td>
-	<td>	\image html model/scg/eq_pair_meta_temp_neg.png </td>
+	<td>константная нечеткая нестационарная sc.g-дуга принадлежности</td>
+	<td>	\image html model/scg/pair_const_temp_fuz.png </td>
+	<td>	\image html model/scg/eq_pair_const_temp_fuz.png </td>
 	<td></td>
 </tr>
+
+<tr>
+	<td>переменная нечеткая нестационарная sc.g-дуга принадлежности</td>
+	<td>	\image html model/scg/pair_var_temp_fuz.png </td>
+	<td>	\image html model/scg/eq_pair_var_temp_fuz.png </td>
+	<td></td>
+</tr>
+
+
+
 
 <tr>
 	<td>sc.g-шина</td>
@@ -389,13 +302,6 @@ SCg-код (Semantic Computer graphic Сode) – это один из возмо
 	<td>первопеременный sc.g-контур</td>
 	<td>	\image html model/scg/contour_var.png </td>
 	<td> 	\image html model/scg/eq_node_general_var.png </td>
-	<td></td>
-</tr>
-
-<tr>
-	<td>метапеременный sc.g-контур</td>
-	<td>	\image html model/scg/contour_meta.png </td>
-	<td> 	\image html model/scg/eq_node_general_meta.png </td>
 	<td></td>
 </tr>
 

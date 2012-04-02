@@ -274,13 +274,13 @@ SCg-код (Semantic Computer graphic Сode) – это один из возмо
 <tr>
 	<td>	\image html model/scg/contour_const.png </td>
 	<td><b><i>константный sc.g-контур</i></b></td>
-	<td class="left"> 	\image html model/scg/eq_node_general_const.png </td>
+	<td class="left"> 	\image html model/scg/eq_node_struct_const.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/contour_var.png </td>
 	<td><b><i>первопеременный sc.g-контур</i></b></td>
-	<td class="left"> 	\image html model/scg/eq_node_general_var.png </td>
+	<td class="left"> 	\image html model/scg/eq_node_struct_var.png </td>
 </tr>
 
 </table>

@@ -604,10 +604,13 @@ table.doc{
 	margin-top: 15px;
 	margin-bottom: 15px;
 	border-collapse: collapse;
+	font-family: "Times New Roman";
+	font-size: 12px;
 }
 
 table.doc td {
 	border: 1px solid #000;
+	vertical-align: text-bottom;
 }
 
 table.doc td.left div.image{
@@ -622,7 +625,7 @@ table.doc th {
 }
 
 table.doxtable {
-	border-collapse:collapse;
+	border-collapse: collapse;
 }
 
 table.doxtable td, table.doxtable th {

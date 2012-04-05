@@ -86,13 +86,13 @@ SCg-код (Semantic Computer graphic Сode) – это один из возмо
 
 <tr>
 	<td>	\image html model/scg/node_tuple_const.png </td>
-	<td><b><i>sc.g-узел обозначающий константную, n-арную связку</i></b></td>
+	<td><b><i>sc.g-узел обозначающий константную n-арную связку</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_tuple_const.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_tuple_var.png </td>
-	<td><b><i>sc.g-узел, обозначающий переменную, n-арную связку</i></b></td>
+	<td><b><i>sc.g-узел, обозначающий переменную n-арную связку</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_tuple_var.png </td>
 </tr>
 
@@ -146,26 +146,26 @@ SCg-код (Semantic Computer graphic Сode) – это один из возмо
 
 <tr>
 	<td>	\image html model/scg/node_abstract_const.png </td>
-	<td><b><i>sc.g-узел, обозначающий константный абстрактный, объект, не являющийся множеством</i></b></td>
+	<td><b><i>sc.g-узел, обозначающий константный абстрактный объект, не являющийся множеством</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_abstract_const.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_abstract_var.png </td>
-	<td><b><i>sc.g-узел, обозначающий переменный абстрактный, объект, не являющийся множеством</i></b></td>
+	<td><b><i>sc.g-узел, обозначающий переменный абстрактный объект, не являющийся множеством</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_abstract_var.png </td>
 </tr>
 
 <tr>
-	<td>	\image html model/scg/node_abstract_ext_const.png </td>
-	<td><b><i>sc.g-узел, обозначающий константный абстрактный, внешний объект, не являющийся множеством</i></b></td>
-	<td class="left">	\image html model/scg/eq_node_abstract_ext_const.png </td>
+	<td>	\image html model/scg/node_material_const.png </td>
+	<td><b><i>sc.g-узел, обозначающий константный материальный объект</i></b></td>
+	<td class="left">	\image html model/scg/eq_node_material_const.png </td>
 </tr>
 
 <tr>
-	<td>	\image html model/scg/node_abstract_ext_var.png </td>
-	<td><b><i>sc.g-узел, обозначающий переменный абстрактный, внешний объект, не являющийся множеством</i></b></td>
-	<td class="left">	\image html model/scg/eq_node_abstract_ext_var.png </td>
+	<td>	\image html model/scg/node_material_var.png </td>
+	<td><b><i>sc.g-узел, обозначающий переменный материальный объект</i></b></td>
+	<td class="left">	\image html model/scg/eq_node_material_var.png </td>
 </tr>
 
 

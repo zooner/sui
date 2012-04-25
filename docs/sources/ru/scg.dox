@@ -2,7 +2,7 @@
  * \page ui_model_scg_page SCg-код 0.1.0
 SCg-код (Semantic Computer graphic Сode) – это один из возможных способов визуализации (графического изображения) sc-конструкций на плоскости. 
 
- * \section ui_model_scg_code_level1 SCg-код уровень 1 (SCg-ядро)
+ * \section ui_model_scg_code_level1 SCg-код 1-го уровня (SCg-ядро)
 Разработка такого способа в полном объёме является целью отдельного проекта. Сейчас для более детального рассмотрения синтаксиса SC-кода нам потребуются минимальные, но семантически полные средства SCg-кода, обеспечивающие изображение любых sc-конструкций. Такие базовые средства SCg-кода назовем ядром SCg-кода (SCg-ядром).
 Основными свойствами SCg-ядра являются:
 \li каждая информационная конструкция, принадлежащая SCg-ядру, изоморфна той sc-конструкции, которую она графически изображает. В этом смысле средства SCg-ядра максимально близки SC-коду.
@@ -26,9 +26,9 @@ SCg-код (Semantic Computer graphic Сode) – это один из возмо
 	<tr>
 		<td width="200px"><b><i>sc-ссылка</i></b></td>
 		<td>
-			\image html model/scg/content.png
+			\image html model/scg/link.png
 		</td>
-		<td><b><i>sc.g-рамка</i></b></td>
+		<td><b><i>sc.g-ссылка общего вида</i></b></td>
 	</tr>
 	<tr>
 		<td width="200px"><b><i>sc-ребро</i></b></td>
@@ -98,22 +98,40 @@ SCg-код позволяет использовать внешние идент
 </div>
 </p>
 
- * \section ui_model_scg_code_level2 SCg-код уровень 2
+ * \section ui_model_scg_code_level2 SCg-код 2-го уровня
+ 
+<p>
+Второй уровень sc.g-кода направлен на повышение наглядности отображаемых sc.g-текстов путем уменьшения количества изображаемых sc.g-элементов.
+Для этого выделены наиболее часто используемые типы sc.g-элементов и каждому из них в соответствие поставлен некоторый графический и четко ращличимый признак.
+</p>
+<p>
+Изображения sc-узлов имеют два признака: константность и структурный тип. Для их изображения используются следующие правила:
+	\li константные sc-узлы изображаются в виде окружностей, переменные - в виде квадратов;
+	\li структурный тип sc-узла изображается внутри окружности (квадрата), который соответвует признаку констатности;
 
-Второй уровень sc.g-кода направлен на повышение наглядности отображаемых sc.g-текстов путем уменьшения изображаемых sc.g-элементов.
-Это достигается за счет выделения общих признаков и построения изображения sc.g-элементов с использованием "иероглифического" принципа, который заклюючается
-в том, что различным признакам (типам) sc-элементов, приписываются различные, четко различимые признаки.
-Количество выделяемых признаков не должно быть достаточно большим, чтобы обеспечить минимальное количество их сочетаний.
-Каждый выделяемый признак изображается по определенным правилам.
+К примеру у нас есть sc-узел, обозначающий множество всех возможных треугольников, с идентификатором <i><b>треугольник</b></i>, 
+который входит во множество всех объектов являющихся <i><b>sc-узлами, обозначающими константное понятие, не являющееся отношением</b></i>.
+	\image html model/scg/examples/level1_triangle_struct.png
+
+Видно, что sc-узел с идентификатором <i><b>треугольник</b></i> имеет два четко отличимых признака: он является константой
+и он является sc-узлом, обозначающим понятие не являющееся отношением. Изображение такого узла с помощью SCg-кода второго уровня
+строится следующим образом:
+	\li так как sc-узел <i><b>треугольник</b></i> является константой, то он изображается в виде окружности;
+	\li внутри окружности изображается структурный тип (sc-узел, обозначающий понятие не являющееся отношением). 
+	Данный структурный тип изображается в виде буквы X с горизонтальной линией по середине.
+
+С помощью SCg-кода второго уровня этот узел изображается следующим образом:
+	\image html model/scg/examples/level2_triangle_struct.png
 
 Переход от элементов SСg-кода 1-го уровня к SСg-коду 2-го уровня осуществляется по правилам описанным в таблице:
+</p>
 <center>
 <table width="90%" bgcolor="#FFF" class="doc">
 
 <tr>
 	<th>Расширение алфавита sc.g-элементов</th>
 	<th>Синтаксический тип sc.g-элемента</th>
-	<th>Представление изображаемых sc-элементов в SC-коде</th>
+	<th>Представление изображаемых sc-элементов в SC-коде<br/>(точнее, в SCg-коде 1-го уровня)</th>
 </tr>
 
 <tr>
@@ -124,91 +142,91 @@ SCg-код позволяет использовать внешние идент
 
 <tr>
 	<td>	\image html model/scg/node_general_var.png </td>
-	<td><b><i>переменный sc.g-узел</i></b></td>
+	<td><b><i>первичный переменный sc.g-узел</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_general_var.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_tuple_const.png </td>
-	<td><b><i>sc.g-узел обозначающий константную n-арную связку</i></b></td>
+	<td><b><i>константный sc.g-узел обозначающий небинарную связку</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_tuple_const.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_tuple_var.png </td>
-	<td><b><i>sc.g-узел, обозначающий переменную n-арную связку</i></b></td>
+	<td><b><i>первичный переменный sc.g-узел, обозначающий небинарную связку</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_tuple_var.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_struct_const.png </td>
-	<td><b><i>sc.g-узел, обозначающий константную структуру</i></b></td>
+	<td><b><i>константный sc.g-узел, обозначающий структуру</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_struct_const.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_struct_var.png </td>
-	<td><b><i>sc.g-узел, обозначающий переменную структуру</i></b></td>
+	<td><b><i>первичный переменный sc.g-узел, обозначающий структуру</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_struct_var.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_role_const.png </td>
-	<td><b><i>sc.g-узел, обозначающий константное ролевое отношение</i></b></td>
+	<td><b><i>константный sc.g-узел, обозначающий ролевое отношение</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_role_const.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_role_var.png </td>
-	<td><b><i>sc.g-узел, обозначающий переменное ролевое отношение</i></b></td>
+	<td><b><i>первичный переменный sc.g-узел, обозначающий ролевое отношение</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_role_var.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_binary_const.png </td>
-	<td><b><i>sc.g-узел, обозначающий константное бинарное неролевое отношение</i></b></td>
+	<td><b><i>константный sc.g-узел, обозначающий неролевое отношение</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_binary_const.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_binary_var.png </td>
-	<td><b><i>sc.g-узел, обозначающий переменное бинарное неролевое отношение</i></b></td>
+	<td><b><i>первичный переменный sc.g-узел, обозначающий неролевое отношение</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_binary_var.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_concept_const.png </td>
-	<td><b><i>sc.g-узел, обозначающий константное понятие, не являющееся отношением</i></b></td>
+	<td><b><i>константный sc.g-узел, обозначающий понятие, не являющееся отношением</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_concept_const.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_concept_var.png </td>
-	<td><b><i>sc.g-узел, обозначающий переменное понятие, не являющееся отношением</i></b></td>
+	<td><b><i>первичный переменный sc.g-узел, обозначающий понятие, не являющееся отношением</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_concept_var.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_abstract_const.png </td>
-	<td><b><i>sc.g-узел, обозначающий константный абстрактный объект, не являющийся множеством</i></b></td>
+	<td><b><i>константный sc.g-узел, обозначающий абстрактный объект, не являющийся множеством</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_abstract_const.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_abstract_var.png </td>
-	<td><b><i>sc.g-узел, обозначающий переменный абстрактный объект, не являющийся множеством</i></b></td>
+	<td><b><i>первичный переменный sc.g-узел, обозначающий абстрактный объект, не являющийся множеством</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_abstract_var.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_material_const.png </td>
-	<td><b><i>sc.g-узел, обозначающий константный материальный объект</i></b></td>
+	<td><b><i>коснтантный sc.g-узел, обозначающий материальный объект</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_material_const.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/node_material_var.png </td>
-	<td><b><i>sc.g-узел, обозначающий переменный материальный объект</i></b></td>
+	<td><b><i>первичный переменный sc.g-узел, обозначающий материальный объект</i></b></td>
 	<td class="left">	\image html model/scg/eq_node_material_var.png </td>
 </tr>
 
@@ -221,7 +239,7 @@ SCg-код позволяет использовать внешние идент
 
 <tr>
 	<td>	\image html model/scg/pair_var.png </td>
-	<td><b><i>переменное sc.g-ребро</i></b></td>
+	<td><b><i>первичное переменное sc.g-ребро</i></b></td>
 	<td class="left">	\image html model/scg/eq_pair_var.png </td>
 </tr>
 
@@ -233,13 +251,13 @@ SCg-код позволяет использовать внешние идент
 
 <tr>
 	<td>	\image html model/scg/pair_var_orient.png </td>
-	<td><b><i>переменная sc.g-дуга</i></b></td>
+	<td><b><i>первичная переменная sc.g-дуга</i></b></td>
 	<td class="left">	\image html model/scg/eq_pair_var_orient.png </td>
 </tr>
 
 <tr>
 	<td>	\image html model/scg/pair_var_perm_pos.png </td>
-	<td><b><i>переменная позитивная стационарная sc.g-дуга принадлежности</i></b></td>
+	<td><b><i>первичная переменная позитивная стационарная sc.g-дуга принадлежности</i></b></td>
 	<td class="left">	\image html model/scg/eq_pair_var_perm_pos.png </td>
 </tr>
 
@@ -251,7 +269,7 @@ SCg-код позволяет использовать внешние идент
 
 <tr>
 	<td>	\image html model/scg/pair_var_perm_neg.png </td>
-	<td><b><i>переменная негативная стационарная sc.g-дуга принадлежности</i></b></td>
+	<td><b><i>первичная переменная негативная стационарная sc.g-дуга принадлежности</i></b></td>
 	<td class="left">	\image html model/scg/eq_pair_var_perm_neg.png </td>
 </tr>
 
@@ -263,7 +281,7 @@ SCg-код позволяет использовать внешние идент
 
 <tr>
 	<td>	\image html model/scg/pair_var_perm_fuz.png </td>
-	<td><b><i>переменная нечеткая стационарная sc.g-дуга принадлежности</i></b></td>
+	<td><b><i>первичная переменная нечеткая стационарная sc.g-дуга принадлежности</i></b></td>
 	<td class="left">	\image html model/scg/eq_pair_var_perm_fuz.png </td>
 </tr>
 
@@ -278,7 +296,7 @@ SCg-код позволяет использовать внешние идент
 
 <tr>
 	<td>	\image html model/scg/pair_var_temp_pos.png </td>
-	<td><b><i>переменная позитивная нестационарная sc.g-дуга принадлежности</i></b></td>
+	<td><b><i>первичная переменная позитивная нестационарная sc.g-дуга принадлежности</i></b></td>
 	<td class="left">	\image html model/scg/eq_pair_var_temp_pos.png </td>
 </tr>
 
@@ -290,7 +308,7 @@ SCg-код позволяет использовать внешние идент
 
 <tr>
 	<td>	\image html model/scg/pair_var_temp_neg.png </td>
-	<td><b><i>переменная негативная нестационарная sc.g-дуга принадлежности</i></b></td>
+	<td><b><i>первичная переменная негативная нестационарная sc.g-дуга принадлежности</i></b></td>
 	<td class="left">	\image html model/scg/eq_pair_var_temp_neg.png </td>
 </tr>
 
@@ -302,15 +320,21 @@ SCg-код позволяет использовать внешние идент
 
 <tr>
 	<td>	\image html model/scg/pair_var_temp_fuz.png </td>
-	<td><b><i>переменная нечеткая нестационарная sc.g-дуга принадлежности</i></b></td>
+	<td><b><i>первичная переменная нечеткая нестационарная sc.g-дуга принадлежности</i></b></td>
 	<td class="left">	\image html model/scg/eq_pair_var_temp_fuz.png </td>
 </tr>
 
 </table>
 </center>
 
+<p>
+Рассмотрим несколько примеров представления знаний с помощью SCg-кода второго уровня:
 
- * \section ui_model_scg_code_level3 SCg-код уровень 3
+	\image html model/scg/examples/level2_triangle_ABC.png Имеется треугольник с вершинами в точках A, B и C.
+	\image html model/scg/examples/level2_moon.png Луна вращается вокруг планеты "Земля"
+</p>
+
+ * \section ui_model_scg_code_level3 SCg-код 3-го уровня
 
 Переход от элементов SСg-кода 1-го уровня к SСg-коду 3-го уровня осуществляется по правилам описанным в таблице:
 <center>
@@ -340,12 +364,17 @@ SCg-код позволяет использовать внешние идент
 	<td class="left"> 	\image html model/scg/eq_node_struct_var.png </td>
 </tr>
 
+<tr>
+	<td> \image html model/scg/content.png </td>
+	<td><b><i>sc.g-рамка</i></b></td>
+	<td class="left"></td>
+</tr>
 </table>
 </center>
 
 
 
- * \section ui_model_scg_code_level4 SCg-код уровень 4
+ * \section ui_model_scg_code_level4 SCg-код 4-го уровня
 
 Переход от элементов SСg-кода 2-го уровня к SСg-коду 4-го уровня осуществляется по правилам описанным в таблице:
 <center>

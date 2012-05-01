@@ -610,7 +610,7 @@ table.doc{
 
 table.doc td {
 	border: 1px solid #000;
-	vertical-align: text-bottom;
+	vertical-align: text-center;
 }
 
 table.doc td.left div.image{

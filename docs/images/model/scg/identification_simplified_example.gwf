@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="windows-1251"?>
-<GWF version="1.6">
-    <staticSector>
-        <node type="node/const/relation" idtf="идентификация*" shapeColor="0" id="148478448" parent="0" left="0" top="0" right="112" bottom="23" textColor="164" text_angle="0" text_font="Times New Roman [Arial]" font_size="10" x="137" y="119" haveBus="false">
-            <content type="0" mime_type="" file_name=""/>
-        </node>
-    </staticSector>
-</GWF>

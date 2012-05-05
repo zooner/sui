@@ -64,9 +64,12 @@ void suiPluginManager::loadPlugin(const QString &fileName)
         mPluginLoaders[fileName] = loader;
         processLoadPlugin(plugInterface);
     }else
+    {
+        delete loader;
         SuiExcept(SuiExceptionInternalError,
                   QString("There are no plugin interface in '%1'").arg(fileName),
                   "void suiPluginManager::loadPlugin(const QString &fileName)");
+    }
 }
 
 void suiPluginManager::unloadPlugin(const QString &fileName)

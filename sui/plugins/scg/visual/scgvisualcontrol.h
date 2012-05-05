@@ -26,6 +26,9 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "scgprerequest.h"
 #include "scgvisualobject.h"
 
+/*! This object visualize sc.g-controls. You can work with that object
+  * like with any sc.g-node object. Command starts on left mouse button click.
+  */
 class SCgVisualControl : public SCgVisualObject
 {
     Q_OBJECT
@@ -53,6 +56,13 @@ protected:
     //! @copydoc SCgObject::itemChange
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
+    //! @copydoc QGraphicsItem::mousePressEvent
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    //! @copydoc QGraphicsItem::mouseReleaseEvent
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    //! @copydoc QGraphicsItem::mouseMoveEvent
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+
     //! Return object shape
     QPainterPath shape() const;
 
@@ -62,6 +72,10 @@ protected:
 protected:
     //! Backgound color
     QColor mBackColor;
+    //! Dragged path length
+    qreal mDragLength;
+    //! Last mouse position
+    QPointF mLastDragPos;
 
 signals:
 

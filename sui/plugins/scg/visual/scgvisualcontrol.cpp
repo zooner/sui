@@ -24,12 +24,17 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "scgconfig.h"
 
 #include <QPainter>
+#include <QVector2D>
+#include <QGraphicsSceneMouseEvent>
 #if ENABLE_VISUAL_EFFECTS_SUPPORT
 #include <QGraphicsDropShadowEffect>
 #endif
 
+#define DRAG_MIN_LENGTH 5.f
+
 SCgVisualControl::SCgVisualControl(QGraphicsItem *parent, QGraphicsScene *scene) :
-    SCgVisualObject(parent, scene)
+    SCgVisualObject(parent, scene),
+    mDragLength(-1.f)
 {
     mBackColor = scg_cfg_get_value_color(scg_key_control_backcolor_normal);
     mColor = scg_cfg_get_value_color(scg_key_control_color_normal);
@@ -150,4 +155,40 @@ void SCgVisualControl::_update(SCgObjectObserver::UpdateEventType eventType, SCg
     }
 
     SCgVisualObject::_update(eventType, object);
+}
+
+void SCgVisualControl::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    mDragLength = 0.f;
+    mLastDragPos = event->pos();
+
+    SCgVisualObject::mousePressEvent(event);
+}
+
+void SCgVisualControl::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton && mDragLength < DRAG_MIN_LENGTH)
+    {
+        SCgControl *control = observedObjectT<SCgControl>(0);
+        Q_ASSERT(control != 0);
+
+        control->initiated();
+    }
+
+    mDragLength = -1.f;
+
+    SCgVisualObject::mouseReleaseEvent(event);
+}
+
+void SCgVisualControl::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (mDragLength >= 0)
+    {
+        QVector2D v(event->pos() - mLastDragPos);
+        mLastDragPos = event->pos();
+
+        mDragLength += v.length();
+    }
+
+    SCgVisualObject::mouseMoveEvent(event);
 }

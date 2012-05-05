@@ -292,7 +292,8 @@ bool suiScHelper::searchOneShot(const ScTemplate &templ, ScUriVector &res) const
     ScSafeIterator it(mMemoryInterface, templ);
     if (it.is_over()) return false;
 
-    for (int i = 0; i < templ.count(); i++) res[i] = it.value(i);
+    for (int i = 0; i < templ.count(); i++)
+        res[i] = it.value(i);
     it.next();
 
     // check if there is error in knowledge base

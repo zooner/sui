@@ -21,7 +21,7 @@ CONFIG (debug, debug|release) {
 }
 
 unix {
-    TARGETDEPS += $$DESTDIR/libsuiCore.so
+    POST_TARGETDEPS += $$DESTDIR/libsuiCore.so
     LIBS += $$DESTDIR/libsuiCore.so
 }
 

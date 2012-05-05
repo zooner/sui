@@ -876,7 +876,7 @@ void ScCoreMemory::_listenSegment(sc_segment *seg)
             if (it_uri == mScUri2ScAddr.end())
             {
                 mScUri2ScAddr[uri] = addr;
-                qDebug() << uri.value() << " --- " << mSession->get_idtf(addr).c_str() << "\n";
+                //qDebug() << uri.value() << " --- " << mSession->get_idtf(addr).c_str() << "\n";
             }
         }
     }

@@ -137,6 +137,7 @@ public:
       */
     bool hasAttachedObserver(SCgObjectObserver *observer) const;
 
+    // -------------- Work with coordinates, hierarchy, colors and etc. ---------------------------
     /*! Calculate connection point coordinates for connected sc.g-pair.
       * @param dotPosition Dot position value.
       * @param point World coordinates of second point (fisrt point - is a connection point)
@@ -213,7 +214,6 @@ public:
 
     //! Return object world coordinates
     QPointF worldPosition() const;
-
 
 protected:
     //! Remove object from childs list

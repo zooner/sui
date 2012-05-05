@@ -102,6 +102,16 @@ protected:
     //! Synchronize with observed object if it need
     void sync();
 
+    /*! Return observed object with index \p idx casted to \p ObjectType
+      * @param idx Observed object index
+      * @return Return pointer to specified observed object, casted to \p ObjectType.
+      */
+    template<class ObjectType>
+    ObjectType* observedObjectT(quint32 idx) const
+    {
+        return qobject_cast<ObjectType*>(observedObject(idx));
+    }
+
 public:
     /*!
      * @return unique identifier of this object in current environment.

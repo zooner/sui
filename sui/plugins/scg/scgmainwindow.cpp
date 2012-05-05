@@ -177,7 +177,12 @@ SCgObject* SCgMainWindow::resolveUri(const ScUri &uri)
         res->setIdentifier(idtf_value);
 
     if (res != 0)
+    {
+        res->setUri(uri);
         res->setObjectType(type);
+    }
+
+
 
     return res;
 }
@@ -186,7 +191,7 @@ bool SCgMainWindow::isCommand(const ScUri &uri) const
 {
     ScHelperInterface *helper = SCgPlugin::rootInterface()->scHelper();
 
-    return helper->checkInclusion(uri, helper->keynode("/ui/command/atom")) ||
+    return helper->checkInclusion(uri, helper->keynode("/ui/command/class")) ||
             helper->checkInclusion(uri, helper->keynode("/ui/command/noatom"));
 }
 

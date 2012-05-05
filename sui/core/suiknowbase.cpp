@@ -59,7 +59,7 @@ void suiKnowBase::registerAllKeynodes()
     mKeynodesMap["ui_main_window"] = "/ui/main_window";
     mKeynodesMap["ui_main_menu"] = "/ui/main_menu";
     mKeynodesMap["ui_noatom_command"] = "/ui/command/noatom";
-    mKeynodesMap["ui_atom_command"] = "/ui/command/atom";
+    mKeynodesMap["ui_atom_command"] = "/ui/command/class";
 
     // test code that works
 

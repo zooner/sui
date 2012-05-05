@@ -82,10 +82,10 @@ SCgControl::ControlType SCgControl::controlType() const
     ScHelperInterface *helper = root->scHelper();
 
     if (helper->checkInclusion(uri(), helper->keynode("/ui/command/noatom")))
-        return NoAtomType;
+        return NoAtom;
 
-    if (helper->checkInclusion(uri(), helper->keynode("/ui/command/atom")))
-        return ClassType;
+    if (helper->checkInclusion(uri(), helper->keynode("/ui/command/class")))
+        return Class;
 }
 
 bool SCgControl::childCommands(ScUriVector &childs)
@@ -112,10 +112,12 @@ bool SCgControl::childCommands(ScUriVector &childs)
     ScUriVector res;
     if (helper->searchOneShot(ScTemplate() << ScElementType(ScNode | ScConst)
                               << ScElementType(ScArcCommon | ScConst)
-                              << _uri, res))
+                              << _uri
+                              << ScElementType(ScArcMain)
+                              << decompUri, res))
     {
         // get all child commands
-        ScSafeIterator it(memory, ScTemplate() << res[2] << ScElementType(ScArcMain) << ScElementType(ScNode));
+        ScSafeIterator it(memory, ScTemplate() << res[0] << ScElementType(ScArcMain) << ScElementType(ScNode));
         while (!it.is_over())
         {
             childs.append(it.value(2));
@@ -126,3 +128,33 @@ bool SCgControl::childCommands(ScUriVector &childs)
     return !childs.empty();
 }
 
+void SCgControl::initiated()
+{
+    ControlType tp = controlType();
+
+    switch(tp)
+    {
+    case NoAtom:
+        initiatedNoAtom();
+        break;
+    };
+}
+
+void SCgControl::initiatedNoAtom()
+{
+    UiRootInterface *root = SCgPlugin::rootInterface();
+    ScMemoryInterface *memory = root->scMemory();
+    ScHelperInterface *helper = root->scHelper();
+
+    ScUriVector childs, res;
+    ScUri uri, mainWindowUri;
+
+    childCommands(childs);
+    mainWindowUri = helper->keynode("/ui/main_window");
+    foreach(uri, childs)
+    {
+        // check if command in main window
+        helper->ensureExist(ScTemplate() << mainWindowUri << ScElementType(ScArcMain) << uri, res);
+    }
+
+}

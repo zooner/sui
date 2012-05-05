@@ -25,6 +25,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scgobject.h"
 
+class QGraphicsSceneMouseEvent;
+
 /*! Class define any sc.g-control, that can be used in sc.g-window.
   * It allow to work with control types. Also it store whole information
   * that need to define control.
@@ -50,10 +52,10 @@ public:
     typedef enum
     {
         Unlnown = 0,
-        NoAtomType,
-        ClassType,
-        InstanceType,
-        ObjectType
+        NoAtom,
+        Class,
+        Instance,
+        Object
     } ControlType;
 
     //! @copydoc SCgObject::calculateDotCoordinates
@@ -64,8 +66,9 @@ public:
     //! @copydoc SCgObject::type
     int type() const { return Control; }
 
-private:
-    //! Return control type
+    /*! Return control type. This function gets control type by
+      * using sc-memory. So it's no so fast.
+      */
     ControlType controlType() const;
 
     /*! Get all child commands for noatom command
@@ -74,10 +77,17 @@ private:
       */
     bool childCommands(ScUriVector &childs);
 
+private:
+    //! Process initiation of noatom control
+    void initiatedNoAtom();
+
+
 signals:
 
 public slots:
-
+    /*! Initiate command. This function just change sc-memory state (to initiate agents)
+      */
+    void initiated();
 
 };
 

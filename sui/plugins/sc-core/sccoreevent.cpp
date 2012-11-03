@@ -55,7 +55,7 @@ bool ScCoreEvent::activateImpl(sc_addr paramSystem, sc_segment *tmpSegment)
         ScIteratorInterface *iter = mMemory->create_iterator(ScTemplate() << mUri
                                                              << ScElementType(0)
                                                              << ScElementType(0)
-                                                             << ScElementType(ScArcMain | ScConst | ScPos)
+                                                             << ScElementType(ScArcMain | ScConst | ScPositive)
                                                              << param_uri);
         if (!iter->is_over())
             res_templ << iter->value(0) << iter->value(1) << iter->value(2);
@@ -68,7 +68,7 @@ bool ScCoreEvent::activateImpl(sc_addr paramSystem, sc_segment *tmpSegment)
         ScIteratorInterface *iter = mMemory->create_iterator(ScTemplate() << ScElementType(0)
                                                              << ScElementType(0)
                                                              << mUri
-                                                             << ScElementType(ScArcMain | ScConst | ScPos)
+                                                             << ScElementType(ScArcMain | ScConst | ScPositive)
                                                              << param_uri);
         if (!iter->is_over())
             res_templ << iter->value(0) << iter->value(1) << iter->value(2);

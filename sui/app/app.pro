@@ -23,6 +23,7 @@ CONFIG (debug, debug|release) {
 unix {
     POST_TARGETDEPS += $$DESTDIR/libsuiCore.so
     LIBS += $$DESTDIR/libsuiCore.so
+    QMAKE_RPATHDIR += $$DESTDIR
 }
 
 OBJECTS_DIR = obj

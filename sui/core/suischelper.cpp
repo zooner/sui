@@ -46,7 +46,7 @@ ScUri suiScHelper::keynode(const QString &alias) const
               QString("Can't find keynode with alias='%1'").arg(alias),
               "ScUri suiScHelper::keynode(const QString &alias) const");
 
-    return ScUriEmpty;
+    return ScUri::empty();
 }
 
 void suiScHelper::appendKeynode(const ScUri &uri, const QString &alias)
@@ -99,7 +99,7 @@ bool suiScHelper::appendTextIdtf(const ScUri &elem, const QString &idtf, bool is
     QBuffer buff;
     string2IODevice(buff, idtf);
 
-    ScUri idtf_uri = ScUriEmpty;
+    ScUri idtf_uri = ScUri::empty();
     // try to find sc-link with same content
     ScUriList result;
     mMemoryInterface->find_content(buff, result);
@@ -117,18 +117,18 @@ bool suiScHelper::appendTextIdtf(const ScUri &elem, const QString &idtf, bool is
 
 bool suiScHelper::appendIdtf(const ScUri &elem, const ScUri &idtf, bool is_main)
 {
-    Q_ASSERT(elem != ScUriEmpty && idtf != ScUriEmpty);
+    Q_ASSERT(!elem.isEmpty() && !idtf.isEmpty());
 
     // check if main idtf already exist
     ScUri nrel_idtf = keynode(key_nrel_identification);
     ScUri main_ = keynode(key_rrel_main);
 
-    Q_ASSERT(nrel_idtf != ScUriEmpty && main_ != ScUriEmpty);
+    Q_ASSERT(!nrel_idtf.isEmpty() && !main_.isEmpty());
 
     // get identifiers set
     ScUriVector set;
     ScTemplate idtf_set_templ = ScTemplate(scParamType(ScNode | ScConst),
-                                           scParamType(ScArcCommon | ScConst | ScPos),
+                                           scParamType(ScArcCommon | ScConst | ScPositive),
                                            scParamUri(elem),
                                            scParamType(ScArcMain),
                                            scParamUri(nrel_idtf));
@@ -189,7 +189,7 @@ bool suiScHelper::allIdtfs(const ScUri &elem, ScUriVector &result) const
     ScUriVector res_tmp;
 
    if (searchOneShot(ScTemplate() << ScElementType(ScNode | ScConst)
-                                << ScElementType(ScArcCommon | ScConst | ScPos)
+                                << ScElementType(ScArcCommon | ScConst | ScPositive)
                                 << elem
                                 << ScElementType(ScArcMain)
                                 << nrel_idtf
@@ -218,7 +218,7 @@ ScUri suiScHelper::findElementByMainIdentifier(const QString &idtf) const
     // get all contents that same to our identifier
     mMemoryInterface->find_str_content(idtf, contents);
 
-    if (contents.size() == 0)   return ScUriEmpty;
+    if (contents.size() == 0)   return ScUri::empty();
 
     ScUri keynode_main_ = keynode("/etc/main_");
     ScUri keynode_idtf = keynode("/etc/identification*");
@@ -250,7 +250,7 @@ ScUri suiScHelper::findElementByMainIdentifier(const QString &idtf) const
 
     }
 
-    return ScUriEmpty;
+    return ScUri::empty();
 }
 
 QString suiScHelper::stringIdtf(const ScUri &uri, const ScUri &langUri) const

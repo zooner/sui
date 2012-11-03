@@ -29,12 +29,11 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtCore>
 
 // base keynode aliases
-#define key_rrel_main "/etc/main_"
-#define key_nrel_identification "/etc/identification*"
-#define key_group_text "/etc/text"
-
-#define key_command_noatom  "/ui/command/noatom"
-#define key_command_atom    "/ui/command/atom"
+static const QString key_rrel_main = "/etc/main_";
+static const QString key_nrel_identification = "/etc/identification*";
+static const QString key_group_text = "/etc/text";
+static const QString key_command_noatom = "/ui/command/noatom";
+static const QString key_command_atom = "/ui/command/atom";
 
 /*! Class that control knowledge base stuff, like keynodes and garbage clean
   */

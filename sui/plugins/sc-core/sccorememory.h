@@ -28,7 +28,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include <QThread>
 #include <libsc/libsc.h>
 
-#define sc_addr2ScUri(x)    (ScUri((quint64)x))
+static inline ScUri sc_addr2ScUri(sc_addr x) { return ScUri((quintptr)x);}
 
 class ScCoreEvent;
 
@@ -184,10 +184,10 @@ protected:
 
     /*! Sc-core memory listener class
      */
-    class ScCoreSink : public event_sink
+    class ScCoreEventListener : public event_sink
     {
     public:
-        ScCoreSink(ScCoreMemory *memory, sc_segment *seg) :
+        ScCoreEventListener(ScCoreMemory *memory, sc_segment *seg) :
             mMemory(memory),
             mSegment(seg)
         {
@@ -195,7 +195,7 @@ protected:
             Q_ASSERT(mSegment != 0);
         }
 
-        virtual ~ScCoreSink() {}
+        virtual ~ScCoreEventListener() {}
 
         void operator ()(const event_struct &event);
 
@@ -213,13 +213,13 @@ protected:
       * @param sink Pointer to sink that recieve event
       * @param idtf Identifier of generated sc-element
       */
-    void _notifyGenElement(ScCoreSink *sink, const QString &idtf);
+    void _notifyGenElement(ScCoreEventListener *sink, const QString &idtf);
 
     /*! Destroy sc-element notification
       * @param sink Pointer to sink that send event
       * @param idtf Identifier of destoyed sc-element
       */
-    void _notifyEraseElement(ScCoreSink *sink, const QString &idtf);
+    void _notifyEraseElement(ScCoreEventListener *sink, const QString &idtf);
 
     /*! Setup listening to segment
       * @param seg Pointer to segment for listening
@@ -229,7 +229,7 @@ protected:
     /*! Notification about segment unlink
       * @param sink Pointer to sink that recieve event
       */
-    void _notifySegUnlink(ScCoreSink *sink);
+    void _notifySegUnlink(ScCoreEventListener *sink);
 
     //! Structure to store information about segment listener
     struct ScSegListenInfo
@@ -247,7 +247,7 @@ protected:
             return segment == other.segment;
         }
 
-        ScCoreSink *sink;
+        ScCoreEventListener *sink;
         event_fifo *fifo;
         sc_segment *segment;
     };
@@ -264,8 +264,8 @@ private:
     //! Synchronization mutex
     static QMutex *mGlobalMutex;
     //! List of segment listeners
-    typedef QList<ScSegListenInfo> ScSegListeners;
-    ScSegListeners mSegmentListeners;
+    typedef QList<ScSegListenInfo> ScSegmentListeners;
+    ScSegmentListeners mSegmentListeners;
 
     typedef QMap<ScUri, sc_addr> ScUri2ScAddrMap;
     //! Map that convert sc-uri to sc-addr

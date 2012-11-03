@@ -54,7 +54,7 @@ QRectF SCgVisualNode::boundingRect() const
     QPointF size = object->size();
     res = QRectF(-size.x() / 2.f, -size.y() / 2.f, size.x(), size.y());
 
-    if (!object->objectType().check(ScStructMask))
+    if (!object->objectType().check(ScStructuralMask))
         res.adjust(5, 5, -5, -5);
 
     return res;
@@ -112,7 +112,7 @@ void SCgVisualNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     QRectF bound = boundRect.adjusted(2, 2, -2, -2);
     SCgObject *object = observedObject(0);
 
-    if (!object->objectType().check(ScStructMask))
+    if (!object->objectType().check(ScStructuralMask))
     {
         brush.setColor(mColor);
     }

@@ -743,15 +743,15 @@ sc_type ScCoreMemory::ScElementType2sc_type(const ScElementType &type)
     if (type.check(ScArcCommon)) res_type = res_type | SC_ARC;
     if (type.check(ScEdgeCommon)) res_type = res_type | SC_EDGE;
 
-    if (type.check(ScPos)) res_type = res_type | SC_POS;
-    if (type.check(ScNeg)) res_type = res_type | SC_NEG;
+    if (type.check(ScPositive)) res_type = res_type | SC_POS;
+    if (type.check(ScNegative)) res_type = res_type | SC_NEG;
 
     if (type.check(ScConst)) res_type = res_type | SC_CONST;
     if (type.check(ScVar)) res_type = res_type | SC_VAR;
     if (type.check(ScMeta)) res_type = res_type | SC_METAVAR;
 
-    if (type.check(ScTemp)) res_type = res_type | SC_TEMPORARY;
-    if (type.check(ScPerm)) res_type = res_type | SC_PERMANENT;
+    if (type.check(ScTemporary)) res_type = res_type | SC_TEMPORARY;
+    if (type.check(ScPermanent)) res_type = res_type | SC_PERMANENT;
 
     if (type.check(ScStruct)) res_type = res_type | SC_STRUCT;
     if (type.check(ScTuple)) res_type = res_type | SC_TUPLE;
@@ -773,15 +773,15 @@ ScElementType ScCoreMemory::sc_type2ScElementType(const sc_type &type)
     if (sc_isa(type, SC_ARC_MAIN)) res_type.add(ScArcMain);
     if (type & SC_EDGE) res_type.add(ScEdgeCommon);
 
-    if (type & SC_POS) res_type.add(ScPos);
-    if (type & SC_NEG) res_type.add(ScNeg);
+    if (type & SC_POS) res_type.add(ScPositive);
+    if (type & SC_NEG) res_type.add(ScNegative);
 
     if (type & SC_CONST) res_type.add(ScConst);
     if (type & SC_VAR) res_type.add(ScVar);
     if (type & SC_METAVAR) res_type.add(ScMeta);
 
-    if (type & SC_TEMPORARY) res_type.add(ScTemp);
-    if (type & SC_PERMANENT) res_type.add(ScPerm);
+    if (type & SC_TEMPORARY) res_type.add(ScTemporary);
+    if (type & SC_PERMANENT) res_type.add(ScPermanent);
 
     if (type & SC_STRUCT) res_type.add(ScStruct);
     if (type & SC_TUPLE) res_type.add(ScTuple);
@@ -806,7 +806,7 @@ sc_addr ScCoreMemory::getScAddr(const ScUri &uri) const
     return it.value();
 }
 
-void ScCoreMemory::_notifyGenElement(ScCoreSink *sink, const QString &idtf)
+void ScCoreMemory::_notifyGenElement(ScCoreEventListener *sink, const QString &idtf)
 {
     QMutexLocker locker(mGlobalMutex);
 
@@ -826,7 +826,7 @@ void ScCoreMemory::_notifyGenElement(ScCoreSink *sink, const QString &idtf)
         mScUri2ScAddr[uri] = addr;
 }
 
-void ScCoreMemory::_notifyEraseElement(ScCoreSink *sink, const QString &idtf)
+void ScCoreMemory::_notifyEraseElement(ScCoreEventListener *sink, const QString &idtf)
 {
     QMutexLocker locker(mGlobalMutex);
 
@@ -855,7 +855,7 @@ void ScCoreMemory::_listenSegment(sc_segment *seg)
     QMutexLocker locker(mGlobalMutex);
 
     // check if segment already listened
-    ScSegListeners::iterator it;
+    ScSegmentListeners::iterator it;
     for (it = mSegmentListeners.begin(); it != mSegmentListeners.end(); ++it)
         if ((*it).segment == seg)
             return;
@@ -883,7 +883,7 @@ void ScCoreMemory::_listenSegment(sc_segment *seg)
 
     // apped new listener
     ScSegListenInfo info;
-    info.sink = new ScCoreSink(this, seg);
+    info.sink = new ScCoreEventListener(this, seg);
     info.fifo = new event_fifo(*info.sink);
     info.segment = seg;
 
@@ -892,14 +892,14 @@ void ScCoreMemory::_listenSegment(sc_segment *seg)
     mSegmentListeners.append(info);
 }
 
-void ScCoreMemory::_notifySegUnlink(ScCoreSink *sink)
+void ScCoreMemory::_notifySegUnlink(ScCoreEventListener *sink)
 {
     QMutexLocker locker(mGlobalMutex);
 
     ScSegListenInfo info;
     info.sink = sink;
 
-    ScSegListeners::iterator it;
+    ScSegmentListeners::iterator it;
     while (it != mSegmentListeners.end() || (*it).sink != sink)
     if (it == mSegmentListeners.end())
         SuiExcept(SuiExceptionInternalError,
@@ -933,8 +933,8 @@ void ScCoreMemory::_notifySegUnlink(ScCoreSink *sink)
     }
 }
 
-/// ---- sink
-void ScCoreMemory::ScCoreSink::operator ()(const event_struct &event)
+/// ---- listener
+void ScCoreMemory::ScCoreEventListener::operator ()(const event_struct &event)
 {
 
     if (event.type == SCEV_GENEL)

@@ -31,59 +31,80 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "_utils.h"
 
 // sc-element type
-/*! \def Type of sc-element, that designate node.
- * See image: \image html images/model/scg/node_not_define.png
- */
-#define ScNode              1
-/*! \def Type of sc-element, that designate commond edge.
- * See image: \image html images/model/scg/edge.png
- */
-#define ScEdgeCommon        2
-/*! \def Type of sc-element, that designate commond arc.
- * See image: \image html images/model/scg/arc_common.png
- */
-#define ScArcCommon         4
-/*! \def Type of sc-element, that designate main arc (equivalent to (ScArcCommon | ScAccessory | ScConst | ScPos)).
- * See image: \image html images/model/scg/arc_main.png
- */
-#define ScArcMain           8   //
-/*! \def Type of sc-element, that designate link to other content.
- * See image: \image html images/model/scg/content.png
- */
-#define ScLink              16
-// sc-element constant
-#define ScConst             32
-#define ScVar               64
-#define ScMeta              128
-// sc-element positivity
-#define ScPos               256
-#define ScNeg               512
-#define ScFuz               1024
-// sc-element premanently
-#define ScTemp              2048
-#define ScPerm              4096
-// sc-accessory
-#define ScAccessory         8192
+enum _ScElementCommonType
+{
+    /*! \def Type of sc-element, that designate node.
+     * See image: \image html images/model/scg/node_not_define.png
+     */
+    ScNode = 1,
+    /*! \def Type of sc-element, that designate commond edge.
+     * See image: \image html images/model/scg/edge.png
+     */
+    ScEdgeCommon = 2,
+    /*! \def Type of sc-element, that designate commond arc.
+     * See image: \image html images/model/scg/arc_common.png
+     */
+    ScArcCommon = 4,
+    /*! \def Type of sc-element, that designate main arc (equivalent to (ScArcCommon | ScAccessory | ScConst | ScPos)).
+     * See image: \image html images/model/scg/arc_main.png
+     */
+    ScArcMain = 8,
+    /*! \def Type of sc-element, that designate link to other content.
+     * See image: \image html images/model/scg/content.png
+     */
+    ScLink = 16
+};
 
-// struct node types
-#define ScTuple             256
-#define ScStruct            512
-#define ScRole              1024
-#define ScBinary            2048
-#define ScConcept           4096
-#define ScAbstract          8192
+enum _ScElementConstancy
+{
+    ScConst = 32,
+    ScVar = 64,
+    ScMeta = 128
+};
 
+enum _ScElementPositivity
+{
+    ScPositive = 256,
+    ScNegative = 512,
+    ScFuzzy = 1024
+};
 
-// type mask
-#define ScArcMask           (ScEdgeCommon | ScArcCommon | ScArcMain)
-#define ScConstMask         (ScConst | ScVar | ScMeta)
-#define ScPosMask           (ScPos | ScNeg)
-#define ScPermMask          (ScTemp | ScPerm)
-#define ScStructMask        (ScTuple | ScStruct | ScRole | ScBinary | ScConcept | ScAbstract)
+enum _ScElementPermanence
+{
+    ScTemporary = 2048,
+    ScPermanent = 4096
+};
+
+/*!
+ * @TODO: Add comment here
+ */
+enum
+{
+    ScAccessory = 8192
+};
+
+enum _ScNodeType
+{
+    ScTuple = 256,
+    ScStruct = 512,
+    ScRole = 1024,
+    ScBinary = 2048,
+    ScConcept = 4096,
+    ScAbstract = 8192
+};
+
+enum _ScTypeMask
+{
+    ScArcMask = (ScEdgeCommon | ScArcCommon | ScArcMain),
+    ScConstMask = (ScConst | ScVar | ScMeta),
+    ScPositivityMask = (ScPositive | ScNegative),
+    ScPermanenceMask = (ScTemporary | ScPermanent),
+    ScStructuralMask = (ScTuple | ScStruct | ScRole | ScBinary | ScConcept | ScAbstract)
+};
 
 struct _ScUri
 {
-    explicit _ScUri(quint64 v = 0) : val(v) {}
+    explicit _ScUri(quintptr v = 0) : val(v) {}
     _ScUri(const _ScUri &other) { val = other.val; }
 
     bool operator ==(const _ScUri &other) const { return val == other.val; }
@@ -98,13 +119,13 @@ struct _ScUri
     // check if it empty
     bool isEmpty() const { return val == 0; }
     // get value
-    quint64 value() const { return val; }
+    quintptr value() const { return val; }
+
+    static inline _ScUri empty() {return _ScUri(0);}
 
 private:
-    quint64 val;
+    quintptr val;
 };
-
-#define ScUriEmpty    _ScUri(0)
 
 typedef quint16 _ScElemTypeValue;
 struct _ScElementType
@@ -166,7 +187,7 @@ struct _ScElementType
         if ((val & ScVar) && (val & ScMeta)) return false;
 
         // check positive types
-        if ((val & ScPos) && (val & ScNeg)) return false;
+        if ((val & ScPositive) && (val & ScNegative)) return false;
 
 
         return true;
@@ -196,14 +217,14 @@ struct _ScElementType
         else if (check(ScMeta))
             res += " | meta";
 
-        if (check(ScPos))
+        if (check(ScPositive))
             res += " | pos";
-        else if (check(ScNeg))
+        else if (check(ScNegative))
             res += " | neg";
         else
             res += " | fuz";
 
-        if (check(ScTemp))
+        if (check(ScTemporary))
             res += " | temp";
         else
             res += " | perm";
@@ -221,9 +242,6 @@ private:
 typedef _ScUri ScUri;
 //! sc-element type
 typedef _ScElementType ScElementType;
-
-#define _scType(x) ((ScElementType)(x))
-#define _scUri(x) ((ScUri)(x))
 
 //! List of ScUri's
 typedef QList<ScUri> ScUriList;
@@ -268,8 +286,10 @@ struct ScParam
     QVariant m_value;
 };
 
-#define scParamUri(x) ScParam(_scUri((x)))
-#define scParamType(x) ScParam(_scType((x)))
+static inline ScParam scParamUri(ScUri x) { return ScParam(x); }
+static inline ScParam scParamUri(quint64 x) { return ScParam(ScUri(x)); }
+static inline ScParam scParamType(ScElementType x) { return ScParam(x); }
+static inline ScParam scParamType(_ScElemTypeValue x) { return ScParam(ScElementType(x)); }
 
 /*! Structure to store template for sc-construction that contains from 3 or 5 sc-elements
   */
@@ -342,7 +362,7 @@ public:
         if (mCount >= 5) SuiExcept(SuiExceptionInvalidParameters,
                                    "Template can't have more then 5 parameters",
                                    "ScMemoryInterface::operator<<()");
-        mParams[mCount++] = scParamUri(uri);
+        mParams[mCount++] = ScParam(uri);
         return *this;
     }
     ScTemplate& operator <<(const ScElementType &type)
@@ -350,7 +370,7 @@ public:
         if (mCount >= 5) SuiExcept(SuiExceptionInvalidParameters,
                                    "Template can't have more then 5 parameters",
                                    "ScMemoryInterface::operator<<()");
-        mParams[mCount++] = scParamType(type);
+        mParams[mCount++] = ScParam(type);
         return *this;
     }
 

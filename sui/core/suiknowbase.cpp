@@ -143,7 +143,7 @@ void suiKnowBase::loadSources(const QStringList &sourceDirs)
         if (helper->hasKeynode(it.value())) continue;
         // try to find keynodes by main identifier
         ScUri uri = helper->findElementByMainIdentifier(it.key());
-        if (uri == ScUriEmpty) SuiExcept(SuiExceptionItemNotFound,
+        if (uri.isEmpty()) SuiExcept(SuiExceptionItemNotFound,
                                          QString("Can't find keynode '%1'").arg(it.key()),
                                          "void suiKnowBase::initialize(const QStringList &sourceDirs)");
     }
@@ -160,7 +160,7 @@ void suiKnowBase::loadSources(const QStringList &sourceDirs)
         ScUriVector res;
         // trying to find content of source
         if (helper->searchOneShot(ScTemplate() << scIt.value(2)
-                                             << ScElementType(ScArcCommon | ScConst | ScPos)
+                                             << ScElementType(ScArcCommon | ScConst | ScPositive)
                                              << ScElementType(0) // fix to link
                                              << ScElementType(ScArcMain)
                                              << content_keynode, res))
@@ -224,13 +224,13 @@ void suiKnowBase::loadSourceFile(const QString& filename)
                         << source_node, v);
 
     sc_helper->genElStr(ScTemplate() << source_node
-                        << ScElementType(ScArcCommon | ScConst | ScPos)
+                        << ScElementType(ScArcCommon | ScConst | ScPositive)
                         << source_content
                         << ScElementType(ScArcMain)
                         << content_keynode, v);
 
     sc_helper->genElStr(ScTemplate() << source_node
-                        << ScElementType(ScArcCommon | ScConst | ScPos)
+                        << ScElementType(ScArcCommon | ScConst | ScPositive)
                         << source_path_node
                         << ScElementType(ScArcMain)
                         << path_keynode, v);

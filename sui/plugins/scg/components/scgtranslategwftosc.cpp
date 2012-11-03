@@ -69,30 +69,30 @@ SCgTranslateGWFToSc::SCgTranslateGWFToSc(QObject *parent) :
     mTypeAliasToScType["node/meta/group"] = ScElementType(ScNode | ScMeta);
 
 
-    mTypeAliasToScType["pair/const/pos/-/orient"] = ScElementType(ScArcMain | ScConst | ScPos);
-    mTypeAliasToScType["pair/const/neg/-/orient"] = ScElementType(ScArcMain | ScConst | ScNeg);
+    mTypeAliasToScType["pair/const/pos/-/orient"] = ScElementType(ScArcMain | ScConst | ScPositive);
+    mTypeAliasToScType["pair/const/neg/-/orient"] = ScElementType(ScArcMain | ScConst | ScNegative);
     mTypeAliasToScType["pair/const/fuz/-/orient"] = ScElementType(ScArcMain | ScConst);
-    mTypeAliasToScType["pair/const/pos/temp/orient"] = ScElementType(ScArcMain | ScConst | ScPos | ScTemp);
-    mTypeAliasToScType["pair/const/neg/temp/orient"] = ScElementType(ScArcMain | ScConst | ScNeg | ScTemp);
-    mTypeAliasToScType["pair/const/fuz/temp/orient"] = ScElementType(ScArcMain | ScConst | ScTemp);
+    mTypeAliasToScType["pair/const/pos/temp/orient"] = ScElementType(ScArcMain | ScConst | ScPositive | ScTemporary);
+    mTypeAliasToScType["pair/const/neg/temp/orient"] = ScElementType(ScArcMain | ScConst | ScNegative | ScTemporary);
+    mTypeAliasToScType["pair/const/fuz/temp/orient"] = ScElementType(ScArcMain | ScConst | ScTemporary);
     mTypeAliasToScType["pair/const/-/-/-"] = ScElementType(ScEdgeCommon | ScConst);
     mTypeAliasToScType["pair/const/-/-/orient"] = ScElementType(ScArcCommon | ScConst);
 
-    mTypeAliasToScType["pair/var/pos/-/orient"] = ScElementType(ScArcMain | ScVar | ScPos);
-    mTypeAliasToScType["pair/var/neg/-/orient"] = ScElementType(ScArcMain | ScVar | ScNeg);
+    mTypeAliasToScType["pair/var/pos/-/orient"] = ScElementType(ScArcMain | ScVar | ScPositive);
+    mTypeAliasToScType["pair/var/neg/-/orient"] = ScElementType(ScArcMain | ScVar | ScNegative);
     mTypeAliasToScType["pair/var/fuz/-/orient"] = ScElementType(ScArcMain | ScVar);
-    mTypeAliasToScType["pair/var/pos/temp/orient"] = ScElementType(ScArcMain | ScVar | ScPos | ScTemp);
-    mTypeAliasToScType["pair/var/neg/temp/orient"] = ScElementType(ScArcMain | ScVar | ScNeg | ScTemp);
-    mTypeAliasToScType["pair/var/fuz/temp/orient"] = ScElementType(ScArcMain | ScVar | ScTemp);
+    mTypeAliasToScType["pair/var/pos/temp/orient"] = ScElementType(ScArcMain | ScVar | ScPositive | ScTemporary);
+    mTypeAliasToScType["pair/var/neg/temp/orient"] = ScElementType(ScArcMain | ScVar | ScNegative | ScTemporary);
+    mTypeAliasToScType["pair/var/fuz/temp/orient"] = ScElementType(ScArcMain | ScVar | ScTemporary);
     mTypeAliasToScType["pair/var/-/-/-"] = ScElementType(ScEdgeCommon | ScVar);
     mTypeAliasToScType["pair/var/-/-/orient"] = ScElementType(ScArcCommon | ScVar);
 
-    mTypeAliasToScType["pair/meta/pos/-/orient"] = ScElementType(ScArcMain | ScMeta | ScPos);
-    mTypeAliasToScType["pair/meta/neg/-/orient"] = ScElementType(ScArcMain | ScMeta | ScNeg);
+    mTypeAliasToScType["pair/meta/pos/-/orient"] = ScElementType(ScArcMain | ScMeta | ScPositive);
+    mTypeAliasToScType["pair/meta/neg/-/orient"] = ScElementType(ScArcMain | ScMeta | ScNegative);
     mTypeAliasToScType["pair/meta/fuz/-/orient"] = ScElementType(ScArcMain | ScMeta);
-    mTypeAliasToScType["pair/meta/pos/temp/orient"] = ScElementType(ScArcMain | ScMeta | ScPos | ScTemp);
-    mTypeAliasToScType["pair/meta/neg/temp/orient"] = ScElementType(ScArcMain | ScMeta | ScNeg | ScTemp);
-    mTypeAliasToScType["pair/meta/fuz/temp/orient"] = ScElementType(ScArcMain | ScMeta | ScTemp);
+    mTypeAliasToScType["pair/meta/pos/temp/orient"] = ScElementType(ScArcMain | ScMeta | ScPositive | ScTemporary);
+    mTypeAliasToScType["pair/meta/neg/temp/orient"] = ScElementType(ScArcMain | ScMeta | ScNegative | ScTemporary);
+    mTypeAliasToScType["pair/meta/fuz/temp/orient"] = ScElementType(ScArcMain | ScMeta | ScTemporary);
     mTypeAliasToScType["pair/meta/-/-/-"] = ScElementType(ScEdgeCommon | ScMeta);
     mTypeAliasToScType["pair/meta/-/-/orient"] = ScElementType(ScArcCommon | ScMeta);
 }
@@ -153,9 +153,9 @@ bool SCgTranslateGWFToSc::translate(QIODevice &device, ScMemoryInterface *memory
                 // generate 5 elements construction to append new arc between parent and child into output set
                 ScUriVector res;
                 ScTemplate templ(parent,
-                                 ScElementType(ScArcMain | ScConst | ScPos),
+                                 ScElementType(ScArcMain | ScConst | ScPositive),
                                  uri,
-                                 ScElementType(ScArcMain | ScConst | ScPos),
+                                 ScElementType(ScArcMain | ScConst | ScPositive),
                                  set);
 
                 if (!helper->genElStr(templ, res))
@@ -169,7 +169,7 @@ bool SCgTranslateGWFToSc::translate(QIODevice &device, ScMemoryInterface *memory
     ScUriList::iterator it_list;
     ScUriVector res;
     for (it_list = mTranslatedObjects.begin(); it_list != mTranslatedObjects.end(); ++it_list)
-        if (!helper->genElStr(ScTemplate() << set << ScElementType(ScArcMain | ScConst| ScPos) << *it_list, res))
+        if (!helper->genElStr(ScTemplate() << set << ScElementType(ScArcMain | ScConst| ScPositive) << *it_list, res))
             SuiExcept(SuiExceptionInternalError,
                       QString("Can't append '%1 into output set '%2").arg((*it_list).value()).arg(set.value()),
                       "bool SCgTranslateGWFToSc::translate(QIODevice &device, ScMemoryInterface *memory, const ScUri &set)");

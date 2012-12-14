@@ -41,8 +41,8 @@ bool suiMainWindowAddOperation::checkCondition(const ScEvent &event)
 bool suiMainWindowAddOperation::run_impl(const ScEvent &event)
 {
     // check param
-    Q_ASSERT(event.templ().param(2).is_uri());
+    Q_ASSERT(event.scTemplate().param(2).is_uri());
     // we use output arc event, so end element in template is added into window sc-element
-    suiRoot::getInstance()->mainScWindow()->showObjects(ScUriList() << event.templ().param(2).uri());
+    suiRoot::getInstance()->mainScWindow()->showObjects(ScUriList() << event.scTemplate().param(2).uri());
     return true;
 }

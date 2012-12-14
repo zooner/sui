@@ -24,6 +24,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 SCgObjectInfo::SCgObjectInfo(const SCgVisualObject* obj)
 {
+    //! \todo: implement
+    Q_UNUSED(obj);
 }
 
 SCgObjectInfo::~SCgObjectInfo()

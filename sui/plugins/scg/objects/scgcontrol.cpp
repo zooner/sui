@@ -28,7 +28,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 SCgControl::SCgControl(QObject *parent) :
     SCgObject(parent)
 {
-    setSize(QPointF(50.f, 25.f));
+    setSize(QSizeF(50.f, 25.f));
 }
 
 SCgControl::~SCgControl()
@@ -37,14 +37,16 @@ SCgControl::~SCgControl()
 
 QPointF SCgControl::calculateDotCoordinates(qreal dotPosition, const QPointF &point) const
 {
-    QPointF wpos = worldPosition();
-    QPolygonF polygon(QRectF(wpos - size() / 2.f, QSize(size().x(), size().y())));
+    Q_UNUSED(dotPosition);
+
+    QPointF wpos = position();
+    QPolygonF polygon(QRectF(wpos - QPointF(size().width() / 2.f, size().height() / 2.f), size()));
     QPointF p, res;
 
     p = wpos;
 
     QPointF p1 = polygon.last();
-    QPointF p2, intersectPoint, result;
+    QPointF p2, intersectPoint;
     QLineF line, pair(point, p);
     qreal minLength = -1;
 
@@ -70,9 +72,16 @@ QPointF SCgControl::calculateDotCoordinates(qreal dotPosition, const QPointF &po
     return res;
 }
 
+QPointF SCgControl::calculateDotCoordinatesByAngle(qreal slope, const QPointF &point) const
+{
+    //! TODO: maybe best implementation could take place here
+    return calculateDotCoordinates(slope, point);
+}
+
 qreal SCgControl::calculateDotPosition(const QPointF &point) const
 {
-    return 0.f;
+    Q_UNUSED(point);
+    return -1.f;
 }
 
 SCgControl::ControlType SCgControl::controlType() const
@@ -86,6 +95,8 @@ SCgControl::ControlType SCgControl::controlType() const
 
     if (helper->checkInclusion(uri(), helper->keynode("/ui/command/class")))
         return Class;
+    //TODO: Extend
+    return Unknown;
 }
 
 bool SCgControl::childCommands(ScUriVector &childs)
@@ -132,6 +143,7 @@ void SCgControl::initiated()
 {
     ControlType tp = controlType();
 
+    //! \todo: Extend
     switch(tp)
     {
     case NoAtom:
@@ -143,7 +155,7 @@ void SCgControl::initiated()
 void SCgControl::initiatedNoAtom()
 {
     UiRootInterface *root = SCgPlugin::rootInterface();
-    ScMemoryInterface *memory = root->scMemory();
+    /*ScMemoryInterface *memory = */root->scMemory();
     ScHelperInterface *helper = root->scHelper();
 
     ScUriVector childs, res;

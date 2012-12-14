@@ -32,12 +32,15 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 class SCgVisualControl : public SCgVisualObject
 {
     Q_OBJECT
+
+protected:
+    friend class SCgVisualObject;
+    explicit SCgVisualControl(QGraphicsScene *scene = 0);
 public:
 
     //! Type for qgraphicsitem_cast
     int type() const { return SCgControlType; }
 
-    explicit SCgVisualControl(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     virtual ~SCgVisualControl();
 
     //! @copydoc SCgObject::boundingRect
@@ -69,6 +72,8 @@ protected:
     //! @copydoc SCgVisualObject::_update
     void _update(UpdateEventType eventType, SCgObject *object);
 
+    //! @copydoc SCgVisualObject::clone()
+//    virtual SCgVisualObject* clone(){return 0;}
 protected:
     //! Backgound color
     QColor mBackColor;

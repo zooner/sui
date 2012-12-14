@@ -482,7 +482,7 @@ public:
     const ScUri& uri() const { return m_uri; }
 
     //! Return template that contains arguments
-    const ScTemplate& templ() const { return m_template; }
+    const ScTemplate& scTemplate() const { return m_template; }
 
     //! Return memory interface, that must be used to work with sc-memory
     ScMemoryInterface* memory() { return m_memory_interface; }

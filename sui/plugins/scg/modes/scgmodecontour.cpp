@@ -1,9 +1,24 @@
 /*
- * scgmodeselect.cpp
- *
- *  Created on: 14.07.2011
- *      Author: ZooNer
- */
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
 
 #include "scgprecompiled.h"
 #include "scgmodecontour.h"
@@ -16,10 +31,11 @@
 #include "scgpathitem.h"
 
 
-SCgModeContour::SCgModeContour(SCgInputHandlerInterface* inputHandler):
-                SCgModeInterface(inputHandler),
+SCgModeContour::SCgModeContour(SCgInputHandlerInterface* inputHandler, SCgModeInterface* childMode):
+                SCgModeInterface(inputHandler, childMode),
                 mPathItem(0),
-                mParentContour(0)
+                mParentContour(0),
+                mPassMouseReleaseEvent(false)
 {
 
 }
@@ -44,27 +60,37 @@ QList<QGraphicsItem* > SCgModeContour::selectItemsForContour() const
     return result;
 }
 
-void SCgModeContour::keyPressEvent ( QKeyEvent * keyEvent )
+void SCgModeContour::keyPressEvent (QKeyEvent * keyEvent)
 {
-
+    if(mDecoratedMode)
+        mDecoratedMode->keyPressEvent(keyEvent);
 }
 
-void SCgModeContour::keyReleaseEvent ( QKeyEvent * keyEvent )
+void SCgModeContour::keyReleaseEvent (QKeyEvent * keyEvent)
 {
-
+    if(mDecoratedMode)
+        mDecoratedMode->keyReleaseEvent(keyEvent);
 }
 
-void SCgModeContour::mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * mouseEvent )
+void SCgModeContour::mouseDoubleClickEvent (QGraphicsSceneMouseEvent * mouseEvent)
 {
-
+    if(mDecoratedMode)
+        mDecoratedMode->mouseDoubleClickEvent(mouseEvent);
 }
 
-void SCgModeContour::mouseMoveEvent ( QGraphicsSceneMouseEvent * mouseEvent )
+void SCgModeContour::mouseMoveEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool afterSceneEvent )
 {
-    mouseEvent->accept();
+    if(afterSceneEvent)
+    {
+        if(mDecoratedMode)
+            mDecoratedMode->mouseMoveEvent(mouseEvent, afterSceneEvent);
+        return;
+    }
 
     if(mPathItem)
     {
+        mouseEvent->accept();
+
         QVector2D vec(mouseEvent->scenePos() - mPathItem->points().first());
 
         QPen pen = mPathItem->pen();
@@ -82,32 +108,42 @@ void SCgModeContour::mouseMoveEvent ( QGraphicsSceneMouseEvent * mouseEvent )
         }
 
         mPathItem->update(mouseEvent->scenePos());
+
+        return;
     }
+
+    if(mDecoratedMode)
+        mDecoratedMode->mouseMoveEvent(mouseEvent, afterSceneEvent);
 }
 
-void SCgModeContour::mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent )
+void SCgModeContour::mousePressEvent (QGraphicsSceneMouseEvent * mouseEvent , bool afterSceneEvent)
 {
-    mouseEvent->accept();
+    if(afterSceneEvent)
+    {
+        if(mDecoratedMode)
+            mDecoratedMode->mousePressEvent(mouseEvent, afterSceneEvent);
+        return;
+    }
 
+    QPointF mousePos = mouseEvent->scenePos();
+    // Process this event only if there is no items under mouse.
+    QGraphicsItem* scgVisObjectUnderMouse = scene()->scgVisualObjectAt(mousePos);
+    if(!mPathItem && scgVisObjectUnderMouse)
+    {
+        if(mDecoratedMode)
+            mDecoratedMode->mousePressEvent(mouseEvent, afterSceneEvent);
+
+        mPassMouseReleaseEvent = true;
+        return;
+    }
+
+    // left button
     if (mouseEvent->button() == Qt::LeftButton)
     {
-       QPointF mousePos = mouseEvent->scenePos();
+       mouseEvent->accept();
 
         if (!mPathItem)
         {
-//            SCgVisualObject* obj = scene()->scgObjectAt(mousePos);
-//            if(obj)
-//            {
-//                if(obj->type() == SCgVisualObject::SCgContourType)
-//                    mParentContour = static_cast<SCgVisualContour*>(obj);
-//                else
-//                {
-//                    QGraphicsItem* it = obj->parentItem();
-//                    if (it && it->type() == SCgVisualObject::SCgContourType)
-//                        mParentContour = static_cast<SCgVisualContour*>(it);
-//                }
-//            }
-
             mPathItem = new SCgPathItem(scene(), true);
             mPathItem->pushPoint(mousePos);
 
@@ -120,32 +156,35 @@ void SCgModeContour::mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent )
 
             mPathItem->setPen(pen);
             return;
-        }else
+        }
+
+        QVector<QPointF> points = mPathItem->points();
+        QVector2D vec(points.at(0) - mousePos);
+
+        if (vec.length() < 5.f && points.size() > 2)
         {
-            QVector<QPointF> points = mPathItem->points();
-            QVector2D vec(points.at(0) - mousePos);
+            // get child items
+            QList<QGraphicsItem*> childs = selectItemsForContour();
 
-            if (vec.length() < 5.f && points.size() > 2)
-            {
-                // get child items
-                QList<QGraphicsItem*> childs = selectItemsForContour();
+            scene()->pushCommand(new SCgCommandCreateContour(scene(), childs, points, 0));
 
-                scene()->appendUndoCommand(new SCgCommandCreateContour(scene(), childs, points, 0));
-
-                mParentContour = 0;
-                delete mPathItem;
-            }
+            mParentContour = 0;
+            delete mPathItem;
+            mPathItem = 0;
+        }
+        else
+        {
+            mPathItem->pushPoint(mousePos);
         }
     }
 
-    QPointF mousePos = mouseEvent->scenePos();
-    if (mPathItem && mouseEvent->button() == Qt::LeftButton)
-        mPathItem->pushPoint(mousePos);
     // right button
     if (mouseEvent->button() == Qt::RightButton)
     {
         if (mPathItem)
         {
+            mouseEvent->accept();
+
             mPathItem->popPoint();
             if (mPathItem->points().empty())
                 delete mPathItem;
@@ -153,15 +192,26 @@ void SCgModeContour::mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent )
     }
 }
 
-void SCgModeContour::mouseReleaseEvent ( QGraphicsSceneMouseEvent * mouseEvent )
+void SCgModeContour::mouseReleaseEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool afterSceneEvent )
 {
+    if(afterSceneEvent)
+    {
+        if(mDecoratedMode)
+            mDecoratedMode->mouseReleaseEvent(mouseEvent, afterSceneEvent);
+        return;
+    }
 
+    if(mPassMouseReleaseEvent && mDecoratedMode)
+        mDecoratedMode->mouseReleaseEvent(mouseEvent, afterSceneEvent);
+
+    mPassMouseReleaseEvent = false;
 }
 
 
 void SCgModeContour::activate()
 {
-
+    if(mDecoratedMode)
+        mDecoratedMode->activate();
 }
 
 
@@ -169,4 +219,6 @@ void SCgModeContour::deactivate()
 {
     if (mPathItem)
         delete mPathItem;
+    if(mDecoratedMode)
+        mDecoratedMode->deactivate();
 }

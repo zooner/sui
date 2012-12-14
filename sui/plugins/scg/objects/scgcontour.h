@@ -27,7 +27,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 /*! Class represents sc.g-contour object.
   * \chapter Coordinate system.
-  * All coordinate sof contour points must to bee relative to it position.
+  * All coordinates of contour points must to be relative to it position.
   */
 class SCgContour : public SCgPointContainer
 {

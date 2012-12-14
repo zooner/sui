@@ -1,9 +1,24 @@
 /*
- * scgmodeselect.h
- *
- *  Created on: 14.07.2011
- *      Author: ZooNer
- */
+-----------------------------------------------------------------------------
+This source file is part of OSTIS (Open Semantic Technology for Intelligent Systems)
+For the latest info, see http://www.ostis.net
+
+Copyright (c) 2010 OSTIS
+
+OSTIS is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+OSTIS is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
+-----------------------------------------------------------------------------
+*/
 
 #ifndef SCGMODEPAIR_H_
 #define SCGMODEPAIR_H_
@@ -17,7 +32,7 @@ class SCgPathItem;
 class SCgModePair: public SCgModeInterface
 {
 public:
-    explicit SCgModePair(SCgInputHandlerInterface* inputHandler);
+    explicit SCgModePair(SCgInputHandlerInterface* inputHandler, SCgModeInterface *childMode = 0);
 
     virtual ~SCgModePair();
 
@@ -28,11 +43,11 @@ public:
     //! @copydoc QGraphicsScene::mouseDoubleClickEvent
     void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * mouseEvent );
     //! @copydoc QGraphicsScene::mouseMoveEvent
-    void mouseMoveEvent ( QGraphicsSceneMouseEvent * mouseEvent );
+    void mouseMoveEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool afterSceneEvent );
     //! @copydoc QGraphicsScene::mousePressEvent
-    void mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent );
+    void mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool afterSceneEvent );
     //! @copydoc QGraphicsScene::mouseReleaseEvent
-    void mouseReleaseEvent ( QGraphicsSceneMouseEvent * mouseEvent );
+    void mouseReleaseEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool afterSceneEvent );
 
 
     /*! Called then this mode is become active.
@@ -46,10 +61,10 @@ public:
     void deactivate();
 
 private:
-
     QPointer<SCgPathItem> mPathItem;
-
     QPointer<SCgVisualObject> mObjectAtFirstPoint;
+
+    bool mPassMouseReleaseEvent;
 };
 
 #endif /* SCGMODEPAIR_H_ */

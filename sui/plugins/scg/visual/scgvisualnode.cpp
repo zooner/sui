@@ -29,10 +29,9 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
-SCgVisualNode::SCgVisualNode(QGraphicsItem *parent, QGraphicsScene *scene) :
-    SCgVisualObject(parent, scene)
+SCgVisualNode::SCgVisualNode(QGraphicsScene *scene) :
+    SCgVisualObject(scene)
 {
-    setFlag(QGraphicsItem::ItemIsMovable, true);
     setToolTip(QObject::tr("SCg-node"));
     setZValue(2);
 }
@@ -50,11 +49,11 @@ QRectF SCgVisualNode::boundingRect() const
 //    if (mConstType == SCgAlphabet::Meta)
 //        res = QRectF(-size().width() / 2.f - 1.f, -size().height() / 2.f - 1.f, mSize.width() + 2.f, mSize.height() + 2.f);
 //    else
-    SCgObject *object = observedObject(0);
-    QPointF size = object->size();
-    res = QRectF(-size.x() / 2.f, -size.y() / 2.f, size.x(), size.y());
+    SCgObject *object = baseObject();
+    QSizeF size = object->size();
+    res = QRectF(-size.width() / 2.f, -size.height() / 2.f, size.width(), size.height());
 
-    if (!object->objectType().check(ScStructuralMask))
+    if (!object->scObjectType().check(ScStructuralMask))
         res.adjust(5, 5, -5, -5);
 
     return res;
@@ -67,13 +66,13 @@ QPainterPath SCgVisualNode::shape() const
 
     QMatrix matrix;
 
-    SCgObject *object = observedObject(0);
+    SCgObject *object = baseObject();
 
-    if (object->objectType().check(ScConst))
+    if (object->scObjectType().check(ScConst))
         path.addEllipse(boundRect);
-    else if (object->objectType().check(ScVar))
+    else if (object->scObjectType().check(ScVar))
         path.addRect(boundRect);
-    else if (object->objectType().check(ScMeta))
+    else if (object->scObjectType().check(ScMeta))
         path.addPolygon(matrix.rotate(45.f).mapToPolygon(boundRect.toRect()));
     else
         SuiExcept(SuiExceptionInvalidState,
@@ -83,23 +82,12 @@ QPainterPath SCgVisualNode::shape() const
     return path;
 }
 
-QVariant SCgVisualNode::itemChange(GraphicsItemChange change, const QVariant &value)
-{
-//    if (mBus && !mBus->isDead() && change == QGraphicsItem::ItemParentHasChanged)
-//        mBus->setParentItem(parentItem());
-
-    return SCgVisualObject::itemChange(change, value);
-}
-
 void SCgVisualNode::updatePosition()
 {
 }
 
 void SCgVisualNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    // synchronize with sc.g-object
-    sync();
-
     /* need to rebuild that code to more flexible.
        Just for example make drawers class for different types.
      */
@@ -110,23 +98,23 @@ void SCgVisualNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     QBrush brush = QBrush(QColor(255, 255, 255, 224), Qt::SolidPattern);
 
     QRectF bound = boundRect.adjusted(2, 2, -2, -2);
-    SCgObject *object = observedObject(0);
+    SCgObject *object = baseObject();
 
-    if (!object->objectType().check(ScStructuralMask))
+    if (!object->scObjectType().check(ScStructuralMask))
     {
         brush.setColor(mColor);
     }
     painter->setPen(pen);
     painter->setBrush(brush);
 
-    if (object->objectType().check(ScConst))
+    if (object->scObjectType().check(ScConst))
     {
         painter->drawEllipse(bound);
 
         //paintStruct(painter, mObject->colorForeground(), bound, type_struct);
     }else
     {
-        if (object->objectType().check(ScMeta))
+        if (object->scObjectType().check(ScMeta))
         {
             painter->save();
 

@@ -40,8 +40,8 @@ QPointF SCgContour::calculateDotCoordinates(qreal dotPosition, const QPointF &po
 {
     QPointF res;
 
-    QPointF wpos = worldPosition();
-    if (dotPosition != 0)
+    QPointF wpos = position();
+    if (dotPosition >= 0)
     {
         quint32 seg_num = (quint32)dotPosition;
         qreal seg_pos = dotPosition - (qreal)seg_num;
@@ -61,7 +61,7 @@ QPointF SCgContour::calculateDotCoordinates(qreal dotPosition, const QPointF &po
         QPointF p(bound.center());
 
         QPointF p1 = mPoints.last();
-        QPointF p2, intersectPoint, result;
+        QPointF p2, intersectPoint;
         QLineF line, pair(point - wpos, p);
         // Ensure, that pair definitely have intersections with contour.
         pair.setLength(pair.length() + bound.width() + bound.height());
@@ -96,7 +96,7 @@ qreal SCgContour::calculateDotPosition(const QPointF &point) const
     // and calculates relative dot position on it
     qreal minDist = -1.f;
     qreal result = 0.f;
-    QPointF wpos = worldPosition();
+    QPointF wpos = position();
     quint32 sz = mPoints.size();
 
     for (quint32 i = 0; i < sz; i++)

@@ -59,6 +59,9 @@ public:
     //! @copydoc SCgObject::type
     int type() const { return Bus; }
 
+    //! @copydoc SCgObject::directlyConnected()
+    virtual QList<SCgObject*> directlyConnected() const;
+
 protected:
 
     //! @copydoc SCgObject::calculateDotCoordinates

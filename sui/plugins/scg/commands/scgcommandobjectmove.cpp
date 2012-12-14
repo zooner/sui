@@ -23,16 +23,24 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "scgprecompiled.h"
 #include "scgcommandobjectmove.h"
 
-SCgCommandObjectMove::SCgCommandObjectMove( SCgSceneBase *scene,
-                                            SCgObject* obj,
-                                            const QPointF& oldPos,
-                                            const QPointF& newPos,
-                                            QUndoCommand *parent):
-        SCgBaseCommand(scene, obj, parent),
-        mOldPosition(oldPos),
-        mNewPosition(newPos)
+SCgCommandObjectMove::SCgCommandObjectMove(SCgSceneBase *scene,
+                                           SCgObject *obj,
+                                           const QPointF &oldPos,
+                                           const QPointF &newPos,
+                                           QUndoCommand *parent):
+        SCgBaseCommand(scene, obj, parent)
 {
+    mMoveInfo[obj] = QPair<QPointF, QPointF>(oldPos, newPos);
     setText(QObject::tr("Move item"));
+}
+
+SCgCommandObjectMove::SCgCommandObjectMove(SCgSceneBase *scene,
+                                           const MoveInfo &moveInfo,
+                                           QUndoCommand *parent):
+        SCgBaseCommand(scene, 0, parent),
+        mMoveInfo(moveInfo)
+{
+    setText(QObject::tr("Move items"));
 }
 
 SCgCommandObjectMove::~SCgCommandObjectMove()
@@ -43,11 +51,23 @@ SCgCommandObjectMove::~SCgCommandObjectMove()
 void SCgCommandObjectMove::redo()
 {
     SCgBaseCommand::redo();
-    //mObject->setPos(mNewPosition);
+    MoveInfo::const_iterator it = mMoveInfo.constBegin();
+    for(;it != mMoveInfo.constEnd(); ++it)
+    {
+        SCgObject* obj = it.key();
+        const QPair<QPointF, QPointF>& positions = it.value();
+        obj->setPosition(positions.second);
+    }
 }
 
 void SCgCommandObjectMove::undo()
 {
     SCgBaseCommand::undo();
-   // mObject->setPos(mOldPosition);
+    MoveInfo::const_iterator it = mMoveInfo.constBegin();
+    for(;it != mMoveInfo.constEnd(); ++it)
+    {
+        SCgObject* obj = it.key();
+        const QPair<QPointF, QPointF>& positions = it.value();
+        obj->setPosition(positions.first);
+    }
 }

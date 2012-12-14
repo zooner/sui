@@ -24,16 +24,29 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #define SCGCOMMANDOBJECTMOVE_H
 
 #include "scgbasecommand.h"
+#include <QMap>
+#include <QPair>
+#include <QPointF>
 
-//! Moves specified object from it's initial position to finish position.
+/*! Moves objects from it's initial position to finish position.
+ * Use \ref SCgCommandObjectMove::MoveInfo structure to move group of objects
+ * First item in QPair - old position, second - new position.
+ */
 class SCgCommandObjectMove : public SCgBaseCommand
 {
 public:
+    typedef QMap<SCgObject*, QPair<QPointF, QPointF> > MoveInfo;
+
     explicit SCgCommandObjectMove(SCgSceneBase *scene,
                                   SCgObject* obj,
                                   const QPointF& oldPos,
                                   const QPointF& newPos,
                                   QUndoCommand *parent = 0 );
+
+    explicit SCgCommandObjectMove(SCgSceneBase *scene,
+                                  const MoveInfo& moveInfo,
+                                  QUndoCommand *parent = 0 );
+
     virtual ~SCgCommandObjectMove();
 
 protected:
@@ -41,8 +54,7 @@ protected:
     void undo();
 
 private:
-    QPointF mOldPosition;
-    QPointF mNewPosition;
+    MoveInfo mMoveInfo;
 };
 
 

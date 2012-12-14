@@ -30,11 +30,10 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include <QGraphicsScene>
 #include <QPainter>
 
-SCgVisualContour::SCgVisualContour(QGraphicsItem *parent, QGraphicsScene *scene) :
-    SCgVisualObject(parent, scene),
+SCgVisualContour::SCgVisualContour(QGraphicsScene *scene) :
+    SCgVisualObject(scene),
     mColorBack(QColor(250, 250, 250, 224))
 {
-    setFlag(QGraphicsItem::ItemIsMovable, true);
     //setFlag(QGraphicsItem::ItemClipsChildrenToShape, true);
     setToolTip(QObject::tr("SCg-contour"));
     setZValue(7);
@@ -58,10 +57,7 @@ QRectF SCgVisualContour::boundingRect() const
 void SCgVisualContour::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     //SCgAlphabet::paintContour(painter, this);
-    // synchronize with sc.g-object
-    sync();
-
-    SCgContour *contour = qobject_cast<SCgContour*>(observedObject(0));
+    SCgContour *contour = static_cast<SCgContour*>(baseObject());
     Q_ASSERT(contour != 0);
 
     painter->setBrush(QBrush(mColorBack));
@@ -106,19 +102,12 @@ void SCgVisualContour::_update(UpdateEventType eventType, SCgObject *object)
         updateShape();
 }
 
-void SCgVisualContour::_reSync()
-{
-    SCgVisualObject::_reSync();
-
-    updateShape();
-}
-
 void SCgVisualContour::updateShape()
 {
     prepareGeometryChange();
     mShape = QPainterPath();
 
-    const QVector<QPointF>& points = static_cast<SCgContour*>(observedObject(0))->points();
+    const QVector<QPointF>& points = static_cast<SCgContour*>(baseObject())->points();
 
     if (points.size() < 3) return; // do nothing
 

@@ -124,11 +124,14 @@ void SCgMainWindow::showObjects(const ScUriList &objects)
 
 void SCgMainWindow::hideObjects(const ScUriList &objects)
 {
-
+    //! \todo: implement
+    Q_UNUSED(objects);
 }
 
 bool SCgMainWindow::isObjectVisible(const ScUri &uri) const
 {
+    //! \todo: implement
+    Q_UNUSED(uri)
     return false;
 }
 

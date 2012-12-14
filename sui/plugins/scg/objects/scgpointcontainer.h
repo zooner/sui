@@ -36,22 +36,46 @@ public:
     virtual ~SCgPointContainer();
 
     //! Append point to the end of list
-    void appendPoint(const QPointF &point);
-    //! Insert point in specified index
-    void insertPoint(quint32 idx, const QPointF &point);
+    void appendPoint(const QPointF &worldPoint);
+    //! Insert point at specified index
+    void insertPoint(quint32 idx, const QPointF &worldPoint);
     //! Remove points with specified index
     void removePoint(quint32 idx);
 
-    //! Return point with specified index
-    const QPointF& point(quint32 idx) const;
+    //! Replaces point at specified index. Point in world coordinates
+    void replacePoint(quint32 idx, const QPointF &worldPoint);
+
+    //! Return point at specified index in local coordinates
+    const QPointF& pointAt(quint32 idx) const;
+
+    //! Return point at specified index in world coordinates
+    QPointF worldPointAt(quint32 idx) const;
+
     //! Return number of points
     quint32 pointsCount() const;
-    //! Return points
+
+    /*! Return points in this object's coordinate system.
+     * To get point in world use \ref mapToWorld()
+     */
     const QVector<QPointF>& points() const;
 
+    /*!
+     * \return points in world coordinates
+     */
+    QVector<QPointF> worldPoints() const;
+
+    /*! Translates given \p point in local coordinates to world coordinates.
+     */
+    QPointF mapToWorld(const QPointF& point) const;
+
+    /*! Translates given \p point from world coordinates into local.
+     */
+    QPointF mapFromWorld(const QPointF& point) const;
 
 protected:
-    //! List of points
+    //! @copydoc SCgObject::calculateDotCoordinatesByAngle();
+    virtual QPointF calculateDotCoordinatesByAngle(qreal slope, const QPointF &point) const;
+    //! List of points in object coordinates.
     QVector<QPointF> mPoints;
 };
 

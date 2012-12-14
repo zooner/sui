@@ -41,7 +41,7 @@ SCgPair::~SCgPair()
 
 void SCgPair::setBeginObject(SCgObject *object)
 {
-    if (mBeginObject == object) return; // do nothing
+    if (mBeginObject == object) return;
 
     if (mBeginObject != 0) mBeginObject->detachObserver(this);
     mBeginObject = object;
@@ -53,7 +53,7 @@ void SCgPair::setBeginObject(SCgObject *object)
 
 void SCgPair::setEndObject(SCgObject *object)
 {
-    if (mEndObject == object) return; // do nothing
+    if (mEndObject == object) return;
 
     if (mEndObject != 0) mEndObject->detachObserver(this);
     mEndObject = object;
@@ -83,17 +83,19 @@ void SCgPair::setEndDotPosition(qreal dotPosition)
 
 QPointF SCgPair::calculateDotCoordinates(qreal dotPosition, const QPointF &point) const
 {
+    Q_UNUSED(point);
+
     QPointF res;
 
     Q_ASSERT(dotPosition >= 0.f);
 
     qint32 seg_num = (qint32)dotPosition;
-    qreal seg_pos = dotPosition - (qreal)seg_num;
+    qreal seg_pos = dotPosition - seg_num;
 
-    if (seg_num >= mPoints.size() - 1) seg_num = (qint32)mPoints.size() - 2;
+    if (seg_num >= mPoints.size() - 1) seg_num = mPoints.size() - 2;
 
-    QPointF p2 = mPoints.at(seg_num + 1);
-    QPointF p1 = mPoints.at(seg_num);
+    QPointF p2 = mapToWorld(mPoints.at(seg_num + 1));
+    QPointF p1 = mapToWorld(mPoints.at(seg_num));
     QPointF dir(p2 - p1);
 
     res = p1 + dir * seg_pos;
@@ -108,23 +110,24 @@ qreal SCgPair::calculateDotPosition(const QPointF &point) const
     qreal minDist = -1.f;
     qreal result = 0.f;
 
-    for (int i = 1; i < mPoints.size(); i++)
+    const QVector<QPointF>& sPoints = worldPoints();
+
+    for (int i = 1; i < sPoints.size(); i++)
     {
-        QPointF p1 = mPoints.at(i - 1);
-        QPointF p2 = mPoints.at(i);
+        QPointF p1 = sPoints.at(i - 1);
+        QPointF p2 = sPoints.at(i);
 
         QVector2D v(p2 - p1);
         QVector2D vp(point - p1);
 
         if(v.length() == 0)
-            return result;
-
-        qreal dotPos = QVector2D::dotProduct(vp, v.normalized()) / v.length();
-        QPointF p = p1 + v.toPointF() * dotPos;
-
-        if (dotPos < 0.f || dotPos > 1.f)
             continue;
 
+        qreal dotPos = QVector2D::dotProduct(vp, v.normalized()) / v.length();
+        if (dotPos < 0.f || (dotPos > 1.f && !qFuzzyCompare((qreal)dotPos, (qreal)1)))
+            continue;
+
+        QPointF p = p1 + v.toPointF() * dotPos;
         // we doesn't need to get real length, because we need minimum
         // so we get squared length to make that procedure faster
         qreal d = QVector2D(point - p).lengthSquared();
@@ -140,23 +143,30 @@ qreal SCgPair::calculateDotPosition(const QPointF &point) const
     return result;
 }
 
+void SCgPair::_notifyUpdate(SCgObjectObserver::UpdateEventType eventType)
+{
+    if(eventType == SCgObjectObserver::PositionChanged)
+        updateDotCoordinates();
+    SCgObject::_notifyUpdate(eventType);
+}
+
 void SCgPair::_update(UpdateEventType eventType, SCgObject *object)
 {
-    // recalculate begin and end points
+    Q_UNUSED(object);
+
     if (eventType == SCgObjectObserver::PositionChanged ||
         eventType == SCgObjectObserver::PointsChanged ||
         eventType == SCgObjectObserver::SizeChanged)
-    {
         updateDotCoordinates();
-    }
+
 }
 
 void SCgPair::updateDotCoordinates()
 {
-    if (mEndObject == 0 || mBeginObject == 0 || mPoints.size() < 2) return; // do nothing
+    if (mEndObject == 0 || mBeginObject == 0 || mPoints.size() < 2) return;
 
-    mPoints.front() = mBeginObject->calculateDotCoordinates(mBeginDotPos, mPoints.at(1));
-    mPoints.back() = mEndObject->calculateDotCoordinates(mEndDotPos, mPoints.at(mPoints.size() - 2));
+    mPoints.front() = mapFromWorld(mBeginObject->calculateDotCoordinates(mBeginDotPos, mapToWorld(mPoints.at(1))));
+    mPoints.back() = mapFromWorld(mEndObject->calculateDotCoordinates(mEndDotPos, mapToWorld(mPoints.at(mPoints.size() - 2))));
 
     _notifyUpdate(SCgObjectObserver::PointsChanged);
 }

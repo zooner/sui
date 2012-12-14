@@ -53,7 +53,7 @@ public:
         IdentifierPositionChanged,  /*! object identifier position changed*/
         IdentifierColorChanged,     /*! object identifier color changed */
         TypeChanged,                /*! object type changed */
-        ParentChanged,              /*! parend tobject changed */
+        ParentChanged,              /*! parent tobject changed */
         OwnerChanged,               /*! object owner changed (used for sc.g-bus) */
         PairBeginChanged,           /*! sc.g-pair begin object changed */
         PairEndChanged,             /*! sc.g-pair end object changed */
@@ -68,13 +68,6 @@ public:
     SCgObject* observedObject(quint32 idx) const { return mObservedObjects.at(idx); }
 
 protected:
-    /*! Observed object update callback. Calls when observed object
-      * has changed.
-      * @param eventType Type of update event
-      * @param object Pointer to sc.g-object, that was changed
-      */
-    virtual void _update(UpdateEventType eventType, SCgObject *object) = 0;
-
     /*! Update notification. That function calls by SCgObject class
       * when it change any state. So it point to observer, that it need to
       * be synchronized with sc.g-object.
@@ -85,7 +78,14 @@ protected:
 
     /*! Check if observer need to synchronization with sc.g-object
       */
-    bool isNeedSync() const { return mNeedSync; }
+    bool _isNeedSync() const { return mNeedSync; }
+
+    /*! Observed object update callback. Calls when observed object
+      * has changed.
+      * @param eventType Type of update event
+      * @param object Pointer to sc.g-object, that was changed
+      */
+    virtual void _update(UpdateEventType eventType, SCgObject *object) = 0;
 
 protected:
     //! List of observed objects

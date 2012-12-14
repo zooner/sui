@@ -28,7 +28,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 SCgNode::SCgNode(QObject *parentObject) :
     SCgObject(parentObject)
 {
-    setSize(QPointF(20, 20));
+    setSize(QSizeF(20, 20));
 }
 
 SCgNode::~SCgNode()
@@ -37,14 +37,22 @@ SCgNode::~SCgNode()
 
 QPointF SCgNode::calculateDotCoordinates(qreal dotPosition, const QPointF &point) const
 {
+    Q_UNUSED(dotPosition);
+
     QPointF pos = position();
     QVector2D dir(pos - point);
-    qreal l = size().x() / 2.f;
+    qreal l = size().width() / 2.f;
 
     return pos - dir.normalized().toPointF() * l;
 }
 
+QPointF SCgNode::calculateDotCoordinatesByAngle(qreal slope, const QPointF &point) const
+{
+    return calculateDotCoordinates(slope, point);
+}
+
 qreal SCgNode::calculateDotPosition(const QPointF &point) const
 {
-    return 0.f;
+    Q_UNUSED(point);
+    return -1.f;
 }

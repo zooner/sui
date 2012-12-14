@@ -43,6 +43,9 @@ SCgWaitWidget::~SCgWaitWidget()
 
 void SCgWaitWidget::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     QRectF boundRect = boundingRect();
 
     // draw background

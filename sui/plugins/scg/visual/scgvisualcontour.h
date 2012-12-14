@@ -29,9 +29,12 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 class SCgVisualContour : public SCgVisualObject
 {
+    Q_OBJECT
 
+protected:
+    friend class SCgVisualObject;
+    explicit SCgVisualContour(QGraphicsScene *scene = 0);
 public:
-    explicit SCgVisualContour(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     virtual ~SCgVisualContour();
 
     /*! Set background color
@@ -63,10 +66,6 @@ protected:
 
     //! @copydoc SCgVisualObject::_update
     void _update(UpdateEventType eventType, SCgObject *object);
-
-    //! @copydoc SCgVisualObject::_reSync
-    void _reSync();
-
 public:
     //! Type for qgraphicsitem_cast
     int type() const { return SCgContourType; }

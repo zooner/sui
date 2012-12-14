@@ -36,6 +36,8 @@ SCgBus::~SCgBus()
 
 void SCgBus::_update(UpdateEventType eventType, SCgObject *object)
 {
+    Q_UNUSED(object);
+
     if (eventType == SCgObjectObserver::PositionChanged ||
             eventType == SCgObjectObserver::SizeChanged)
         updatePoints();
@@ -52,8 +54,16 @@ void SCgBus::updatePoints()
     }
 }
 
+QList<SCgObject *> SCgBus::directlyConnected() const
+{
+     QList<SCgObject*> result;
+     result << mOwner;
+     return result;
+}
+
 QPointF SCgBus::calculateDotCoordinates(qreal dotPosition, const QPointF &point) const
 {
+    Q_UNUSED(point);
     QPointF res;
 
     Q_ASSERT(dotPosition >= 0.f);

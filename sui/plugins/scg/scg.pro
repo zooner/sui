@@ -68,7 +68,10 @@ HEADERS += scgprecompiled.h \
     scgbuildconfig.h \
     scgview.h \
     widgets/scgwaitwidget.h \
-    widgets/scgtextedit.h
+    widgets/scgtextedit.h \
+    interfaces/commandstackcontrollerinterface.h \
+    modes/scgmovinghelper.h \
+    commands/scgcommandchangepairbeginenddots.h
 
 SOURCES += scgprecompiled.cpp \
     scgscenebase.cpp \
@@ -114,4 +117,6 @@ SOURCES += scgprecompiled.cpp \
     objects/scgcontrol.cpp \
     scgview.cpp \
     widgets/scgwaitwidget.cpp \
-    widgets/scgtextedit.cpp
+    widgets/scgtextedit.cpp \
+    modes/scgmovinghelper.cpp \
+    commands/scgcommandchangepairbeginenddots.cpp

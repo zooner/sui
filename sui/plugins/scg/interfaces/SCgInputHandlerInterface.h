@@ -92,11 +92,11 @@ public:
     //! @copydoc QGraphicsScene::mouseDoubleClickEvent
     virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * mouseEvent ) = 0;
     //! @copydoc QGraphicsScene::mouseMoveEvent
-    virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * mouseEvent ) = 0;
+    virtual void mouseMoveEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool afterSceneEvent ) = 0;
     //! @copydoc QGraphicsScene::mousePressEvent
-    virtual void mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent ) = 0;
+    virtual void mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool afterSceneEvent ) = 0;
     //! @copydoc QGraphicsScene::mouseReleaseEvent
-    virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * mouseEvent ) = 0;
+    virtual void mouseReleaseEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool afterSceneEvent ) = 0;
     //! @copydoc QGraphicsScene::wheelEvent
     virtual void wheelEvent ( QGraphicsSceneWheelEvent * wheelEvent ) = 0;
 

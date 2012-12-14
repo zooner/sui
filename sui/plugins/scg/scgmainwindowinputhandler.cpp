@@ -46,9 +46,9 @@ SCgMainWindowInputHandler::SCgMainWindowInputHandler(QObject* parent) :
     mAvailableModes.resize(ModeCount);
 
     mAvailableModes[(int)ModeSelect] = new SCgModeSelect(this);
-    mAvailableModes[(int)ModeBus] = new SCgModeBus(this);
-    mAvailableModes[(int)ModePair] = new SCgModePair(this);
-    mAvailableModes[(int)ModeContour] = new SCgModeContour(this);
+    mAvailableModes[(int)ModeBus] = new SCgModeBus(this, mAvailableModes[(int)ModeSelect]);
+    mAvailableModes[(int)ModePair] = new SCgModePair(this, mAvailableModes[(int)ModeSelect]);
+    mAvailableModes[(int)ModeContour] = new SCgModeContour(this, mAvailableModes[(int)ModeSelect]);
 
     mMode = mAvailableModes[(int)ModeSelect];
     mMode->activate();
@@ -92,33 +92,33 @@ void SCgMainWindowInputHandler::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *
     mMode->mouseDoubleClickEvent(mouseEvent);
 }
 
-void SCgMainWindowInputHandler::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent)
+void SCgMainWindowInputHandler::mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent, bool afterSceneEvent)
 {
-    mMode->mouseMoveEvent(mouseEvent);
+    mMode->mouseMoveEvent(mouseEvent, afterSceneEvent);
 }
 
-void SCgMainWindowInputHandler::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent)
+void SCgMainWindowInputHandler::mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent, bool afterSceneEvent)
 {
-    mMode->mousePressEvent(mouseEvent);
+    mMode->mousePressEvent(mouseEvent, afterSceneEvent);
 }
 
-void SCgMainWindowInputHandler::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
+void SCgMainWindowInputHandler::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent, bool afterSceneEvent)
 {
-    mMode->mouseReleaseEvent(mouseEvent);
+    mMode->mouseReleaseEvent(mouseEvent, afterSceneEvent);
 }
 
-void SCgMainWindowInputHandler::wheelEvent(QGraphicsSceneWheelEvent *wheelEvent){}
-void SCgMainWindowInputHandler::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent){}
-void SCgMainWindowInputHandler::dragEnterEvent(QGraphicsSceneDragDropEvent *event){}
-void SCgMainWindowInputHandler::dragLeaveEvent(QGraphicsSceneDragDropEvent *event){}
-void SCgMainWindowInputHandler::dragMoveEvent(QGraphicsSceneDragDropEvent *event){}
-void SCgMainWindowInputHandler::drawBackground(QPainter *painter, const QRectF &rect){}
-void SCgMainWindowInputHandler::drawForeground(QPainter *painter, const QRectF &rect){}
-void SCgMainWindowInputHandler::dropEvent(QGraphicsSceneDragDropEvent *event){}
-void SCgMainWindowInputHandler::focusInEvent(QFocusEvent *focusEvent){}
-void SCgMainWindowInputHandler::focusOutEvent(QFocusEvent *focusEvent){}
-void SCgMainWindowInputHandler::helpEvent(QGraphicsSceneHelpEvent *helpEvent){}
-void SCgMainWindowInputHandler::inputMethodEvent(QInputMethodEvent *event){}
+void SCgMainWindowInputHandler::wheelEvent(QGraphicsSceneWheelEvent *wheelEvent){Q_UNUSED(wheelEvent);}
+void SCgMainWindowInputHandler::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent){Q_UNUSED(contextMenuEvent);}
+void SCgMainWindowInputHandler::dragEnterEvent(QGraphicsSceneDragDropEvent *event){Q_UNUSED(event);}
+void SCgMainWindowInputHandler::dragLeaveEvent(QGraphicsSceneDragDropEvent *event){Q_UNUSED(event);}
+void SCgMainWindowInputHandler::dragMoveEvent(QGraphicsSceneDragDropEvent *event){Q_UNUSED(event);}
+void SCgMainWindowInputHandler::drawBackground(QPainter *painter, const QRectF &rect){Q_UNUSED(painter);Q_UNUSED(rect);}
+void SCgMainWindowInputHandler::drawForeground(QPainter *painter, const QRectF &rect){Q_UNUSED(painter);Q_UNUSED(rect);}
+void SCgMainWindowInputHandler::dropEvent(QGraphicsSceneDragDropEvent *event){Q_UNUSED(event);}
+void SCgMainWindowInputHandler::focusInEvent(QFocusEvent *focusEvent){Q_UNUSED(focusEvent);}
+void SCgMainWindowInputHandler::focusOutEvent(QFocusEvent *focusEvent){Q_UNUSED(focusEvent);}
+void SCgMainWindowInputHandler::helpEvent(QGraphicsSceneHelpEvent *helpEvent){Q_UNUSED(helpEvent);}
+void SCgMainWindowInputHandler::inputMethodEvent(QInputMethodEvent *event){Q_UNUSED(event);}
 
 
 void SCgMainWindowInputHandler::deleteJustContour()

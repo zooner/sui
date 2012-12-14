@@ -38,6 +38,9 @@ protected:
     //! @see SCgObject::calculateDotCoordinates
     QPointF calculateDotCoordinates(qreal dotPosition, const QPointF &point) const;
 
+    //! @copydoc SCgObject::calculateDotCoordinatesByAngle();
+    virtual QPointF calculateDotCoordinatesByAngle(qreal slope, const QPointF &point) const;
+
     //! @see SCgObject::calculateDotPosition
     qreal calculateDotPosition(const QPointF &point) const;
 

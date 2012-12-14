@@ -30,6 +30,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scgprerequest.h"
 
+class CommandStackControllerInterface;
 
 class SCgVisualObject : public QObject, public QGraphicsItem,
                         public SCgObjectObserver
@@ -37,7 +38,11 @@ class SCgVisualObject : public QObject, public QGraphicsItem,
     Q_OBJECT
     Q_INTERFACES(QGraphicsItem)
 
-    friend class SCgPlugin;
+//    friend class SCgPlugin;
+protected:
+    //! use createVisual() instead. \note Do not use Qt's "parent-child" mehanism.
+    explicit SCgVisualObject(QGraphicsScene *scene = 0);
+    //explicit SCgVisualObject();
 
 public:
     // scg object types
@@ -53,8 +58,6 @@ public:
 
 public:
     virtual int type() const = 0;
-
-    explicit SCgVisualObject(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     virtual ~SCgVisualObject();
 
     //! Check if type is an scg-object type
@@ -62,6 +65,16 @@ public:
 
     //! Check if type is an scg-pointObject type
     static bool isSCgVisualPointObjectType(int type);
+
+    /*! Factory for visuals. Type depends on base object's type
+     * \note Do not use Qt's "parent-child" mehanism.
+     * \param base Base object for created instance
+     * \param scene Scene visual is drawn on
+     * \param parent Parent item
+     * \return Visual instance of appropriate type, null If type can't be resolved.
+     */
+    static SCgVisualObject* createVisual(SCgObject* base,
+                                         QGraphicsScene* scene);
 
 public:
 
@@ -77,16 +90,27 @@ public:
     //! Check if bounding box is visible
     bool isBoundingBoxVisible() const;
 
-    /*! Resync whole object data. It updates whole data from sc.g-object
-      * in visual object.
-      */
-    virtual void _reSync();
+    /*! Returns an SCgObject current instance is based on.
+     * That means the object from which drawing information is taken.
+     * Current instance observes changes from base object and reflect them in graphics representation.
+     * If base object is not set, visual is not drawn.
+     * \return base object
+     * \see setBaseObject();
+     * \see _update();
+     */
+    SCgObject* baseObject() const { return mBaseObject; }
+
+    /*! Sets base object. Old base object is removed from observed and new is added.
+     * If \p object is null, current visual has no source to take drawing information from and it is not drawn.
+     * \see baseObject()
+     */
+    void setBaseObject(SCgObject* object);
 
 protected:
     //! @copydoc SCgObjectObserver::_update
     virtual void _update(UpdateEventType eventType, SCgObject *object);
-    //! @copydoc SCgObjectObserver::_needSync
-    virtual void _needSync();
+//    //! @copydoc SCgObjectObserver::_needSync
+//    virtual void _needSync();
 
 protected:
     //! @copydoc QGraphicsItem::hoverEnterEvent
@@ -94,13 +118,10 @@ protected:
     //! @copydoc QGraphicsItem::hoverLeaveEvent
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
 
-    //! @copydoc QGraphicsItem::itemChange
-    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value);
-
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
-    //! Synchronize with observed object if it need
-    void sync();
+//    //! Synchronize with observed object if it need
+//    void sync();
 
     /*! Return observed object with index \p idx casted to \p ObjectType
       * @param idx Observed object index
@@ -112,23 +133,27 @@ protected:
         return qobject_cast<ObjectType*>(observedObject(idx));
     }
 
+    /*! Clones current instance of visual. It affects only visual representation.
+     * No interaction with SCgObjects. Some visuals may clone theirs child items too.
+     * \note You should care about absoulute position of cloned objects manualy. /
+     * They retain only relative position, but do not set parent object.
+     */
+//    virtual SCgVisualObject* clone() const = 0;
+
+    virtual void _onBaseObjectChanged();
 public:
     /*!
      * @return unique identifier of this object in current environment.
      */
     long id() const
     {
-        return reinterpret_cast<long>(this);
+        return reinterpret_cast<quintptr>(this);
     }
 
     long parentId() const
     {
         return ((SCgVisualObject*)this->parentItem())->id();
     }
-
-    // work with scuri's
-public:
-
 protected:
     //! Main color
     QColor mColor;
@@ -138,6 +163,10 @@ protected:
     QGraphicsTextItem *mTextItem;
     //! true, if parent about to change.
     bool mParentChanging;
+    //! Main base for current visual instance
+    SCgObject* mBaseObject;
+
+    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 };
 
 

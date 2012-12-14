@@ -25,6 +25,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scgprerequest.h"
 #include "objects/scgconstructionobserver.h"
+#include "interfaces/commandstackcontrollerinterface.h"
 #include <QGraphicsScene>
 #include <QMap>
 
@@ -36,7 +37,8 @@ class QUndoStack;
   * It contains functionality, that can be used in each type of scene
   */
 class SCgSceneBase : public QGraphicsScene,
-                        public SCgConstructionObserver
+                     public SCgConstructionObserver,
+                     public CommandStackControllerInterface
 {
     Q_OBJECT
 public:
@@ -49,22 +51,12 @@ public:
       */
     SCgConstruction* construction() const { return mConstruction; }
 
-    /*! Append new undo command
-      * @param command Pointer to undo command
-      */
-    void appendUndoCommand(QUndoCommand *command);
-
     /*! You can specify your event handler by using this method.
      * @note Scene doesn't take ownership of the input handler, so won't be destroyed after setting new handler or on destroying scene.
      *
      * @param handler new input handler.
      */
     void setInputHandler(SCgInputHandlerInterface* handler);
-
-    QUndoStack* undoStack() const
-    {
-        return mUndoStack;
-    }
 
     /*! Get sc.g-object at specified point with maximum Z-value
       * @param point Point coordinates
@@ -79,6 +71,16 @@ public:
       */
     virtual SCgVisualObject* scgVisualObjectAt(const QPointF& point) const = 0;
 
+    //! \copydoc CommandStackControllerInterface::pushCommand()
+    virtual void pushCommand(QUndoCommand *command);
+
+    //! \copydoc CommandStackControllerInterface::beginMacro()
+    virtual void beginMacro(const QString &name);
+
+    //! \copydoc CommandStackControllerInterface::endMacro()
+    virtual void endMacro();
+
+    QUndoStack *undoStack();
 protected:
     //! @copydoc QGraphicsScene::contextMenuEvent
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);

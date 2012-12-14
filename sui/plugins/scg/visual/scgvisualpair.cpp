@@ -29,8 +29,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include <QPainter>
 #include <QVector2D>
 
-SCgVisualPair::SCgVisualPair(QGraphicsItem *parent, QGraphicsScene *scene) :
-    SCgVisualObject(parent, scene)
+SCgVisualPair::SCgVisualPair(QGraphicsScene *scene) :
+    SCgVisualObject(scene)
 {
     setToolTip(QObject::tr("SCg-pair"));
     setZValue(1);
@@ -52,11 +52,7 @@ QPainterPath SCgVisualPair::shapeNormal() const
 
 void SCgVisualPair::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-
-    // synchronize with sc.g-object
-    sync();
-
-    SCgPair *pair = qobject_cast<SCgPair*>(observedObject(0));
+    SCgPair *pair = static_cast<SCgPair*>(baseObject());
     const QVector<QPointF>& points = pair->points();
 
     Q_ASSERT(pair != 0);
@@ -65,7 +61,7 @@ void SCgVisualPair::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     static float arrowLength = 15.f;
     static float arrowWidth = 9.f;
 
-    if (!observedObject(0)->objectType().check(ScEdgeCommon))
+    if (!baseObject()->scObjectType().check(ScEdgeCommon))
     {
 
         static const QPointF arrowPoints[3] = {QPointF(-arrowWidth / 2.f, 0.f),
@@ -82,7 +78,7 @@ void SCgVisualPair::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
         painter->translate(0.f, -arrowLength);
 
         painter->setBrush(QBrush(mColor, Qt::SolidPattern));
-        painter->setPen(Qt::NoPen);
+        painter->setPen(QPen(mColor, 0));
         painter->drawConvexPolygon(arrowPoints, 3);
 
         painter->restore();
@@ -90,16 +86,14 @@ void SCgVisualPair::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
         // correct last point
         //points.last() -= QPointF((arrowLength + 3.f) * ::sin(angle), (arrowLength + 3.f) * ::cos(angle));
     }
+    painter->setPen(QPen(mColor, 2));
 
     QPainterPath path;
-    QVector<QPointF>::const_iterator it;
-    for (it = points.begin(); it != points.end(); ++it)
-    {
-        if (it == points.begin())
-            path.moveTo(*it);
-        else
-            path.lineTo(*it);
-    }
+    QVector<QPointF>::const_iterator it = points.begin();
+    path.moveTo(*(it++));
+    for (; it != points.end(); ++it)
+        path.lineTo(*it);
+
     painter->drawPath(path);
 
     SCgVisualObject::paint(painter, option, widget);
@@ -119,7 +113,7 @@ void SCgVisualPair::updateShape()
     // Rebuilding shape
     mShape = QPainterPath();
 
-    const QVector<QPointF>& points = static_cast<SCgPair*>(observedObject(0))->points();
+    const QVector<QPointF>& points = static_cast<SCgPair*>(baseObject())->points();
 
     mShape.moveTo(points.at(0));
     for (int i = 1; i < points.size(); i++)
@@ -127,7 +121,7 @@ void SCgVisualPair::updateShape()
 
     QPainterPathStroker path_stroker;
     path_stroker.setJoinStyle(Qt::MiterJoin);
-    path_stroker.setWidth(3.f);
+    path_stroker.setWidth(10.f);
 
     mShape = path_stroker.createStroke(mShape);
 

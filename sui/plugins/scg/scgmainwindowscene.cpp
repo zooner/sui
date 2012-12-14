@@ -68,29 +68,19 @@ void SCgMainWindowScene::_processEventObjectCreated(QObject *object)
                                     "Unsupported object type",
                                     "void SCgSceneBase::_processEventObjectCreated(QObject *object)");
 
-    Q_ASSERT(mObjectToVisual.find(scg_object) == mObjectToVisual.end());
+    Q_ASSERT(!mObjectToVisual.contains(scg_object));
 
-    // create visual object
-    SCgVisualObject *vobject = 0;
-    //! TODO: add typee function to sc.g-objects and replace qobject_cast with it
-    if (qobject_cast<SCgNode*>(object) != 0)
-        vobject = new SCgVisualNode(0, this);
-    if (qobject_cast<SCgPair*>(object) != 0)
-        vobject = new SCgVisualPair(0, this);
-    if (qobject_cast<SCgContour*>(object) != 0)
-        vobject = new SCgVisualContour(0, this);
-    if (qobject_cast<SCgBus*>(object) != 0)
-        vobject = new SCgVisualBus(0, this);
-    if (qobject_cast<SCgControl*>(object))
-        vobject = new SCgVisualControl(0, this);
+    // create visual object. looks strange (this, this) but may be some time CommandStackControllerInterface
+    // will be implemented in separate class
+    SCgVisualObject *vobject = SCgVisualObject::createVisual(scg_object, this);
+    if(!vobject)
+    {
+        SuiExcept(SuiExceptionInternalError,
+                  "Unsupported sc.g-object type",
+                  "void SCgSceneBase::_processEventObjectCreated(QObject *object)");
+    }
 
-    if (vobject == 0) SuiExcept(SuiExceptionInternalError,
-                                "Unsupported sc.g-object type",
-                                "void SCgSceneBase::_processEventObjectCreated(QObject *object)");
-
-    scg_object->attachObserver(vobject);
     mObjectToVisual[scg_object] = vobject;
-    vobject->_reSync();
 }
 
 void SCgMainWindowScene::_processEventObjectDeleted(QObject *object)
@@ -120,8 +110,7 @@ void SCgMainWindowScene::_processEventObjectDeleted(QObject *object)
 SCgObject* SCgMainWindowScene::scgObjectAt(const QPointF &point) const
 {
     SCgVisualObject *object = scgVisualObjectAt(point);
-    if (object != 0) return object->observedObject(0);
-    return 0;
+    return object ? object->baseObject() : 0;
 }
 
 SCgVisualObject* SCgMainWindowScene::scgVisualObjectAt(const QPointF &point) const

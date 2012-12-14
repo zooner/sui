@@ -30,19 +30,21 @@ class SCgVisualNode;
 
 class SCgVisualBus : public SCgVisualObject
 {
+    Q_OBJECT
+
+protected:
+    friend class SCgVisualObject;
+    explicit SCgVisualBus(QGraphicsScene *scene = 0);
 public:
-    explicit SCgVisualBus(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     virtual ~SCgVisualBus();
 
 protected:
     QRectF boundingRect() const;
     QPainterPath shape() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
     //! @copydoc SCgVisualObject::_update
     void _update(UpdateEventType eventType, SCgObject *object);
-
 public:
 
     void updatePosition();

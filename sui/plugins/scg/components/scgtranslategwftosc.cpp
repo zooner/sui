@@ -180,8 +180,9 @@ bool SCgTranslateGWFToSc::translate(QIODevice &device, ScMemoryInterface *memory
 
 void SCgTranslateGWFToSc::clearSet(const ScUri &set)
 {
-    //! TODO: implement this function
+    //! \todo: implement this function
 
+    Q_UNUSED(set);
     /* Destroy just objects, that haven't main identifier and
       * aren't linked with any object out of set
       */

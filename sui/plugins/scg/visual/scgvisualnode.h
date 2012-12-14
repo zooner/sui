@@ -34,11 +34,13 @@ class SCgVisualNode : public SCgVisualObject
 {
     Q_OBJECT
 
+protected:
+    friend class SCgVisualObject;
+    explicit SCgVisualNode(QGraphicsScene *scene = 0);
 public:
     //! Type for qgraphicsitem_cast
     int type() const { return SCgNodeType; }
 
-    explicit SCgVisualNode(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     virtual ~SCgVisualNode();
 
 private:
@@ -50,7 +52,6 @@ protected:
     QPainterPath shape() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void paintStruct(QPainter *painter);
-    QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
 public:
     void updatePosition();

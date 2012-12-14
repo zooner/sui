@@ -31,7 +31,6 @@ SCgBaseCommand::SCgBaseCommand(SCgSceneBase *scene,
         mScene(scene),
         mObject(object)
 {
-    //Q_ASSERT(mObject);
 }
 
 SCgBaseCommand::~SCgBaseCommand()

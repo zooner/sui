@@ -58,184 +58,226 @@ void SCgSceneBase::setInputHandler(SCgInputHandlerInterface* handler)
     mInputHandler = handler;
 }
 
-void SCgSceneBase::appendUndoCommand(QUndoCommand *command)
+void SCgSceneBase::pushCommand(QUndoCommand *command)
 {
+    Q_ASSERT(command);
     mUndoStack->push(command);
+}
+
+void SCgSceneBase::beginMacro(const QString &name)
+{
+    mUndoStack->beginMacro(name);
+}
+
+void SCgSceneBase::endMacro()
+{
+    mUndoStack->endMacro();
+}
+
+QUndoStack* SCgSceneBase::undoStack()
+{
+    return mUndoStack;
 }
 
 void SCgSceneBase::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->contextMenuEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::contextMenuEvent(event);
+
+    mInputHandler->contextMenuEvent(event);
 }
 
 void SCgSceneBase::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->dragEnterEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::dragEnterEvent(event);
+
+    mInputHandler->dragEnterEvent(event);
 }
 
 void SCgSceneBase::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->dragLeaveEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::dragLeaveEvent(event);
+
+    mInputHandler->dragLeaveEvent(event);
 }
 
 void SCgSceneBase::dragMoveEvent(QGraphicsSceneDragDropEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->dragMoveEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::dragMoveEvent(event);
+
+    mInputHandler->dragMoveEvent(event);
 }
 
 void SCgSceneBase::drawBackground(QPainter *painter, const QRectF &rect)
 {
     Q_ASSERT(mInputHandler != 0);
-    mInputHandler->drawBackground(painter, rect);
 
     QGraphicsScene::drawBackground(painter, rect);
+
+    mInputHandler->drawBackground(painter, rect);
 }
 
 void SCgSceneBase::drawForeground(QPainter *painter, const QRectF &rect)
 {
     Q_ASSERT(mInputHandler != 0);
-    mInputHandler->drawForeground(painter, rect);
 
     QGraphicsScene::drawForeground(painter, rect);
+
+    mInputHandler->drawForeground(painter, rect);
 }
 
 void SCgSceneBase::dropEvent(QGraphicsSceneDragDropEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->dropEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::dropEvent(event);
+
+    mInputHandler->dropEvent(event);
 }
 
 void SCgSceneBase::focusInEvent(QFocusEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->focusInEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::focusInEvent(event);
+
+    mInputHandler->focusInEvent(event);
 }
 
 void SCgSceneBase::focusOutEvent(QFocusEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->focusOutEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::focusOutEvent(event);
+
+    mInputHandler->focusOutEvent(event);
 }
 
 void SCgSceneBase::helpEvent(QGraphicsSceneHelpEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->helpEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::helpEvent(event);
+
+    mInputHandler->helpEvent(event);
 }
 
 void SCgSceneBase::inputMethodEvent(QInputMethodEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->inputMethodEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::inputMethodEvent(event);
+
+    mInputHandler->inputMethodEvent(event);
 }
 
 void SCgSceneBase::keyPressEvent(QKeyEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->keyPressEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::keyPressEvent(event);
+
+    mInputHandler->keyPressEvent(event);
 }
 
 void SCgSceneBase::keyReleaseEvent(QKeyEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->keyReleaseEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::keyReleaseEvent(event);
+
+    mInputHandler->keyReleaseEvent(event);
 }
 
 void SCgSceneBase::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->mouseDoubleClickEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::mouseDoubleClickEvent(event);
+
+    mInputHandler->mouseDoubleClickEvent(event);
 }
 
 void SCgSceneBase::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->mouseMoveEvent(event);
+
+    mInputHandler->mouseMoveEvent(event, false);
 
     if (!event->isAccepted())
+    {
         QGraphicsScene::mouseMoveEvent(event);
+        mInputHandler->mouseMoveEvent(event, true);
+    }
 }
 
 void SCgSceneBase::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->mousePressEvent(event);
+
+    mInputHandler->mousePressEvent(event, false);
 
     if (!event->isAccepted())
+    {
         QGraphicsScene::mousePressEvent(event);
+        mInputHandler->mousePressEvent(event, true);
+    }
 }
 
 void SCgSceneBase::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->mouseReleaseEvent(event);
+
+    mInputHandler->mouseReleaseEvent(event, false);
 
     if (!event->isAccepted())
+    {
         QGraphicsScene::mouseReleaseEvent(event);
+        mInputHandler->mouseReleaseEvent(event, true);
+    }
 }
 
 void SCgSceneBase::wheelEvent(QGraphicsSceneWheelEvent *event)
 {
     Q_ASSERT(mInputHandler != 0);
     event->ignore();
-    mInputHandler->wheelEvent(event);
 
     if (!event->isAccepted())
         QGraphicsScene::wheelEvent(event);
-}
 
+    mInputHandler->wheelEvent(event);
+}

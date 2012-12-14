@@ -91,11 +91,11 @@ protected:
     //! @copydoc SCgInputHandlerInterface::mouseDoubleClickEvent
     void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent);
     //! @copydoc SCgInputHandlerInterface::mouseMoveEvent
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *mouseEvent, bool afterSceneEvent);
     //! @copydoc SCgInputHandlerInterface::mousePressEvent
-    void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void mousePressEvent(QGraphicsSceneMouseEvent *mouseEvent, bool afterSceneEvent);
     //! @copydoc SCgInputHandlerInterface::mouseReleaseEvent
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent, bool afterSceneEvent);
     //! @copydoc SCgInputHandlerInterface::wheelEvent
     void wheelEvent(QGraphicsSceneWheelEvent *wheelEvent);
 

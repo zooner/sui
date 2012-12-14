@@ -29,10 +29,9 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include <QVector2D>
 #include <QPainter>
 
-SCgVisualBus::SCgVisualBus(QGraphicsItem *parent, QGraphicsScene *scene) :
-    SCgVisualObject(parent, scene)
+SCgVisualBus::SCgVisualBus(QGraphicsScene *scene) :
+    SCgVisualObject(scene)
 {
-    setFlag(QGraphicsItem::ItemIsMovable, false);
     setToolTip(QObject::tr("SCg-bus"));
 }
 
@@ -53,10 +52,7 @@ QPainterPath SCgVisualBus::shape() const
 
 void SCgVisualBus::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    // synchronize with sc.g-object
-    sync();
-
-    SCgBus *bus = qobject_cast<SCgBus*>(observedObject(0));
+    SCgBus *bus = static_cast<SCgBus*>(baseObject());
     const QVector<QPointF>& points = bus->points();
 
     painter->setPen(QPen(QBrush(mColor), 7.f));
@@ -66,22 +62,13 @@ void SCgVisualBus::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     for (it = points.begin(); it != points.end(); ++it)
     {
         if (it == points.begin())
-            path.moveTo(*it);
+            path.moveTo(mapFromScene(*it));
         else
-            path.lineTo(*it);
+            path.lineTo(mapFromScene(*it));
     }
     painter->drawPath(path);
 
     SCgVisualObject::paint(painter, option, widget);
-}
-
-QVariant SCgVisualBus::itemChange(GraphicsItemChange change, const QVariant &value)
-{
-//    if (change == QGraphicsItem::ItemPositionHasChanged && !mParentChanging
-//            && mOwner && !mOwner->isDead())
-//        mOwner->setPos(mapToParent(mOwnerPos));
-
-    return SCgVisualObject::itemChange(change, value);
 }
 
 void SCgVisualBus::_update(UpdateEventType eventType, SCgObject *object)
@@ -103,7 +90,7 @@ void SCgVisualBus::updateShape()
     // Rebuilding shape
     mShape = QPainterPath();
 
-    const QVector<QPointF>& points = static_cast<SCgBus*>(observedObject(0))->points();
+    const QVector<QPointF>& points = static_cast<SCgBus*>(baseObject())->points();
 
     mShape.moveTo(points.at(0));
     for (int i = 1; i < points.size(); i++)

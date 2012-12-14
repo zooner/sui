@@ -44,7 +44,10 @@ SCgLayoutAlgorithmFactory::SCgLayoutAlgorithmFactory(QObject *parent) :
     QObject(parent),
     mRatingInstance(0)
 {
-    mRatingInstance = createAlgorithm();
+    //! \todo: Refactor this
+    //DO NOT CALL VIRTUAL FUNCTIONS FROM CONSTRUCTORS AND DESTRUCTORS!
+    //REALY! NEVER! In the best case it won't work as you expect.
+    //mRatingInstance = createAlgorithm();
 }
 
 SCgLayoutAlgorithmFactory::~SCgLayoutAlgorithmFactory()

@@ -24,8 +24,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "scgobjectobserver.h"
 #include "scgobject.h"
 
-SCgObjectObserver::SCgObjectObserver() :
-    mNeedSync(true)
+SCgObjectObserver::SCgObjectObserver(): mNeedSync(true)
 {
 
 }

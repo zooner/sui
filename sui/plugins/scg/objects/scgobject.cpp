@@ -39,7 +39,8 @@ const SCgObject::SCgObjectList& SCgObject::objectsByScUri(const ScUri &uri)
 SCgObject::SCgObject(QObject *parent) :
     QObject(parent),
     mConstruction(0),
-    mParent(0)
+    mParent(0),
+    mPosition(0,0)
 {
     _resetUpdateFalgs();
 }
@@ -103,23 +104,24 @@ void SCgObject::_removeSCgObjectFromUriMap(const ScUri &uri)
 
 void SCgObject::_notifyUpdate(SCgObjectObserver::UpdateEventType eventType)
 {
-    mUpdateFlags[(quint32)eventType] = 1;
+    //mUpdateFlags[(quint32)eventType] = 1;
     SCgObjectObserver *observer = 0;
     foreach(observer, mObservers)
-        observer->_needSync();
+        observer->_update(eventType, this);
+        //observer->_needSync();
 }
 
-void SCgObject::_sync()
-{
-    SCgObjectObserver *observer = 0;
-    for (quint32 idx = 0; idx < (quint32)SCgObjectObserver::UpdateEventCount; idx++)
-        if (mUpdateFlags[idx] != 0)
-        {
-            foreach(observer, mObservers)
-                observer->_update((SCgObjectObserver::UpdateEventType)idx, this);
-            mUpdateFlags[idx] = 0;
-        }
-}
+//void SCgObject::notifyObservers()
+//{
+//    SCgObjectObserver *observer = 0;
+//    for (quint32 idx = 0; idx < (quint32)SCgObjectObserver::UpdateEventCount; idx++)
+//        if (mUpdateFlags[idx] != 0)
+//        {
+//            foreach(observer, mObservers)
+//                observer->_update((SCgObjectObserver::UpdateEventType)idx, this);
+//            mUpdateFlags[idx] = 0;
+//        }
+//}
 
 void SCgObject::_resetUpdateFalgs()
 {
@@ -128,7 +130,8 @@ void SCgObject::_resetUpdateFalgs()
 
 void SCgObject::attachObserver(SCgObjectObserver *observer)
 {
-    if (hasAttachedObserver(observer)) SuiExcept(SuiExceptionDuplicateItem,
+    Q_ASSERT(observer);
+    if (isObserverAttached(observer)) SuiExcept(SuiExceptionDuplicateItem,
                                                  "Observer already attached",
                                                  "void SCgObject::attachObserver(SCgObjectObserver *observer)");
     mObservers.push_back(observer);
@@ -137,29 +140,30 @@ void SCgObject::attachObserver(SCgObjectObserver *observer)
 
 void SCgObject::detachObserver(SCgObjectObserver *observer)
 {
-    if (!hasAttachedObserver(observer)) SuiExcept(SuiExceptionItemNotFound,
+    if (!isObserverAttached(observer)) SuiExcept(SuiExceptionItemNotFound,
                                                   "Observer doesn't attached",
                                                   "void SCgObject::detachObserver(SCgObjectObserver *observer)");
     observer->mObservedObjects.removeOne(this);
     mObservers.removeOne(observer);
 }
 
-bool SCgObject::hasAttachedObserver(SCgObjectObserver *observer) const
+bool SCgObject::isObserverAttached(SCgObjectObserver *observer) const
 {
     return mObservers.contains(observer);
 }
 
 void SCgObject::setParentObject(SCgObject *parent)
 {
-    if (parent == mParent) return; // do nothing
+    if (parent == mParent) return;
 
+    // remove from old parent
     if (mParent)
-    {
         mParent->_removeChild(this);
-        mParent = 0;
-    }
 
-    if (mParent != 0)
+    mParent = parent;
+
+    // add to new parent
+    if (mParent)
         mParent->_appendChild(this);
 
     _notifyUpdate(SCgObjectObserver::ParentChanged);
@@ -173,7 +177,7 @@ void SCgObject::setPosition(const QPointF &pos)
     _notifyUpdate(SCgObjectObserver::PositionChanged);
 }
 
-void SCgObject::setSize(const QPointF &size)
+void SCgObject::setSize(const QSizeF &size)
 {
     if (mSize == size) return; // do nothing
 
@@ -224,9 +228,4 @@ void SCgObject::_appendChild(SCgObject *object)
     Q_ASSERT(object != 0); // Null pointer to object
     Q_ASSERT(!mChildObjects.contains(object)); // Specified object already exist
     mChildObjects.push_back(object);
-}
-
-QPointF SCgObject::worldPosition() const
-{
-    return mParent ? (mPosition + mParent->worldPosition()) : mPosition;
 }

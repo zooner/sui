@@ -125,6 +125,8 @@ protected:
     //! @copydoc SCgObjectObserver::_update
     void _update(UpdateEventType eventType, SCgObject *object);
 
+    void _notifyUpdate(SCgObjectObserver::UpdateEventType eventType);
+
 public:
     //! Recalculate dot point coordinates
     void updateDotCoordinates();

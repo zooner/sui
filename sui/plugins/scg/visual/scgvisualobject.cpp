@@ -29,26 +29,61 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scgconfig.h"
 
+#include "interfaces/commandstackcontrollerinterface.h"
+
 #include <QCursor>
 #include <QVector2D>
 #include <QGraphicsTextItem>
 #include <QGraphicsScene>
+#include <QGraphicsSceneEvent>
 #include <QApplication>
 #include <QPainter>
 
 
-SCgVisualObject::SCgVisualObject(QGraphicsItem *parent, QGraphicsScene *scene) :
-        QGraphicsItem(parent, scene),
+SCgVisualObject::SCgVisualObject(QGraphicsScene *scene) :
+        QGraphicsItem(0, scene),
         mIsBoundingBoxVisible(false),
         mTextItem(0),
-        mParentChanging(false)
+        mParentChanging(false),
+        mBaseObject(0)
 {
     mColor = scg_cfg_get_value_color(scg_key_element_color_normal);
 
     setFlags(QGraphicsItem::ItemIsSelectable
-    		| QGraphicsItem::ItemIsFocusable
-    		| QGraphicsItem::ItemSendsGeometryChanges);
+            | QGraphicsItem::ItemIsFocusable
+            | QGraphicsItem::ItemSendsGeometryChanges);
+    //Do not set this flag. All position and geometry manipulations are hand made.
+    setFlag(QGraphicsItem::ItemIsMovable, false);
     setAcceptHoverEvents(true);
+}
+
+SCgVisualObject *SCgVisualObject::createVisual(SCgObject* base,
+                                               QGraphicsScene *scene)
+{
+    Q_ASSERT(base);
+
+    SCgVisualObject* obj = 0;
+    switch(base->type())
+    {
+    case SCgObject::Node:
+        obj = new SCgVisualNode(scene);
+        break;
+    case SCgObject::Bus:
+        obj = new SCgVisualBus(scene);
+        break;
+    case SCgObject::Pair:
+        obj = new SCgVisualPair(scene);
+        break;
+    case SCgObject::Contour:
+        obj = new SCgVisualContour(scene);
+        break;
+    case SCgObject::Control:
+        obj = new SCgVisualControl(scene);
+        break;
+    }
+
+    obj->setBaseObject(base);
+    return obj;
 }
 
 SCgVisualObject::~SCgVisualObject()
@@ -68,6 +103,9 @@ bool SCgVisualObject::isSCgVisualPointObjectType(int type)
 
 void SCgVisualObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     if (mIsBoundingBoxVisible)
     {
         QPen pen(QBrush(Qt::red, Qt::SolidPattern), 1.f, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
@@ -77,11 +115,16 @@ void SCgVisualObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
     }
 }
 
-void SCgVisualObject::sync()
+void SCgVisualObject::_onBaseObjectChanged()
 {
-    if (isNeedSync()) observedObject(0)->_sync();
-    mNeedSync = false;
+    setPos(mBaseObject->position());
 }
+
+//void SCgVisualObject::sync()
+//{
+//    if (isNeedSync()) mBaseObject->notifyObservers();
+//    mNeedSync = false;
+//}
 
 QVariant SCgVisualObject::itemChange(GraphicsItemChange change, const QVariant &value)
 {
@@ -93,47 +136,6 @@ QVariant SCgVisualObject::itemChange(GraphicsItemChange change, const QVariant &
 
         mColor = scg_cfg_get_value_color(isSelected() ? scg_key_element_color_selected : scg_key_element_color_normal);
     }
-
-    if (change == QGraphicsItem::ItemPositionHasChanged)
-        observedObject(0)->setPosition(value.toPointF());
-
-    // move to correct position automaticly
-//    if (change == QGraphicsItem::ItemParentChange && scene())
-//    {
-//        // we need to set this flag to prevent processing ItemPositionHasChanged,
-//        // because item position at this moment not actual
-//        mParentChanging = true;
-//        QGraphicsItem* newParent = value.value<QGraphicsItem*>();
-//        if(newParent)
-//            setPos(newParent->mapFromScene(scenePos()));
-//        else
-//            setPos(scenePos());
-//    }
-
-//    if (change == QGraphicsItem::ItemParentHasChanged)
-//    {
-//        // now item position has valid value
-//        mParentChanging = false;
-//    }
-
-//    // Change stacking order
-//    if (scene() && change == QGraphicsItem::ItemSelectedHasChanged
-//                && isSelected() && scene()->selectedItems().size() == 1)
-//    {
-//        QGraphicsItem* top = this;
-//        QList<QGraphicsItem*> lst = scene()->items();
-//        foreach(QGraphicsItem* it, lst)
-//        {
-//            if(it != this &&
-//               it->type() == type() &&
-//               it->parentItem() == parentItem())
-//            {
-//                it->stackBefore(top);
-//                top = it;
-//            }
-//        }
-//    }
-
 
     return QGraphicsItem::itemChange(change, value);
 }
@@ -169,25 +171,35 @@ bool SCgVisualObject::isBoundingBoxVisible() const
     return mIsBoundingBoxVisible;
 }
 
-void SCgVisualObject::_reSync()
+void SCgVisualObject::setBaseObject(SCgObject *object)
 {
-    SCgObject *object = mObservedObjects.first();
+    if(mBaseObject)
+        mBaseObject->detachObserver(this);
 
-    setPos(object->position());
+    mBaseObject = object;
+
+    if(mBaseObject)
+        mBaseObject->attachObserver(this);
+
+    _onBaseObjectChanged();
 }
 
-void SCgVisualObject::_needSync()
-{
-    SCgObjectObserver::_needSync();
-    update();
-}
+//void SCgVisualObject::_needSync()
+//{
+//    SCgObjectObserver::_needSync();
+//    update();
+//}
 
 void SCgVisualObject::_update(UpdateEventType eventType, SCgObject *object)
 {
-    if (eventType == PositionChanged)
-        setPos(object->position());
-
-    if (eventType == IdentifierChanged)
+    switch (eventType)
+    {
+    case PositionChanged:
+    {
+        setPos(mapToParent(mapFromScene(object->position())));
+        break;
+    }
+    case IdentifierChanged:
     {
         if (mTextItem == 0)
         {
@@ -200,6 +212,13 @@ void SCgVisualObject::_update(UpdateEventType eventType, SCgObject *object)
         }
 
         mTextItem->setPlainText(object->identifier());
+        break;
+    }
+    case ParentChanged:
+    {
+        //! \todo implement
+        break;
+    }
     }
 
     update();

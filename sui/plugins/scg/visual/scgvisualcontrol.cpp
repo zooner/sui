@@ -32,14 +32,12 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 #define DRAG_MIN_LENGTH 5.f
 
-SCgVisualControl::SCgVisualControl(QGraphicsItem *parent, QGraphicsScene *scene) :
-    SCgVisualObject(parent, scene),
+SCgVisualControl::SCgVisualControl(QGraphicsScene *scene) :
+    SCgVisualObject(scene),
     mDragLength(-1.f)
 {
     mBackColor = scg_cfg_get_value_color(scg_key_control_backcolor_normal);
     mColor = scg_cfg_get_value_color(scg_key_control_color_normal);
-
-    setFlag(QGraphicsItem::ItemIsMovable, true);
 
 #if ENABLE_VISUAL_EFFECTS_SUPPORT
     if (scg_cfg_get_value_uint(scg_key_effects_enabled) != 0)
@@ -57,8 +55,8 @@ SCgVisualControl::~SCgVisualControl()
 
 QRectF SCgVisualControl::boundingRect() const
 {
-    QPointF size = observedObject(0)->size();
-    return QRectF(-size.x() / 2.f, -size.y() / 2.f, size.x(), size.y());
+    QSizeF size = baseObject()->size();
+    return QRectF(-size.width() / 2.f, -size.height() / 2.f, size.width(), size.height());
 }
 
 void SCgVisualControl::updatePosition()
@@ -68,11 +66,10 @@ void SCgVisualControl::updatePosition()
 
 void SCgVisualControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
+
     //SCgAlphabet::paintControl(painter, this);
-
-    // synchronize with sc.g-object
-    sync();
-
     QRectF bound = boundingRect().adjusted(2, 2, -2, -2);
 
     // draw shape
@@ -87,7 +84,7 @@ void SCgVisualControl::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 
 void SCgVisualControl::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    if (!isSelected())
+    if (!isSelected() && mTextItem)
     {
         mBackColor = scg_cfg_get_value_color(scg_key_control_backcolor_highlight);
         mColor = scg_cfg_get_value_color(scg_key_control_color_highlight);
@@ -122,7 +119,6 @@ QVariant SCgVisualControl::itemChange(GraphicsItemChange change, const QVariant 
 
 QPainterPath SCgVisualControl::shape() const
 {
-    //prepareGeometryChange();
     QPainterPath path;
     path.addRect(boundingRect());
 
@@ -148,7 +144,7 @@ void SCgVisualControl::_update(SCgObjectObserver::UpdateEventType eventType, SCg
 
         mTextItem->setPlainText(object->identifier());
         QRectF textBound = mTextItem->boundingRect();
-        observedObject(0)->setSize(QPointF(textBound.width() + 10, textBound.height() + 10));
+        baseObject()->setSize(QSizeF(textBound.width() + 10, textBound.height() + 10));
         mTextItem->setPos(-textBound.width() / 2.f, -textBound.height() / 2.f);
 
         return;

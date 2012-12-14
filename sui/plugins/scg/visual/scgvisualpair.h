@@ -31,9 +31,13 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 class SCgVisualPair : public SCgVisualObject
 {
+    Q_OBJECT
+
+protected:
+    friend class SCgVisualObject;
+    explicit SCgVisualPair(QGraphicsScene *scene = 0);
 public:
 
-    explicit SCgVisualPair(QGraphicsItem *parent = 0, QGraphicsScene *scene = 0);
     virtual ~SCgVisualPair();
 
     /*! Returns normal path, without pen width affected.
@@ -52,7 +56,6 @@ protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     //! @copydoc SCgVisualObject::_update
     void _update(UpdateEventType eventType, SCgObject *object);
-
 public:
     //! Type for qgraphicsitem_cast
     int type() const { return SCgPairType; }

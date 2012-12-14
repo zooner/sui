@@ -34,7 +34,7 @@ class QGraphicsSceneMouseEvent;
   * \li noatom user commands. They can be opened by mouse click. After opening
   * child commands (relation decomposition*) will showed
   * \li class of user commands. They can be initiated by mouse click. Depending on command
-  * type they start edit or view command, or initiade question.
+  * type they start edit or view command, or initiate question.
   * \li controls that already associated with object, that they affect.
   * \li objects, that doesn't initiate anything, but can be used as arguments
   * to any command
@@ -51,7 +51,7 @@ public:
     //! Contol type
     typedef enum
     {
-        Unlnown = 0,
+        Unknown = 0,
         NoAtom,
         Class,
         Instance,
@@ -60,6 +60,9 @@ public:
 
     //! @copydoc SCgObject::calculateDotCoordinates
     QPointF calculateDotCoordinates(qreal dotPosition, const QPointF &point) const;
+    //! @copydoc SCgObject::calculateDotCoordinatesByAngle
+    QPointF calculateDotCoordinatesByAngle(qreal slope, const QPointF &point) const;
+
     //! @copydoc SCgObject::calculateDotPosition
     qreal calculateDotPosition(const QPointF &point) const;
 

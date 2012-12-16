@@ -69,6 +69,11 @@ HEADERS += scgprecompiled.h \
     scgview.h \
     widgets/scgwaitwidget.h \
     widgets/scgtextedit.h \
+    widgets/scgprogressbar.h \
+    widgets/scgmessagebox.h \
+    widgets/scglineedit.h \
+    widgets/scglabel.h \
+    widgets/scggroupbox.h \
     interfaces/commandstackcontrollerinterface.h \
     modes/scgmovinghelper.h \
     commands/scgcommandchangepairbeginenddots.h
@@ -118,5 +123,10 @@ SOURCES += scgprecompiled.cpp \
     scgview.cpp \
     widgets/scgwaitwidget.cpp \
     widgets/scgtextedit.cpp \
+    widgets/scgprogressbar.cpp \
+    widgets/scgmessagebox.cpp \
+    widgets/scglineedit.cpp \
+    widgets/scglabel.cpp \
+    widgets/scggroupbox.cpp \
     modes/scgmovinghelper.cpp \
     commands/scgcommandchangepairbeginenddots.cpp

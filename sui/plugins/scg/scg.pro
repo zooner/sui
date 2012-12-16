@@ -68,7 +68,12 @@ HEADERS += scgprecompiled.h \
     scgbuildconfig.h \
     scgview.h \
     widgets/scgwaitwidget.h \
-    widgets/scgtextedit.h
+    widgets/scgtextedit.h \
+    widgets/scgprogressbar.h \
+    widgets/scgmessagebox.h \
+    widgets/scglineedit.h \
+    widgets/scglabel.h \
+    widgets/scggroupbox.h
 
 SOURCES += scgprecompiled.cpp \
     scgscenebase.cpp \
@@ -114,4 +119,9 @@ SOURCES += scgprecompiled.cpp \
     objects/scgcontrol.cpp \
     scgview.cpp \
     widgets/scgwaitwidget.cpp \
-    widgets/scgtextedit.cpp
+    widgets/scgtextedit.cpp \
+    widgets/scgprogressbar.cpp \
+    widgets/scgmessagebox.cpp \
+    widgets/scglineedit.cpp \
+    widgets/scglabel.cpp \
+    widgets/scggroupbox.cpp

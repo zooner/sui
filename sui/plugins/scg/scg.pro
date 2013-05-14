@@ -29,6 +29,7 @@ HEADERS += scgprecompiled.h \
     commands/scgbasecommand.h \
     commands/scgcommandobjectdelete.h \
     commands/scgcommandobjectidtfchange.h \
+    commands/scgcommandchangepairbeginenddots.h \
     commands/scgcommandcreatenode.h \
     commands/scgcommandcreatepair.h \
     commands/scgcommandcreatebus.h \
@@ -43,6 +44,7 @@ HEADERS += scgprecompiled.h \
     modes/scgmodeinterface.h \
     modes/scgmodecontour.h \
     modes/scgmodebus.h \
+    modes/scgmovinghelper.h \
     layout/scglayoutalgorithm.h \
     interfaces/SCgLayoutAlgorithmInterface.h \
     interfaces/SCgInputHandlerInterface.h \
@@ -73,10 +75,7 @@ HEADERS += scgprecompiled.h \
     widgets/scgmessagebox.h \
     widgets/scglineedit.h \
     widgets/scglabel.h \
-    widgets/scggroupbox.h \
-    interfaces/commandstackcontrollerinterface.h \
-    modes/scgmovinghelper.h \
-    commands/scgcommandchangepairbeginenddots.h
+    widgets/scggroupbox.h
 
 SOURCES += scgprecompiled.cpp \
     scgscenebase.cpp \
@@ -88,6 +87,7 @@ SOURCES += scgprecompiled.cpp \
     commands/scgbasecommand.cpp \
     commands/scgcommandobjectdelete.cpp \
     commands/scgcommandobjectidtfchange.cpp \
+    commands/scgcommandchangepairbeginenddots.cpp \
     commands/scgcommandcreatenode.cpp \
     commands/scgcommandcreatepair.cpp \
     commands/scgcommandcreatebus.cpp \
@@ -101,6 +101,7 @@ SOURCES += scgprecompiled.cpp \
     modes/scgmodepair.cpp \
     modes/scgmodecontour.cpp \
     modes/scgmodebus.cpp \
+    modes/scgmovinghelper.cpp \
     layout/scglayoutalgorithm.cpp \
     visual/scgvisualpair.cpp \
     visual/scgvisualobject.cpp \
@@ -127,6 +128,4 @@ SOURCES += scgprecompiled.cpp \
     widgets/scgmessagebox.cpp \
     widgets/scglineedit.cpp \
     widgets/scglabel.cpp \
-    widgets/scggroupbox.cpp \
-    modes/scgmovinghelper.cpp \
-    commands/scgcommandchangepairbeginenddots.cpp
+    widgets/scggroupbox.cpp

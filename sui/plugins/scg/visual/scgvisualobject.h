@@ -30,8 +30,6 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scgprerequest.h"
 
-class CommandStackControllerInterface;
-
 class SCgVisualObject : public QObject, public QGraphicsItem,
                         public SCgObjectObserver
 {

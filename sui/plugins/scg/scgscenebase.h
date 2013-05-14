@@ -37,8 +37,7 @@ class QUndoStack;
   * It contains functionality, that can be used in each type of scene
   */
 class SCgSceneBase : public QGraphicsScene,
-                     public SCgConstructionObserver,
-                     public CommandStackControllerInterface
+                     public SCgConstructionObserver
 {
     Q_OBJECT
 public:

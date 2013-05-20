@@ -70,9 +70,8 @@ private:
       */
     bool isCommand(const ScUri &uri) const;
 
-
 private:
-
+    SCgMainWindowInputHandler *createInputHandler(QObject *parent);
     void initializeActions();
 
     //! Pointer to widget, that realize whole logic of window

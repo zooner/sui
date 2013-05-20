@@ -217,7 +217,7 @@ void SCgLabel::setPicture(const QPicture &picture)
 }
 #endif
 //------------------------------------------------------------------------------
-#ifndef SCgLabel::QT_NO_MOVIE
+#ifndef QT_NO_MOVIE
 void SCgLabel::setMovie(QMovie *movie)
 {
     return nativeWidget()->setMovie(movie);

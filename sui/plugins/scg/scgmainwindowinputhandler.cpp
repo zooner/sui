@@ -30,27 +30,31 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scgmainwindowscene.h"
 
+#include "modes/scgmodemenu.h"
 #include "modes/scgmodeselect.h"
 #include "modes/scgmodebus.h"
 #include "modes/scgmodecontour.h"
 #include "modes/scgmodepair.h"
 
+#include "widgets/menuWidget/sunmenurepresentation.h"
+
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QGraphicsPathItem>
 
-SCgMainWindowInputHandler::SCgMainWindowInputHandler(QObject* parent) :
+SCgMainWindowInputHandler::SCgMainWindowInputHandler(SunMenuRepresentation* nodeMenu, QObject* parent) :
     QObject(parent),
-    SCgInputHandlerInterface()
+    SCgInputHandlerInterface(), mActiveMenu(nodeMenu)
 {
     mAvailableModes.resize(ModeCount);
 
-    mAvailableModes[(int)ModeSelect] = new SCgModeSelect(this);
-    mAvailableModes[(int)ModeBus] = new SCgModeBus(this, mAvailableModes[(int)ModeSelect]);
-    mAvailableModes[(int)ModePair] = new SCgModePair(this, mAvailableModes[(int)ModeSelect]);
-    mAvailableModes[(int)ModeContour] = new SCgModeContour(this, mAvailableModes[(int)ModeSelect]);
+    SCgModeSelect* pureSelect = new SCgModeSelect(this);
 
-    mMode = mAvailableModes[(int)ModeSelect];
+    mMode = mAvailableModes[(int)ModeSelect] = new SCgModeMenu(this, nodeMenu, pureSelect);
+    mAvailableModes[(int)ModeBus] = new SCgModeBus(this, pureSelect);
+    mAvailableModes[(int)ModePair] = new SCgModePair(this, pureSelect);
+    mAvailableModes[(int)ModeContour] = new SCgModeContour(this, pureSelect);
+
     mMode->activate();
 }
 
@@ -64,7 +68,6 @@ SCgMainWindowInputHandler::~SCgMainWindowInputHandler()
 
 void SCgMainWindowInputHandler::changeMode(Mode newMode)
 {
-
     mMode->deactivate();
 
     mMode = mAvailableModes[(int)newMode];
@@ -119,6 +122,25 @@ void SCgMainWindowInputHandler::focusInEvent(QFocusEvent *focusEvent){Q_UNUSED(f
 void SCgMainWindowInputHandler::focusOutEvent(QFocusEvent *focusEvent){Q_UNUSED(focusEvent);}
 void SCgMainWindowInputHandler::helpEvent(QGraphicsSceneHelpEvent *helpEvent){Q_UNUSED(helpEvent);}
 void SCgMainWindowInputHandler::inputMethodEvent(QInputMethodEvent *event){Q_UNUSED(event);}
+
+
+void SCgMainWindowInputHandler::drawPairMenuTriggered()
+{
+    SCgModePair* pairMode = (SCgModePair*)mAvailableModes[ModePair];
+    connect(pairMode, SIGNAL(operationCompleted(bool)), this, SLOT(pairDrawingOperationCompleted(bool)));
+    changeMode(ModePair);
+    pairMode->startPairCreation(qobject_cast<SCgVisualObject*>(mActiveMenu->associatedObject()),
+                                mActiveMenu->scenePos());
+}
+
+void SCgMainWindowInputHandler::pairDrawingOperationCompleted(bool success)
+{
+    Q_UNUSED(success);
+    SCgModePair* pairMode = qobject_cast<SCgModePair*>(QObject::sender());
+    if(pairMode == NULL) return;
+    disconnect(pairMode, SIGNAL(operationCompleted(bool)), this, SLOT(pairDrawingOperationCompleted(bool)));
+    changeMode(ModeSelect);
+}
 
 
 void SCgMainWindowInputHandler::deleteJustContour()

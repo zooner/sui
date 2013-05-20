@@ -70,8 +70,6 @@ void SCgMainWindowScene::_processEventObjectCreated(QObject *object)
 
     Q_ASSERT(!mObjectToVisual.contains(scg_object));
 
-    // create visual object. looks strange (this, this) but may be some time CommandStackControllerInterface
-    // will be implemented in separate class
     SCgVisualObject *vobject = SCgVisualObject::createVisual(scg_object, this);
     if(!vobject)
     {

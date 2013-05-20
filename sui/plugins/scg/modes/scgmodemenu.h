@@ -20,24 +20,26 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 -----------------------------------------------------------------------------
 */
 
-#ifndef SCGMODEPAIR_H_
-#define SCGMODEPAIR_H_
+#ifndef SCGMODEMENU_H
+#define SCGMODEMENU_H
 
+#include <QObject>
+#include <QList>
 
 #include "scgmodeinterface.h"
 
-#include <QObject>
-#include <QPointer>
+class SunMenuRepresentation;
+class QTimer;
 
-class SCgPathItem;
-
-class SCgModePair: public QObject, public SCgModeInterface
+class SCgModeMenu : public QObject, public SCgModeInterface
 {
     Q_OBJECT
-public:
-    explicit SCgModePair(SCgInputHandlerInterface* inputHandler, SCgModeInterface *childMode = 0);
 
-    virtual ~SCgModePair();
+    static const int MenuTimerDelayInMs = 500;
+public:
+    explicit SCgModeMenu(SCgInputHandlerInterface* inputHandler, SunMenuRepresentation* nodeMenu, SCgModeInterface *childMode = 0);
+
+    virtual ~SCgModeMenu();
 
     //! @copydoc QGraphicsScene::keyPressEvent
     void keyPressEvent ( QKeyEvent * keyEvent ) ;
@@ -52,7 +54,6 @@ public:
     //! @copydoc QGraphicsScene::mouseReleaseEvent
     void mouseReleaseEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool afterSceneEvent );
 
-
     /*! Called then this mode is become active.
      * Here you should provide some initial code you'll need.
      */
@@ -63,16 +64,15 @@ public:
      */
     void deactivate();
 
-    void startPairCreation(SCgVisualObject *obj, const QPointF &scenePoint);
-signals:
-    void operationCompleted(bool success);
-
+private slots:
+    void showMenu();
 private:
-    void endPairCreation(bool success);
-    QPointer<SCgPathItem> mPathItem;
-    QPointer<SCgVisualObject> mObjectAtFirstPoint;
+    void associateMenuWithObject(SCgVisualObject *object, const QPointF &scenePos);
+    void hideMenu();
 
-    bool mPassMouseReleaseEvent;
+    SunMenuRepresentation* mMenuRepresentation;
+    QTimer* mShowMenuTimer;
+    QPointF mSceneMenuPosition;
 };
 
-#endif /* SCGMODEPAIR_H_ */
+#endif // SCGMODEMENU_H

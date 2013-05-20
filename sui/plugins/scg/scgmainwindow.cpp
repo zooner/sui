@@ -27,6 +27,8 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 #include "scgplugin.h"
 #include "scgview.h"
 #include "interfaces/UiRoot.h"
+#include "widgets/menuWidget/menuitemmodel.h"
+#include "widgets/menuWidget/sunmenurepresentation.h"
 
 #include <QUndoStack>
 #include <QAction>
@@ -42,7 +44,7 @@ SCgMainWindow::SCgMainWindow(QObject *parent) :
     mInputHandler(0)
 {
     mView = new SCgView();
-    mInputHandler = new SCgMainWindowInputHandler(mView);
+    mInputHandler = createInputHandler(mView);
     mScene = new SCgMainWindowScene(mInputHandler, mView);
 
     mView->setCacheMode(QGraphicsView::CacheBackground);//CacheBackground);
@@ -66,6 +68,50 @@ SCgMainWindow::SCgMainWindow(QObject *parent) :
     initializeActions();
 
     mView->show();
+}
+
+SCgMainWindowInputHandler* SCgMainWindow::createInputHandler(QObject* parent)
+{
+    QAction* drawPairMenuAction = new QAction(this);
+    QAction* stubAction = new QAction(this);
+    QList<MenuItemModel*> nodeMenuModel;
+
+    //__________________________________________________
+    //create pair menu
+    nodeMenuModel << new MenuItemModel(drawPairMenuAction, "p");
+    //__________________________________________________
+    //Change type menu
+    MenuItemModel* changeTypeMenu = new MenuItemModel(stubAction, "t");
+
+    MenuItemModel* changeTypeMenuSubConstant = new MenuItemModel(stubAction, "c", changeTypeMenu);
+    new MenuItemModel(stubAction, "a", changeTypeMenuSubConstant);
+    new MenuItemModel(stubAction, "r", changeTypeMenuSubConstant);
+    new MenuItemModel(stubAction, "S", changeTypeMenuSubConstant);
+    new MenuItemModel(stubAction, "u", changeTypeMenuSubConstant);
+
+    MenuItemModel* changeTypeMenuSubVariable = new MenuItemModel(stubAction, "v", changeTypeMenu);
+    new MenuItemModel(stubAction, "a", changeTypeMenuSubVariable);
+    new MenuItemModel(stubAction, "r", changeTypeMenuSubVariable);
+    new MenuItemModel(stubAction, "S", changeTypeMenuSubVariable);
+    new MenuItemModel(stubAction, "u", changeTypeMenuSubVariable);
+
+    nodeMenuModel << changeTypeMenu;
+    //__________________________________________________
+    //change idtf menu
+    nodeMenuModel << new MenuItemModel(stubAction, "ch idtf");
+    //__________________________________________________
+    //remove
+    nodeMenuModel << new MenuItemModel(stubAction, "r");
+
+    SunMenuRepresentation* menuRepresentation = new SunMenuRepresentation();
+    foreach (MenuItemModel* menu, nodeMenuModel)
+    {
+        menuRepresentation->addRepresentedMenu(menu);
+    }
+
+    SCgMainWindowInputHandler* handler = new SCgMainWindowInputHandler(menuRepresentation, parent);
+    connect(drawPairMenuAction, SIGNAL(triggered()), handler, SLOT(drawPairMenuTriggered()));
+    return handler;
 }
 
 void SCgMainWindow::initializeActions()
@@ -95,7 +141,6 @@ void SCgMainWindow::initializeActions()
     mView->addAction(actionRedo);
     mView->addAction(actionUndo);
 }
-
 
 SCgMainWindow::~SCgMainWindow()
 {

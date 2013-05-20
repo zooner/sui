@@ -120,7 +120,7 @@ void SCgModePair::mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool 
             mPathItem->popPoint();
             // If there is no more points
             if (mPathItem->points().isEmpty())
-                delete mPathItem;
+                endPairCreation(false);
         }
     }
 
@@ -129,24 +129,12 @@ void SCgModePair::mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool 
         QPointF mousePos = mouseEvent->scenePos();
 
         SCgVisualObject *obj = scene()->scgVisualObjectAt(mousePos);
-        // if we not create pair yet and press on scg-object, then
+        // if we have not createed pair yet and press on scg-object, then
         // start pair creation
         if (obj && !mPathItem)
         {
             mouseEvent->accept();
-            mObjectAtFirstPoint = obj;
-
-            mPathItem = new SCgPathItem(scene());
-
-            mPathItem->pushPoint(mousePos);
-            QPen pen;
-
-            pen.setWidthF(2.f);
-            pen.setCapStyle(Qt::RoundCap);
-            pen.setStyle(Qt::DashDotLine);
-
-            pen.setColor(Qt::red);
-            mPathItem->setPen(pen);
+            startPairCreation(obj, mousePos);
             return;
         }
 
@@ -156,9 +144,10 @@ void SCgModePair::mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool 
 
             SCgVisualObject *begObj = mObjectAtFirstPoint;
             SCgVisualObject *endObj = obj;
+            bool success = begObj != endObj && begObj;
 
             // do not create lines with equivalent begin end end object
-            if (begObj != endObj && begObj)
+            if (success)
             {
                 SCgContour* c=0;
                 // get parent contour
@@ -172,7 +161,7 @@ void SCgModePair::mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool 
                                                                     endObj->baseObject(), c));
             }
 
-            delete mPathItem;
+            endPairCreation(success);
 
             return;
         } // if (obj && obj != mObjectAtFirstPoint->parentItem())
@@ -181,6 +170,32 @@ void SCgModePair::mousePressEvent ( QGraphicsSceneMouseEvent * mouseEvent, bool 
     mPassMouseReleaseEvent = true;
     if (mDecoratedMode)
         mDecoratedMode->mousePressEvent(mouseEvent, afterSceneEvent);
+}
+
+void SCgModePair::startPairCreation(SCgVisualObject* obj, const QPointF& scenePoint)
+{
+    if(mPathItem || !obj) return;
+
+    mObjectAtFirstPoint = obj;
+
+    mPathItem = new SCgPathItem(scene());
+
+    mPathItem->pushPoint(scenePoint);
+    QPen pen;
+
+    pen.setWidthF(2.f);
+    pen.setCapStyle(Qt::RoundCap);
+    pen.setStyle(Qt::DashDotLine);
+
+    pen.setColor(Qt::red);
+    mPathItem->setPen(pen);
+}
+
+void SCgModePair::endPairCreation(bool success)
+{
+    if(mPathItem) delete mPathItem;
+
+    emit operationCompleted(success);
 }
 
 void SCgModePair::mouseReleaseEvent (QGraphicsSceneMouseEvent * mouseEvent , bool afterSceneEvent)
@@ -207,8 +222,7 @@ void SCgModePair::activate()
 
 void SCgModePair::deactivate()
 {
-    if (mPathItem)
-        delete mPathItem;
+    endPairCreation(false);
     if(mDecoratedMode)
         mDecoratedMode->deactivate();
 }

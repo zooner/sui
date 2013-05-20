@@ -35,6 +35,7 @@ along with OSTIS.  If not, see <http://www.gnu.org/licenses/>.
 class QGraphicsPathItem;
 class SCgModeInterface;
 class SCgMainWindowScene;
+class SunMenuRepresentation;
 
 class SCgMainWindowInputHandler : public QObject,
                                   public SCgInputHandlerInterface
@@ -42,7 +43,7 @@ class SCgMainWindowInputHandler : public QObject,
     Q_OBJECT
     Q_INTERFACES(SCgInputHandlerInterface)
 public:
-    explicit SCgMainWindowInputHandler(QObject* parent = 0);
+    explicit SCgMainWindowInputHandler(SunMenuRepresentation* nodeMenu, QObject* parent = 0);
     virtual ~SCgMainWindowInputHandler();
 
     typedef enum
@@ -54,7 +55,6 @@ public:
 
         ModeCount
     } Mode;
-
 protected:
 
     /*! Change current mode to new. If new mode is equivalent to current, then do nothing.
@@ -105,9 +105,14 @@ private:
 
     //! Current mode
     SCgModeInterface* mMode;
+
+    //! HACK: drawPairMenuTriggered() slot should take 2 arguments: SCgVisualObject and start point.
+    SunMenuRepresentation* mActiveMenu;
 signals:
 
 public slots:
+    void drawPairMenuTriggered();
+    void pairDrawingOperationCompleted(bool success);
 
     //! Deletes all selected objects on scene.
     void deleteSelected();

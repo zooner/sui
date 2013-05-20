@@ -75,7 +75,16 @@ HEADERS += scgprecompiled.h \
     widgets/scgmessagebox.h \
     widgets/scglineedit.h \
     widgets/scglabel.h \
-    widgets/scggroupbox.h
+    widgets/scggroupbox.h \
+    widgets/menuWidget/sunmenurepresentation.h \
+    widgets/menuWidget/sunmenulayer.h \
+    widgets/menuWidget/defaultmenubehavior.h \
+    widgets/menuWidget/abstractmenubehavior.h \
+    widgets/menuWidget/sizableItems/abstractsizableitem.h \
+    widgets/menuWidget/sizableItems/textsizableitem.h \
+    widgets/menuWidget/menuitemmodel.h \
+    widgets/menuWidget/sunmenuIiemview.h \
+    modes/scgmodemenu.h
 
 SOURCES += scgprecompiled.cpp \
     scgscenebase.cpp \
@@ -128,4 +137,13 @@ SOURCES += scgprecompiled.cpp \
     widgets/scgmessagebox.cpp \
     widgets/scglineedit.cpp \
     widgets/scglabel.cpp \
-    widgets/scggroupbox.cpp
+    widgets/scggroupbox.cpp \
+    widgets/menuWidget/sunmenurepresentation.cpp \
+    widgets/menuWidget/sunmenulayer.cpp \
+    widgets/menuWidget/defaultmenubehavior.cpp \
+    widgets/menuWidget/abstractmenubehavior.cpp \
+    widgets/menuWidget/sizableItems/abstractsizableitem.cpp \
+    widgets/menuWidget/sizableItems/textsizableitem.cpp \
+    widgets/menuWidget/menuitemmodel.cpp \
+    widgets/menuWidget/sunmenuIiemview.cpp \
+    modes/scgmodemenu.cpp
